@@ -36,36 +36,7 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 		Group_dk(group_id, user_id)
 
 	case "jy", "禁言":
-		defer func() {
-			err := recover()
-			if err != nil {
-				fmt.Println("Group处理禁言时发生错误")
-				api.Send_group_msg(group_id, "Group处理禁言时发生错误")
-				api.Send_group_msg("115987946", "Group处理禁言时发生错误")
-			}
-		}()
-
-		var duration int
-		if len(strings.Fields(message)) == 2 {
-			duration = 10
-		} else if len(strings.Fields(message)) == 3 {
-			duration, _ = strconv.Atoi(strings.Fields(message)[2])
-		} else {
-			api.Send_group_msg(group_id, "缺少指令参数\n\n/jy [@的人] [时间(秒)](可选,默认10秒)\n\n例如：\n/jy @YGXB_net 60\n/jy @YGXB_net")
-			return
-		}
-
-		reg := regexp.MustCompile("\\d+")
-		silence_user_id := reg.FindAllString(strings.Fields(message)[1], -1)[0]
-
-		result := api.Set_group_ban(group_id, silence_user_id, duration)
-
-		status := gjson.Parse(result).Get("status")
-		if status.String() == "ok" {
-			api.Send_group_msg(group_id, "执行成功")
-		} else {
-			api.Send_group_msg(group_id, "执行失败："+gjson.Parse(result).Get("wording").String())
-		}
+		Group_jy(group_id, user_id, message)
 
 	case "p", "图片":
 		api.Send_group_msg(group_id, "此功能正在开发（头发都要没了！）")
@@ -75,7 +46,6 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 
 	case "test":
 		msg := fmt.Sprintf(message_dk, user_id, "成功", "你已经打卡了次了\n上次时间打卡为：2006-01-02")
-		//msg := `[CQ:cardimage,file=https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE4wwuT?ver=466b]`
 		api.Send_group_msg(group_id, msg)
 
 	default:
@@ -95,7 +65,7 @@ func Group_dk(group_id string, user_id string) {
 		dk_data.DK_Last_Time = time_now.Format("2006-01-02")
 		dk_data.DK_Times = 1
 		message = fmt.Sprintf(message_dk, user_id, "成功", "这是你的第一次打卡！")
-	} else { //有打卡记录
+	} else {                      //有打卡记录
 		if time_difference == 0 { //当天打卡（打卡失败）
 			dk_data.DK_Last_Time = time_now.Format("2006-01-02")
 			dk_data.DK_Times = int(gjson.Parse(UserData).Get("dk_times").Int())
@@ -112,4 +82,45 @@ func Group_dk(group_id string, user_id string) {
 	}
 	db.WriteDBFile("group", user_id, dk_data)
 	api.Send_group_msg(group_id, message)
+}
+
+func Group_jy(group_id string, user_id string, message string) {
+
+	defer func() {
+		err := recover()
+		if err != nil {
+			fmt.Println("Group处理禁言时发生错误：")
+			fmt.Println(err)
+			api.Send_group_msg(group_id, "Group处理禁言时发生错误")
+
+			str := fmt.Sprintf("%v", err)
+			api.Send_group_msg("115987946", str)
+		}
+	}()
+
+	var duration int
+	if len(strings.Fields(message)) == 2 {
+		duration = 10
+	} else if len(strings.Fields(message)) == 3 {
+		duration, _ = strconv.Atoi(strings.Fields(message)[2])
+	} else {
+		api.Send_group_msg(group_id,
+			"缺少指令参数"+
+				"\n\n/jy [@的人] [时间(秒)](可选,默认10秒)"+
+				"\n\n例如："+
+				"\n/jy @YGXB_net 60"+
+				"\n/jy @YGXB_net")
+		return
+	}
+
+	reg := regexp.MustCompile("\\d+")
+	silence_user_id := reg.FindAllString(strings.Fields(message)[1], -1)[0]
+	result := api.Set_group_ban(group_id, silence_user_id, duration)
+
+	status := gjson.Parse(result).Get("status")
+	if status.String() == "ok" {
+		api.Send_group_msg(group_id, "执行成功")
+	} else {
+		api.Send_group_msg(group_id, "执行失败："+gjson.Parse(result).Get("wording").String())
+	}
 }
