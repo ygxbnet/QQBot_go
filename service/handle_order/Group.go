@@ -65,7 +65,7 @@ func Group_dk(group_id string, user_id string) {
 		dk_data.DK_Last_Time = time_now.Format("2006-01-02")
 		dk_data.DK_Times = 1
 		message = fmt.Sprintf(message_dk, user_id, "成功", "这是你的第一次打卡！")
-	} else {                      //有打卡记录
+	} else { //有打卡记录
 		if time_difference == 0 { //当天打卡（打卡失败）
 			dk_data.DK_Last_Time = time_now.Format("2006-01-02")
 			dk_data.DK_Times = int(gjson.Parse(UserData).Get("dk_times").Int())

@@ -3,7 +3,7 @@ package api
 import (
 	"QQBot_go/config"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 )
@@ -26,7 +26,7 @@ func sendHTTP(Sndpoint string, body []string) []byte {
 	}
 
 	defer resp.Body.Close()
-	RespBody, err := ioutil.ReadAll(resp.Body)
+	RespBody, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println(err)
 		return nil
