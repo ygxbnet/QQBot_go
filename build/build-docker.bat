@@ -1,0 +1,1 @@
+docker buildx build -t registry.cn-hangzhou.aliyuncs.com/ygxb/qqbot-go --platform linux/arm/v7 .
