@@ -26,7 +26,7 @@ func init() {
 		for {
 			fmt.Println("每日获取Bing壁纸开启")
 			//开启计时
-			t := time.NewTimer(get_time_difference(7, 0, 0))
+			t := time.NewTimer(get_time_difference(6, 20, 0))
 			<-t.C
 
 			url_img, name_img := services_api.Get_Bing_Picture_URL()
