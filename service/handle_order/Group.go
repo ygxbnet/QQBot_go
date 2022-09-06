@@ -45,8 +45,8 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 	//api.Send_group_msg(group_id, "[CQ:image,file="+name_img+",subType=0,url="+url_img+"]\nBing每日壁纸")
 
 	case "test":
-		msg := "这是测试消息"
-		api.Send_group_msg(group_id, msg)
+		message = fmt.Sprintf(message_dk, user_id, "成功", "你已经连续打卡了"+"8292"+"次了！\n[CQ:face,id=144][CQ:face,id=144][CQ:face,id=144][CQ:face,id=144][CQ:face,id=144]")
+		api.Send_group_msg(group_id, message)
 
 	default:
 		api.Send_group_msg(group_id, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
@@ -73,7 +73,7 @@ func Group_dk(group_id string, user_id string) {
 		} else if time_difference == 1 { //昨天打卡
 			dk_data.DK_Last_Time = time_now.Format("2006-01-02")
 			dk_data.DK_Times = int(gjson.Parse(UserData).Get("dk_times").Int()) + 1
-			message = fmt.Sprintf(message_dk, user_id, "成功", "你已经连续打卡了"+strconv.Itoa(dk_data.DK_Times)+"次了！\n假期打卡已全部完成！[CQ:face,id=144][CQ:face,id=144][CQ:face,id=144]")
+			message = fmt.Sprintf(message_dk, user_id, "成功", "你已经连续打卡了"+strconv.Itoa(dk_data.DK_Times)+"次了！\n[CQ:face,id=144][CQ:face,id=144][CQ:face,id=144]")
 		} else if time_difference > 1 { //间隔两天以上打卡
 			dk_data.DK_Last_Time = time_now.Format("2006-01-02")
 			dk_data.DK_Times = int(gjson.Parse(UserData).Get("dk_times").Int()) + 1 //int(gjson.Parse(UserData).Get("dk_times").Int())
