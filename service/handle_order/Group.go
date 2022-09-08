@@ -73,7 +73,7 @@ func Group_dk(group_id string, user_id string) {
 		} else if time_difference == 1 { //昨天打卡
 			dk_data.DK_Last_Time = time_now.Format("2006-01-02")
 			dk_data.DK_Times = int(gjson.Parse(UserData).Get("dk_times").Int()) + 1
-			message = fmt.Sprintf(message_dk, user_id, "成功", "你已经连续打卡了"+strconv.Itoa(dk_data.DK_Times)+"次了！\n[CQ:face,id=144][CQ:face,id=144][CQ:face,id=144]")
+			message = fmt.Sprintf(message_dk, user_id, "成功", "你已经连续打卡了"+strconv.Itoa(dk_data.DK_Times)+"次了！\n[CQ:face,id=144][CQ:face,id=144][CQ:face,id=144][CQ:face,id=144][CQ:face,id=144]")
 		} else if time_difference > 1 { //间隔两天以上打卡
 			dk_data.DK_Last_Time = time_now.Format("2006-01-02")
 			dk_data.DK_Times = int(gjson.Parse(UserData).Get("dk_times").Int()) + 1 //int(gjson.Parse(UserData).Get("dk_times").Int())
