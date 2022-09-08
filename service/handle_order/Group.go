@@ -17,7 +17,7 @@ var help_info = "----------帮助信息----------" +
 	"\n/info 获取机器人信息" +
 	"\n/dk 或 /打卡 进行打卡" +
 	"\n/jy 或 /禁言 对指定的人禁言指定时长" +
-	//"\n/p 或 /图片 获取Bing每日的壁纸" +
+	"\n/p 或 /图片 获取Bing每日的壁纸" +
 	"\n\n----------注意----------" +
 	"\n\n\"/\"为英文输入法的\"/\" 而非中文输入法的\"／\""
 
@@ -38,8 +38,8 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 	case "jy", "禁言":
 		Group_jy(group_id, user_id, message)
 
-	//case "p", "图片":
-	//	api.Send_group_msg(group_id, "此功能正在开发（头发都要没了！）")
+	case "p", "图片":
+		api.Send_group_msg(group_id, "此功能正在开发（头发都要没了！）")
 	//url_img, name_img := services_api.Get_Random_Picture_URL()
 	//fmt.Println(url_img, name_img)
 	//api.Send_group_msg(group_id, "[CQ:image,file="+name_img+",subType=0,url="+url_img+"]\nBing每日壁纸")
