@@ -70,14 +70,26 @@ func Group_dk(group_id string, user_id string) {
 			dk_data.DK_Last_Time = time_now.Format("2006-01-02")
 			dk_data.DK_Times = int(gjson.Parse(UserData).Get("dk_times").Int())
 			message = fmt.Sprintf(message_dk, user_id, "失败", "今天你已经打卡了！")
+
 		} else if time_difference == 1 { //昨天打卡
 			dk_data.DK_Last_Time = time_now.Format("2006-01-02")
 			dk_data.DK_Times = int(gjson.Parse(UserData).Get("dk_times").Int()) + 1
-			message = fmt.Sprintf(message_dk, user_id, "成功", "你已经连续打卡了"+strconv.Itoa(dk_data.DK_Times)+"次了！\n[CQ:face,id=144][CQ:face,id=144][CQ:face,id=144][CQ:face,id=144][CQ:face,id=144]")
+			message = fmt.Sprintf(message_dk, user_id, "成功",
+				"你已经连续打卡了"+strconv.Itoa(dk_data.DK_Times)+"次了！"+
+					"\n[CQ:face,id=144][CQ:face,id=144][CQ:face,id=144][CQ:face,id=144][CQ:face,id=144]")
+
 		} else if time_difference > 1 { //间隔两天以上打卡
 			dk_data.DK_Last_Time = time_now.Format("2006-01-02")
+			now := time.Now()
+			now_unix := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location()).Unix()
+
 			dk_data.DK_Times = int(gjson.Parse(UserData).Get("dk_times").Int()) + 1 //int(gjson.Parse(UserData).Get("dk_times").Int())
-			message = fmt.Sprintf(message_dk, user_id, "成功", "你已经打卡了"+strconv.Itoa(dk_data.DK_Times)+"次了\n上次时间打卡为："+time_data.Format("2006-01-02"))
+
+			message = fmt.Sprintf(message_dk, user_id, "成功",
+				"你已经打卡了"+strconv.Itoa(dk_data.DK_Times)+"次了"+
+					"\n上次打卡时间为："+
+					"\n"+time_data.Format("2006-01-02")+
+					"（"+strconv.FormatInt((now_unix-time_data.Unix())/(60*60*24), 10)+"天前）")
 		}
 	}
 	db.WriteDBFile("group", user_id, dk_data)
