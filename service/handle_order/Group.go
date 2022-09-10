@@ -15,7 +15,7 @@ import (
 var help_info = "----------帮助信息----------" +
 	"\n\n/help 获取帮助" +
 	"\n/info 获取机器人信息" +
-	"\n/dk 或 /打卡 进行打卡" +
+	"\n\n/dk 或 /打卡 进行打卡" +
 	"\n/jy 或 /禁言 对指定的人禁言指定时长" +
 	//"\n/p 或 /图片 获取Bing每日的壁纸" +
 	"\n\n----------注意----------" +
@@ -65,16 +65,17 @@ func Group_dk(group_id string, user_id string) {
 		dk_data.DK_Last_Time = time_now.Format("2006-01-02")
 		dk_data.DK_Times = 1
 		message = fmt.Sprintf(message_dk, user_id, "成功", "这是你的第一次打卡！")
+
 	} else { //有打卡记录
 		if time_difference == 0 { //当天打卡（打卡失败）
 			dk_data.DK_Last_Time = time_now.Format("2006-01-02")
 			dk_data.DK_Times = int(gjson.Parse(UserData).Get("dk_times").Int())
-			message = fmt.Sprintf(message_dk, user_id, "失败", "今天你已经打卡了！")
+			message = fmt.Sprintf(message_dk, user_id, "❌失败", "今天你已经打卡了！")
 
 		} else if time_difference == 1 { //昨天打卡
 			dk_data.DK_Last_Time = time_now.Format("2006-01-02")
 			dk_data.DK_Times = int(gjson.Parse(UserData).Get("dk_times").Int()) + 1
-			message = fmt.Sprintf(message_dk, user_id, "成功",
+			message = fmt.Sprintf(message_dk, user_id, "✅成功",
 				"你已经连续打卡了"+strconv.Itoa(dk_data.DK_Times)+"次了！"+
 					"\n[CQ:face,id=144][CQ:face,id=144][CQ:face,id=144][CQ:face,id=144][CQ:face,id=144]")
 
@@ -85,13 +86,14 @@ func Group_dk(group_id string, user_id string) {
 
 			dk_data.DK_Times = int(gjson.Parse(UserData).Get("dk_times").Int()) + 1 //int(gjson.Parse(UserData).Get("dk_times").Int())
 
-			message = fmt.Sprintf(message_dk, user_id, "成功",
+			message = fmt.Sprintf(message_dk, user_id, "✅成功",
 				"你已经打卡了"+strconv.Itoa(dk_data.DK_Times)+"次了"+
 					"\n上次打卡时间为："+
 					"\n"+time_data.Format("2006-01-02")+
 					"（"+strconv.FormatInt((now_unix-time_data.Unix())/(60*60*24), 10)+"天前）")
 		}
 	}
+
 	db.WriteDBFile("group", user_id, dk_data)
 	api.Send_group_msg(group_id, message)
 }
