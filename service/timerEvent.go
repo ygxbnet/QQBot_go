@@ -31,7 +31,7 @@ func init() {
 
 			url_img, name_img := services_api.Get_Bing_Picture_URL()
 			api.Send_group_msg("1038122549", "[CQ:image,file="+name_img+",subType=0,url="+url_img+"]")
-			api.Send_group_msg("1038122549", "每日Bing壁纸")
+			//api.Send_group_msg("1038122549", "每日Bing壁纸")
 		}
 	}()
 
