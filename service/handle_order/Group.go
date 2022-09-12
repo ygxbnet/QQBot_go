@@ -64,18 +64,18 @@ func Group_dk(group_id string, user_id string) {
 	if UserData == "" { //没有打卡记录
 		dk_data.DK_Last_Time = time_now.Format("2006-01-02")
 		dk_data.DK_Times = 1
-		message = fmt.Sprintf(message_dk, user_id, "成功", "这是你的第一次打卡！")
+		message = fmt.Sprintf(message_dk, user_id, "✅打卡成功", "这是你的第一次打卡！")
 
 	} else { //有打卡记录
 		if time_difference == 0 { //当天打卡（打卡失败）
 			dk_data.DK_Last_Time = time_now.Format("2006-01-02")
 			dk_data.DK_Times = int(gjson.Parse(UserData).Get("dk_times").Int())
-			message = fmt.Sprintf(message_dk, user_id, "❌失败", "今天你已经打卡了！")
+			message = fmt.Sprintf(message_dk, user_id, "❌打卡失败", "今天你已经打卡了！")
 
 		} else if time_difference == 1 { //昨天打卡
 			dk_data.DK_Last_Time = time_now.Format("2006-01-02")
 			dk_data.DK_Times = int(gjson.Parse(UserData).Get("dk_times").Int()) + 1
-			message = fmt.Sprintf(message_dk, user_id, "✅成功",
+			message = fmt.Sprintf(message_dk, user_id, "✅打卡成功",
 				"你已经连续打卡了"+strconv.Itoa(dk_data.DK_Times)+"次了！"+
 					"\n[CQ:face,id=144][CQ:face,id=144][CQ:face,id=144][CQ:face,id=144][CQ:face,id=144]")
 
@@ -86,7 +86,7 @@ func Group_dk(group_id string, user_id string) {
 
 			dk_data.DK_Times = int(gjson.Parse(UserData).Get("dk_times").Int()) + 1 //int(gjson.Parse(UserData).Get("dk_times").Int())
 
-			message = fmt.Sprintf(message_dk, user_id, "✅成功",
+			message = fmt.Sprintf(message_dk, user_id, "✅打卡成功",
 				"你已经打卡了"+strconv.Itoa(dk_data.DK_Times)+"次了"+
 					"\n上次打卡时间为："+
 					"\n"+time_data.Format("2006-01-02")+

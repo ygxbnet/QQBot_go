@@ -3,7 +3,7 @@ package handle_order
 import "QQBot_go/data"
 
 var message_dk = "[CQ:at,qq=%s]" +
-	"\n打卡%s" +
+	"\n%s" +
 	"\n%s"
 
 var info = "本机器人由YGXB_net开发" +
