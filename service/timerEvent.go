@@ -31,7 +31,9 @@ func init() {
 
 			url_img, name_img := services_api.Get_Bing_Picture_URL()
 			api.Send_group_msg("1038122549", "[CQ:image,file="+name_img+",subType=0,url="+url_img+"]")
-			//api.Send_group_msg("1038122549", "每日Bing壁纸")
+
+			timeMessage := fmt.Sprintf("今天是: %d年%d月%d日 星期%d", time.Now().Year(), time.Now().Month(), time.Now().Day(), time.Now().Weekday())
+			api.Send_group_msg("1038122549", timeMessage)
 		}
 	}()
 

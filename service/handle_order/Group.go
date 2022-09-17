@@ -44,8 +44,8 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 	//api.Send_group_msg(group_id, "[CQ:image,file="+name_img+",subType=0,url="+url_img+"]\nBing每日壁纸")
 
 	case "test":
-		message = fmt.Sprintf(message_dk, user_id, "成功", "你已经连续打卡了"+"8292"+"次了！\n[CQ:face,id=144][CQ:face,id=144][CQ:face,id=144][CQ:face,id=144][CQ:face,id=144]")
-		api.Send_group_msg(group_id, message)
+		timeMessage := fmt.Sprintf("今天是: %d年%d月%d日 星期%d", time.Now().Year(), time.Now().Month(), time.Now().Day(), time.Now().Weekday())
+		api.Send_group_msg(group_id, timeMessage)
 
 	default:
 		api.Send_group_msg(group_id, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
