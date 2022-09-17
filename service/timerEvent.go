@@ -26,7 +26,7 @@ func init() {
 		for {
 			fmt.Println("每日获取Bing壁纸开启")
 			//开启计时
-			t := time.NewTimer(get_time_difference(6, 20, 0))
+			t := time.NewTimer(get_time_difference(6, 0, 0))
 			<-t.C
 
 			url_img, name_img := services_api.Get_Bing_Picture_URL()
@@ -36,21 +36,21 @@ func init() {
 	}()
 
 	//每天晚上9点提醒未打卡的打卡
-	go func() {
-		for {
-			t := time.NewTimer(get_time_difference(20, 0, 0))
-			<-t.C
-
-			now := time.Now()
-			August31 := time.Date(2022, time.August, 31, 0, 0, 0, 0, time.Local)
-			if now.Sub(August31) < 0 {
-				api.Send_group_msg("1038122549", "[CQ:at,qq=all] 快点来打卡呀！")
-			} else if now.Sub(August31) < time.Hour*24 {
-				api.Send_group_msg("1038122549", "[CQ:at,qq=all]\n现在是假期的最后一天了，也是假期最后一天打卡了，我破例一回，就当作每一天都打卡了。")
-				api.Send_group_msg("1038122549", "快点来打卡吧！")
-			}
-		}
-	}()
+	//go func() {
+	//	for {
+	//		t := time.NewTimer(get_time_difference(20, 0, 0))
+	//		<-t.C
+	//
+	//		now := time.Now()
+	//		August31 := time.Date(2022, time.August, 31, 0, 0, 0, 0, time.Local)
+	//		if now.Sub(August31) < 0 {
+	//			api.Send_group_msg("1038122549", "[CQ:at,qq=all] 快点来打卡呀！")
+	//		} else if now.Sub(August31) < time.Hour*24 {
+	//			api.Send_group_msg("1038122549", "[CQ:at,qq=all]\n现在是假期的最后一天了，也是假期最后一天打卡了，我破例一回，就当作每一天都打卡了。")
+	//			api.Send_group_msg("1038122549", "快点来打卡吧！")
+	//		}
+	//	}
+	//}()
 }
 
 // 获取时间差
