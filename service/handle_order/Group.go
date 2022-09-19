@@ -44,7 +44,7 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 	//api.Send_group_msg(group_id, "[CQ:image,file="+name_img+",subType=0,url="+url_img+"]\nBing每日壁纸")
 
 	case "test":
-		timeMessage := fmt.Sprintf("今天是: %d年%d月%d日 星期%d", time.Now().Year(), time.Now().Month(), time.Now().Day(), time.Now().Weekday())
+		timeMessage := fmt.Sprintf("今天是: %d年%d月%d日 星期%s", time.Now().Year(), time.Now().Month(), time.Now().Day(), "ConversionWeek(time.Now().Weekday().String())")
 		api.Send_group_msg(group_id, timeMessage)
 
 	default:
@@ -97,43 +97,43 @@ func Group_dk(group_id string, user_id string) {
 	api.Send_group_msg(group_id, message)
 }
 
-//func Group_jy(group_id string, user_id string, message string) {
+// func Group_jy(group_id string, user_id string, message string) {
 //
-//	defer func() {
-//		err := recover()
-//		if err != nil {
-//			fmt.Println("Group处理禁言时发生错误：")
-//			fmt.Println(err)
-//			api.Send_group_msg(group_id, "Group处理禁言时发生错误")
+//		defer func() {
+//			err := recover()
+//			if err != nil {
+//				fmt.Println("Group处理禁言时发生错误：")
+//				fmt.Println(err)
+//				api.Send_group_msg(group_id, "Group处理禁言时发生错误")
 //
-//			str := fmt.Sprintf("%v", err)
-//			api.Send_group_msg("115987946", str)
+//				str := fmt.Sprintf("%v", err)
+//				api.Send_group_msg("115987946", str)
+//			}
+//		}()
+//
+//		var duration int
+//		if len(strings.Fields(message)) == 2 {
+//			duration = 10
+//		} else if len(strings.Fields(message)) == 3 {
+//			duration, _ = strconv.Atoi(strings.Fields(message)[2])
+//		} else {
+//			api.Send_group_msg(group_id,
+//				"缺少指令参数"+
+//					"\n\n/jy [@的人] [时间(秒)](可选,默认10秒)"+
+//					"\n\n例如："+
+//					"\n/jy @YGXB_net 60"+
+//					"\n/jy @YGXB_net")
+//			return
 //		}
-//	}()
 //
-//	var duration int
-//	if len(strings.Fields(message)) == 2 {
-//		duration = 10
-//	} else if len(strings.Fields(message)) == 3 {
-//		duration, _ = strconv.Atoi(strings.Fields(message)[2])
-//	} else {
-//		api.Send_group_msg(group_id,
-//			"缺少指令参数"+
-//				"\n\n/jy [@的人] [时间(秒)](可选,默认10秒)"+
-//				"\n\n例如："+
-//				"\n/jy @YGXB_net 60"+
-//				"\n/jy @YGXB_net")
-//		return
+//		reg := regexp.MustCompile("\\d+")
+//		silence_user_id := reg.FindAllString(strings.Fields(message)[1], -1)[0]
+//		result := api.Set_group_ban(group_id, silence_user_id, duration)
+//
+//		status := gjson.Parse(result).Get("status")
+//		if status.String() == "ok" {
+//			api.Send_group_msg(group_id, "执行成功")
+//		} else {
+//			api.Send_group_msg(group_id, "执行失败："+gjson.Parse(result).Get("wording").String())
+//		}
 //	}
-//
-//	reg := regexp.MustCompile("\\d+")
-//	silence_user_id := reg.FindAllString(strings.Fields(message)[1], -1)[0]
-//	result := api.Set_group_ban(group_id, silence_user_id, duration)
-//
-//	status := gjson.Parse(result).Get("status")
-//	if status.String() == "ok" {
-//		api.Send_group_msg(group_id, "执行成功")
-//	} else {
-//		api.Send_group_msg(group_id, "执行失败："+gjson.Parse(result).Get("wording").String())
-//	}
-//}

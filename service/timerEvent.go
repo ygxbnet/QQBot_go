@@ -32,7 +32,7 @@ func init() {
 			url_img, name_img := services_api.Get_Bing_Picture_URL()
 			api.Send_group_msg("1038122549", "[CQ:image,file="+name_img+",subType=0,url="+url_img+"]")
 
-			timeMessage := fmt.Sprintf("今天是: %d年%d月%d日 星期%d", time.Now().Year(), time.Now().Month(), time.Now().Day(), time.Now().Weekday())
+			timeMessage := fmt.Sprintf("今天是: %d年%d月%d日 星期%s", time.Now().Year(), time.Now().Month(), time.Now().Day(), ConversionWeek(time.Now().Weekday().String()))
 			api.Send_group_msg("1038122549", timeMessage)
 		}
 	}()
@@ -70,4 +70,25 @@ func get_time_difference(Hour int, Min int, Sec int) time.Duration {
 	}
 
 	return next.Sub(now)
+}
+
+// 星期转换文字
+func ConversionWeek(Weekday string) string {
+	switch Weekday {
+	case "Sunday":
+		return "天"
+	case "Monday":
+		return "一"
+	case "Tuesday":
+		return "二"
+	case "Wednesday":
+		return "三"
+	case "Thursday":
+		return "四"
+	case "Friday":
+		return "五"
+	case "Saturday":
+		return "六"
+	}
+	return "Error"
 }
