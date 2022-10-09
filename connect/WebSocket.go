@@ -3,22 +3,22 @@ package connect
 import (
 	"QQBot_go/config"
 	"QQBot_go/handler"
-	"fmt"
 	"github.com/gorilla/websocket"
+	log "github.com/sirupsen/logrus"
 	"time"
 )
 
 func Connect() {
-	fmt.Println("正在连接:", config.WebSocket_url)
+	log.Infoln("正在连接:", config.WebSocket_url)
 	c, _, err := websocket.DefaultDialer.Dial(config.WebSocket_url, nil)
 	if err != nil {
-		fmt.Println("连接错误", err)
+		log.Infoln("连接错误", err)
 		time.Sleep(time.Second)
-		fmt.Println("正在重连......")
+		log.Infoln("正在重连......")
 		time.Sleep(2 * time.Second)
 		Connect()
 	} else {
-		fmt.Println("连接成功")
+		log.Infoln("连接成功")
 	}
 	defer c.Close()
 	//done := make(chan struct{})
@@ -27,7 +27,7 @@ func Connect() {
 		for {
 			_, message, err := c.ReadMessage()
 			if err != nil {
-				fmt.Println("消息接受错误", err)
+				log.Infoln("消息接受错误", err)
 				return
 			}
 			handler.EventHandler(string(message)) //处理消息

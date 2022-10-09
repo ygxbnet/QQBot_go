@@ -4,14 +4,16 @@ import (
 	"QQBot_go/connect"
 	"QQBot_go/db"
 	"QQBot_go/service"
-	"fmt"
+	log "github.com/sirupsen/logrus"
 	"os"
+
+	_ "QQBot_go/log"
 )
 
 func Main() {
-	fmt.Println("程序正在运行......")
+	log.Infoln("程序正在运行......")
 	Path, _ := os.Getwd()
-	fmt.Println("位置:", Path)
+	log.Infoln("位置:", Path)
 
 	service.Services()
 

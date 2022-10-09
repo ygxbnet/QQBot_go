@@ -44,7 +44,7 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 	//case "p", "图片":
 	//	api.Send_group_msg(group_id, "此功能正在开发（头发都要没了！）")
 	//url_img, name_img := services_api.Get_Random_Picture_URL()
-	//fmt.Println(url_img, name_img)
+	//log.Infoln(url_img, name_img)
 	//api.Send_group_msg(group_id, "[CQ:image,file="+name_img+",subType=0,url="+url_img+"]\nBing每日壁纸")
 
 	case "test":
@@ -98,7 +98,7 @@ func Group_dk(group_id string, user_id string) {
 		dk_data.DK_Times = 1
 		message = fmt.Sprintf(message_dk, user_id, "✅打卡成功", "这是你的第一次打卡！")
 
-	} else { //有打卡记录
+	} else {                      //有打卡记录
 		if time_difference == 0 { //当天打卡（打卡失败）
 			dk_data.DK_Last_Time = time_now.Format("2006-01-02")
 			dk_data.DK_Times = int(gjson.Parse(UserData).Get("dk_times").Int())
@@ -135,8 +135,8 @@ func Group_dk(group_id string, user_id string) {
 //		defer func() {
 //			err := recover()
 //			if err != nil {
-//				fmt.Println("Group处理禁言时发生错误：")
-//				fmt.Println(err)
+//				log.Infoln("Group处理禁言时发生错误：")
+//				log.Infoln(err)
 //				api.Send_group_msg(group_id, "Group处理禁言时发生错误")
 //
 //				str := fmt.Sprintf("%v", err)
