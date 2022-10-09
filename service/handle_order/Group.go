@@ -67,7 +67,7 @@ func groupRefresh(group_id string, user_id string, message string) {
 	var msg2 = fmt.Sprintf(
 		"[CQ:at,qq=%s]"+
 			"\n将把您的下一条消息作为刷屏消息"+
-			"\n次数：%d", user_id, bannedNumber)
+			"\n刷屏次数：%d", user_id, bannedNumber)
 	var msg_error = "参数错误或多余"
 
 	if len(strings.Fields(message)) == 1 {
