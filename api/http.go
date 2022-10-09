@@ -21,6 +21,9 @@ func sendHTTP(Sndpoint string, body []string) []byte {
 		strings.NewReader(PostBody))
 	if err != nil {
 		fmt.Println("请求[" + config.Http_url + Sndpoint + "]错误")
+
+		fmt.Printf("body: %s\n", strings.Replace(fmt.Sprintf("%s", body), "\n", "\\n", -1))
+
 		fmt.Println(err)
 		return nil
 	}
@@ -33,5 +36,8 @@ func sendHTTP(Sndpoint string, body []string) []byte {
 	}
 
 	fmt.Println("请求[" + config.Http_url + Sndpoint + "]成功")
+
+	fmt.Printf("body: %s\n", strings.Replace(fmt.Sprintf("%s", body), "\n", "\\n", -1))
+
 	return RespBody
 }

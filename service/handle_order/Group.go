@@ -15,6 +15,7 @@ var help_info = "----------帮助信息----------" +
 	"\n\n/help 获取帮助" +
 	"\n/info 获取机器人信息" +
 	"\n\n/dk 进行打卡" +
+	"\n/sp 进行刷屏" +
 	//"\n/jy 或 /禁言 对指定的人禁言指定时长" +
 	//"\n/p 或 /图片 获取Bing每日的壁纸" +
 	"\n\n----------注意----------" +
@@ -34,6 +35,9 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 	case "dk", "打卡":
 		Group_dk(group_id, user_id)
 
+	case "sp", "刷屏":
+		groupRefresh(group_id, user_id, message)
+
 	//case "jy", "禁言":
 	//	Group_jy(group_id, user_id, message)
 
@@ -52,6 +56,35 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 	}
 }
 
+// 刷屏
+func groupRefresh(group_id string, user_id string, message string) {
+
+	bannedNumber := 5
+	var msg1 = fmt.Sprintf(
+		"[CQ:at,qq=%s]"+
+			"\n将把您的下一条消息作为刷屏消息"+
+			"\n/sp [刷屏次数](默认5次)", user_id)
+	var msg2 = fmt.Sprintf(
+		"[CQ:at,qq=%s]"+
+			"\n将把您的下一条消息作为刷屏消息"+
+			"\n次数：%d", user_id, bannedNumber)
+	var msg_error = "参数错误或多余"
+
+	if len(strings.Fields(message)) == 1 {
+
+		api.Send_group_msg(group_id, msg1)
+		go func() {
+
+		}()
+	} else if len(strings.Fields(message)) == 2 {
+
+		api.Send_group_msg(group_id, msg2)
+	} else {
+		api.Send_group_msg(group_id, msg_error)
+	}
+}
+
+// 打卡
 func Group_dk(group_id string, user_id string) {
 	UserData := db.ReadDBFile("group", user_id)
 	message := ""
