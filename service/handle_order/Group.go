@@ -44,7 +44,7 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 	//case "p", "图片":
 	//	api.Send_group_msg(group_id, "此功能正在开发（头发都要没了！）")
 	//url_img, name_img := services_api.Get_Random_Picture_URL()
-	//log.Infoln(url_img, name_img)
+	//log.Info(url_img, name_img)
 	//api.Send_group_msg(group_id, "[CQ:image,file="+name_img+",subType=0,url="+url_img+"]\nBing每日壁纸")
 
 	case "test":
@@ -135,8 +135,8 @@ func Group_dk(group_id string, user_id string) {
 //		defer func() {
 //			err := recover()
 //			if err != nil {
-//				log.Infoln("Group处理禁言时发生错误：")
-//				log.Infoln(err)
+//				log.Info("Group处理禁言时发生错误：")
+//				log.Info(err)
 //				api.Send_group_msg(group_id, "Group处理禁言时发生错误")
 //
 //				str := fmt.Sprintf("%v", err)

@@ -9,16 +9,16 @@ import (
 )
 
 func Connect() {
-	log.Infoln("正在连接:", config.WebSocket_url)
+	log.Info("正在连接:", config.WebSocket_url)
 	c, _, err := websocket.DefaultDialer.Dial(config.WebSocket_url, nil)
 	if err != nil {
-		log.Infoln("连接错误", err)
+		log.Error("连接错误", err)
 		time.Sleep(time.Second)
-		log.Infoln("正在重连......")
+		log.Info("正在重连......")
 		time.Sleep(2 * time.Second)
 		Connect()
 	} else {
-		log.Infoln("连接成功")
+		log.Info("连接成功")
 	}
 	defer c.Close()
 	//done := make(chan struct{})
@@ -27,7 +27,7 @@ func Connect() {
 		for {
 			_, message, err := c.ReadMessage()
 			if err != nil {
-				log.Infoln("消息接受错误", err)
+				log.Error("消息接受错误", err)
 				return
 			}
 			handler.EventHandler(string(message)) //处理消息

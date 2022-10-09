@@ -25,7 +25,7 @@ func init() {
 	//每天8点定时发送Bing的每日壁纸
 	go func() {
 		for {
-			log.Infoln("每日获取Bing壁纸开启")
+			log.Info("每日获取Bing壁纸开启")
 			//开启计时
 			t := time.NewTimer(get_time_difference(6, 0, 0))
 			<-t.C
