@@ -16,7 +16,7 @@ func init() {
 	go func() {
 		for true {
 			conut = conut + 1
-			api.Send_group_msg("115987946", "每10min定时发送\n次数："+strconv.Itoa(conut))
+			api.Send_group_msg("115987946", "每10min定时发送\n次数: "+strconv.Itoa(conut))
 			//time.Sleep(time.Second * 10)
 			time.Sleep(time.Minute * 10)
 		}
