@@ -14,8 +14,8 @@ func init() {
 	logFile := setOutput()
 	out := io.MultiWriter(os.Stdout, logFile)
 	log.SetOutput(out)
+	log.AddHook(&MyHook{})
 	log.SetFormatter(&log.TextFormatter{
-		ForceColors:     true,
 		FullTimestamp:   true,
 		TimestampFormat: "2006-01-02 15.04.05",
 	})
@@ -75,4 +75,25 @@ func timing(Hour int, Min int, Sec int) {
 
 	t := time.NewTimer(next.Sub(now))
 	<-t.C
+}
+
+// MyHook ...
+type MyHook struct {
+}
+
+// Levels 只定义 error 和 panic 等级的日志,其他日志等级不会触发 hook
+func (h *MyHook) Levels() []log.Level {
+	return log.AllLevels
+}
+
+// Fire 将异常日志写入到指定日志文件中
+func (h *MyHook) Fire(entry *log.Entry) error {
+	f, err := os.OpenFile("./logs/err.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+	if err != nil {
+		return err
+	}
+	if _, err := f.Write([]byte(entry.Message + " " + entry.Level.String())); err != nil {
+		return err
+	}
+	return nil
 }

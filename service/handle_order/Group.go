@@ -70,7 +70,7 @@ func groupRefresh(group_id string, user_id string, message string) {
 	var msg2 = fmt.Sprintf(
 		"[CQ:at,qq=%s]"+
 			"\n将把您的下一条消息作为刷屏消息"+
-			"\n刷屏次数：%d", user_id, bannedNumber)
+			"\n刷屏次数: %d", user_id, bannedNumber)
 	var msg_error = "参数错误或多余"
 
 	if len(strings.Fields(message)) == 1 {
@@ -123,7 +123,7 @@ func Group_dk(group_id string, user_id string) {
 
 			message = fmt.Sprintf(message_dk, user_id, "✅打卡成功",
 				"你已经打卡了"+strconv.Itoa(dk_data.DK_Times)+"次了"+
-					"\n上次打卡时间为："+
+					"\n上次打卡时间为: "+
 					"\n"+time_data.Format("2006-01-02")+
 					"（"+strconv.FormatInt((now_unix-time_data.Unix())/(60*60*24), 10)+"天前）")
 		}
