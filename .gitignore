@@ -1,4 +1,12 @@
 .idea
+.vscode
 
-QQBot_go
+# log
+logs
+
+# data
 data.json
+
+# build
+QQBot_go
+QQBot_go.exe

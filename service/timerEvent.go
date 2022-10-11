@@ -4,6 +4,7 @@ import (
 	"QQBot_go/api"
 	"QQBot_go/service/services_api"
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"strconv"
 	"time"
 )
@@ -15,7 +16,7 @@ func init() {
 	go func() {
 		for true {
 			conut = conut + 1
-			api.Send_group_msg("115987946", "每10min定时发送\n次数："+strconv.Itoa(conut))
+			api.Send_group_msg("115987946", "每10min定时发送\n次数: "+strconv.Itoa(conut))
 			//time.Sleep(time.Second * 10)
 			time.Sleep(time.Minute * 10)
 		}
@@ -24,7 +25,7 @@ func init() {
 	//每天8点定时发送Bing的每日壁纸
 	go func() {
 		for {
-			fmt.Println("每日获取Bing壁纸开启")
+			log.Info("每日获取Bing壁纸开启")
 			//开启计时
 			t := time.NewTimer(get_time_difference(6, 0, 0))
 			<-t.C

@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	_ "QQBot_go/log"
+
 	"QQBot_go/connect"
 	"QQBot_go/db"
 	"QQBot_go/service"
@@ -14,8 +16,6 @@ func Main() {
 	fmt.Println("位置:", Path)
 
 	service.Services()
-
 	db.CreateDBFile()
-
 	connect.Connect()
 }

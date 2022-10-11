@@ -3,7 +3,7 @@ package service
 import (
 	"QQBot_go/handler"
 	"QQBot_go/service/handle_order"
-	"fmt"
+	log "github.com/sirupsen/logrus"
 )
 
 func init() {
@@ -11,7 +11,7 @@ func init() {
 }
 
 func Services() {
-	fmt.Println("功能模块将以插件模式运行")
+	log.Info("功能模块将以插件模式运行")
 }
 
 func Group(group_id string, user_id string, message string) {

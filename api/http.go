@@ -3,6 +3,7 @@ package api
 import (
 	"QQBot_go/config"
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"io"
 	"net/http"
 	"strings"
@@ -19,25 +20,23 @@ func sendHTTP(Sndpoint string, body []string) []byte {
 	resp, err := http.Post(config.Http_url+Sndpoint,
 		"application/x-www-form-urlencoded",
 		strings.NewReader(PostBody))
+
 	if err != nil {
-		fmt.Println("请求[" + config.Http_url + Sndpoint + "]错误")
-
-		fmt.Printf("body: %s\n", strings.Replace(fmt.Sprintf("%s", body), "\n", "\\n", -1))
-
-		fmt.Println(err)
+		log.Error("请求[" + config.Http_url + Sndpoint + "]错误")
+		log.Infof("body: %s\n", strings.Replace(fmt.Sprintf("%s", body), "\n", "\\n", -1))
+		log.Error(err)
 		return nil
 	}
 
 	defer resp.Body.Close()
 	RespBody, err := io.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
 		return nil
 	}
 
-	fmt.Println("请求[" + config.Http_url + Sndpoint + "]成功")
+	log.Info("请求[" + config.Http_url + Sndpoint + "]成功")
 
-	fmt.Printf("body: %s\n", strings.Replace(fmt.Sprintf("%s", body), "\n", "\\n", -1))
-
+	log.Infof("body: %s\n", strings.Replace(fmt.Sprintf("%s", body), "\n", "\\n", -1))
 	return RespBody
 }

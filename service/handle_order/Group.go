@@ -26,6 +26,9 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 	case "": //指令为空时
 		api.Send_group_msg(group_id, "指令不能为空")
 
+	case "reload":
+		panic("重启")
+
 	case "help":
 		api.Send_group_msg(group_id, help_info)
 
@@ -44,7 +47,7 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 	//case "p", "图片":
 	//	api.Send_group_msg(group_id, "此功能正在开发（头发都要没了！）")
 	//url_img, name_img := services_api.Get_Random_Picture_URL()
-	//fmt.Println(url_img, name_img)
+	//log.Info(url_img, name_img)
 	//api.Send_group_msg(group_id, "[CQ:image,file="+name_img+",subType=0,url="+url_img+"]\nBing每日壁纸")
 
 	case "test":
@@ -67,7 +70,7 @@ func groupRefresh(group_id string, user_id string, message string) {
 	var msg2 = fmt.Sprintf(
 		"[CQ:at,qq=%s]"+
 			"\n将把您的下一条消息作为刷屏消息"+
-			"\n刷屏次数：%d", user_id, bannedNumber)
+			"\n刷屏次数: %d", user_id, bannedNumber)
 	var msg_error = "参数错误或多余"
 
 	if len(strings.Fields(message)) == 1 {
@@ -120,7 +123,7 @@ func Group_dk(group_id string, user_id string) {
 
 			message = fmt.Sprintf(message_dk, user_id, "✅打卡成功",
 				"你已经打卡了"+strconv.Itoa(dk_data.DK_Times)+"次了"+
-					"\n上次打卡时间为："+
+					"\n上次打卡时间为: "+
 					"\n"+time_data.Format("2006-01-02")+
 					"（"+strconv.FormatInt((now_unix-time_data.Unix())/(60*60*24), 10)+"天前）")
 		}
@@ -135,8 +138,8 @@ func Group_dk(group_id string, user_id string) {
 //		defer func() {
 //			err := recover()
 //			if err != nil {
-//				fmt.Println("Group处理禁言时发生错误：")
-//				fmt.Println(err)
+//				log.Info("Group处理禁言时发生错误：")
+//				log.Info(err)
 //				api.Send_group_msg(group_id, "Group处理禁言时发生错误")
 //
 //				str := fmt.Sprintf("%v", err)

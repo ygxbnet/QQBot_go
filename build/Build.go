@@ -29,9 +29,9 @@ func main() {
 		return
 	}
 	Version = string(data)
-	fmt.Println("当前版本号：", Version)
+	fmt.Println("当前版本号: ", Version)
 
-	fmt.Println("请输入要构建的版本号(默认为：", Version, ")")
+	fmt.Println("请输入要构建的版本号(默认为: ", Version, ")")
 	fmt.Scanln(&ReturnVersion)
 	if ReturnVersion == "" {
 		ReturnVersion = Version

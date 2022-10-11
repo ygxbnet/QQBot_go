@@ -1,7 +1,7 @@
 package db
 
 import (
-	"fmt"
+	log "github.com/sirupsen/logrus"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 	"io/ioutil"
@@ -14,12 +14,12 @@ func CreateDBFile() {
 	path, _ := os.Getwd()
 	_, err := os.Stat(path + "/" + DBFileName)
 	if err != nil {
-		fmt.Println("未找到:", DBFileName)
+		log.Info("未找到:", DBFileName)
 		file, _ := os.Create(DBFileName)
-		fmt.Println("已创建:", file.Name())
-		ioutil.WriteFile(DBFileName, []byte("{\"guild\":{},\"group\":{}}"), 0644)
+		log.Info("已创建:", file.Name())
+		os.WriteFile(DBFileName, []byte("{\"guild\":{},\"group\":{}}"), 0644)
 	} else {
-		fmt.Println("文件:", DBFileName, "已存在")
+		log.Info("文件:", DBFileName, "已存在")
 	}
 }
 func ReadDBFile(option string, user_id string) string {
