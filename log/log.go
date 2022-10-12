@@ -1,27 +1,31 @@
 package log
 
 import (
+	"fmt"
 	log "github.com/sirupsen/logrus"
-	"io"
 	"os"
+	"runtime"
+	"strings"
 	"time"
 )
+
+var logFile *os.File
 
 func init() {
 	//创建logs文件夹
 	createDir("logs")
 
-	logFile := setOutput()
-	out := io.MultiWriter(os.Stdout, logFile)
-	log.SetOutput(out)
 	log.AddHook(&MyHook{})
+	log.SetReportCaller(true)
 	log.SetFormatter(&log.TextFormatter{
-		FullTimestamp:   true,
-		TimestampFormat: "2006-01-02 15.04.05",
+		ForceColors:      true,
+		FullTimestamp:    true,
+		TimestampFormat:  "2006-01-02 15.04.05",
+		CallerPrettyfier: func(*runtime.Frame) (function string, file string) { return "", "" },
 	})
 	log.SetLevel(log.InfoLevel)
 
-	timeEvent(logFile)
+	timeEvent()
 }
 
 func getTime() string {
@@ -41,20 +45,22 @@ func setOutput() *os.File {
 	if err != nil {
 		log.Error(err)
 	}
-	logFile.Write([]byte("\n-----------------------------------------------------------------------------------------------------\n"))
 	return logFile
 }
 
-func timeEvent(writer *os.File) {
+func timeEvent() {
 	go func() {
-		var logFile = writer
-		for true {
-			timing(0, 0, 5)
-			logFile.Close()
+		logFile = setOutput()
+		_, err := logFile.Write([]byte("\n-----------------------------------------------------------------------------------------------------\n"))
+		if err != nil {
+			log.Error(err)
+		}
 
+		for true {
+			timing(0, 0, 0)
+			logFile.Close()
 			logFile = setOutput()
-			out := io.MultiWriter(os.Stdout, logFile)
-			log.SetOutput(out)
+
 			log.Info("已切换日志文件为: ", time.Now().Format("2006-01-02"), ".log")
 		}
 	}()
@@ -81,19 +87,41 @@ func timing(Hour int, Min int, Sec int) {
 type MyHook struct {
 }
 
-// Levels 只定义 error 和 panic 等级的日志,其他日志等级不会触发 hook
+// Levels 定义所有等级触发hook
 func (h *MyHook) Levels() []log.Level {
 	return log.AllLevels
 }
 
-// Fire 将异常日志写入到指定日志文件中
+// Fire 将日志写入到指定日志文件中 并且将异常日志写入到指定日志文件中
 func (h *MyHook) Fire(entry *log.Entry) error {
-	f, err := os.OpenFile("./logs/err.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+
+	_, err := logFile.Write([]byte(fmt.Sprintf("[%s] [%s] %v\n",
+		entry.Time.Format("2006-01-02 15-04-05"),
+		strings.ToUpper(entry.Level.String()),
+		strings.Replace(entry.Message, "\n", "\\n", -1))))
 	if err != nil {
 		return err
 	}
-	if _, err := f.Write([]byte(entry.Message + " " + entry.Level.String())); err != nil {
-		return err
+
+	if entry.Level == log.ErrorLevel || entry.Level == log.FatalLevel || entry.Level == log.PanicLevel {
+
+		errorFile, err := os.OpenFile("./logs/error-"+getTime()+".log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+		defer errorFile.Close()
+
+		if err != nil {
+			return err
+		}
+
+		_, err = errorFile.Write([]byte(fmt.Sprintf("[%s] [%s] [%v:%v %v] %v\n",
+			entry.Time.Format("2006-01-02 15-04-05"),
+			strings.ToUpper(entry.Level.String()),
+			entry.Caller.File,
+			entry.Caller.Line,
+			entry.Caller.Function,
+			strings.Replace(entry.Message, "\n", "\\n", -1))))
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
