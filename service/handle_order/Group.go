@@ -26,9 +26,6 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 	case "": //指令为空时
 		api.Send_group_msg(group_id, "指令不能为空")
 
-	case "reload":
-		panic("重启")
-
 	case "help":
 		api.Send_group_msg(group_id, help_info)
 
@@ -51,8 +48,7 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 	//api.Send_group_msg(group_id, "[CQ:image,file="+name_img+",subType=0,url="+url_img+"]\nBing每日壁纸")
 
 	case "test":
-		timeMessage := fmt.Sprintf("今天是: %d年%d月%d日 星期%s", time.Now().Year(), time.Now().Month(), time.Now().Day(), "ConversionWeek(time.Now().Weekday().String())")
-		api.Send_group_msg(group_id, timeMessage)
+		api.Send_group_msg(group_id, "[CQ:share,url=https://gitee.com/YGXB-net/QQBot_go/blob/develop/CHANGELOG.md#更新日志]")
 
 	default:
 		api.Send_group_msg(group_id, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
