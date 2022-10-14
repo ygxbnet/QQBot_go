@@ -1,9 +1,9 @@
 package handle_order
 
 import (
-	"QQBot_go/api"
 	"QQBot_go/db"
 	"QQBot_go/db/model"
+	"QQBot_go/internal/httpapi"
 	"fmt"
 	"github.com/tidwall/gjson"
 	"strconv"
@@ -22,13 +22,13 @@ var help_info = "----------帮助信息----------" +
 func HandleOrder_Group(group_id string, user_id string, message string) {
 	switch strings.Fields(message)[0][1:] {
 	case "": //指令为空时
-		api.Send_group_msg(group_id, "指令不能为空")
+		httpapi.Send_group_msg(group_id, "指令不能为空")
 
 	case "help":
-		api.Send_group_msg(group_id, help_info)
+		httpapi.Send_group_msg(group_id, help_info)
 
 	case "info": //机器人信息
-		api.Send_group_msg(group_id, info)
+		httpapi.Send_group_msg(group_id, info)
 
 	case "dk", "打卡":
 		Group_dk(group_id, user_id)
@@ -37,10 +37,10 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 		groupRefresh(group_id, user_id, message)
 
 	case "test":
-		api.Send_group_msg(group_id, "[CQ:share,url=https://gitee.com/YGXB-net/QQBot_go/blob/develop/CHANGELOG.md#更新日志]")
+		httpapi.Send_group_msg(group_id, "[CQ:share,url=https://gitee.com/YGXB-net/QQBot_go/blob/develop/CHANGELOG.md#更新日志]")
 
 	default:
-		api.Send_group_msg(group_id, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
+		httpapi.Send_group_msg(group_id, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
 	}
 }
 
@@ -60,15 +60,13 @@ func groupRefresh(group_id string, user_id string, message string) {
 
 	if len(strings.Fields(message)) == 1 {
 
-		api.Send_group_msg(group_id, msg1)
-		go func() {
-
-		}()
+		httpapi.Send_group_msg(group_id, msg1)
 	} else if len(strings.Fields(message)) == 2 {
 
-		api.Send_group_msg(group_id, msg2)
+		httpapi.Send_group_msg(group_id, msg2)
 	} else {
-		api.Send_group_msg(group_id, msg_error)
+		httpapi.Send_group_msg(group_id, msg_error)
+		return
 	}
 }
 
@@ -115,5 +113,5 @@ func Group_dk(group_id string, user_id string) {
 	}
 
 	db.WriteDBFile("group", user_id, dk_data)
-	api.Send_group_msg(group_id, message)
+	httpapi.Send_group_msg(group_id, message)
 }

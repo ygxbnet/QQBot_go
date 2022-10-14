@@ -12,6 +12,7 @@ func init() {
 
 func Services() {
 	log.Info("功能模块将以插件模式运行")
+	Init()
 }
 
 func Group(group_id string, user_id string, message string) {
