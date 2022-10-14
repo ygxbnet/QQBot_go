@@ -1,4 +1,4 @@
-package api
+package httpapi
 
 import (
 	"QQBot_go/config"
