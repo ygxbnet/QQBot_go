@@ -15,8 +15,6 @@ var help_info = "----------帮助信息----------" +
 	"\n\n/help 获取帮助" +
 	"\n/info 获取机器人信息" +
 	"\n\n/dk 进行打卡" +
-	//"\n/sp 进行刷屏" +
-	//"\n/p 或 /图片 获取Bing每日的壁纸" +
 	"\n\n----------注意----------" +
 	"\n\n\"/\"为英文输入法的\"/\" 而非中文输入法的\"／\""
 
@@ -34,48 +32,11 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 	case "dk", "打卡":
 		Group_dk(group_id, user_id)
 
-	case "sp", "刷屏":
-		groupRefresh(group_id, user_id, message)
-
-	//case "p", "图片":
-	//	api.Send_group_msg(group_id, "此功能正在开发（头发都要没了！）")
-	//url_img, name_img := services_api.Get_Random_Picture_URL()
-	//log.Info(url_img, name_img)
-	//api.Send_group_msg(group_id, "[CQ:image,file="+name_img+",subType=0,url="+url_img+"]\nBing每日壁纸")
-
 	case "test":
 		api.Send_group_msg(group_id, "[CQ:share,url=https://gitee.com/YGXB-net/QQBot_go/blob/develop/CHANGELOG.md#更新日志]")
 
 	default:
 		api.Send_group_msg(group_id, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
-	}
-}
-
-// 刷屏
-func groupRefresh(group_id string, user_id string, message string) {
-
-	bannedNumber := 5
-	var msg1 = fmt.Sprintf(
-		"[CQ:at,qq=%s]"+
-			"\n将把您的下一条消息作为刷屏消息"+
-			"\n/sp [刷屏次数](默认5次)", user_id)
-	var msg2 = fmt.Sprintf(
-		"[CQ:at,qq=%s]"+
-			"\n将把您的下一条消息作为刷屏消息"+
-			"\n刷屏次数: %d", user_id, bannedNumber)
-	var msg_error = "参数错误或多余"
-
-	if len(strings.Fields(message)) == 1 {
-
-		api.Send_group_msg(group_id, msg1)
-		go func() {
-
-		}()
-	} else if len(strings.Fields(message)) == 2 {
-
-		api.Send_group_msg(group_id, msg2)
-	} else {
-		api.Send_group_msg(group_id, msg_error)
 	}
 }
 
