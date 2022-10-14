@@ -16,8 +16,6 @@ var help_info = "----------帮助信息----------" +
 	"\n/info 获取机器人信息" +
 	"\n\n/dk 进行打卡" +
 	"\n/sp 进行刷屏" +
-	//"\n/jy 或 /禁言 对指定的人禁言指定时长" +
-	//"\n/p 或 /图片 获取Bing每日的壁纸" +
 	"\n\n----------注意----------" +
 	"\n\n\"/\"为英文输入法的\"/\" 而非中文输入法的\"／\""
 
@@ -25,9 +23,6 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 	switch strings.Fields(message)[0][1:] {
 	case "": //指令为空时
 		api.Send_group_msg(group_id, "指令不能为空")
-
-	case "reload":
-		panic("重启")
 
 	case "help":
 		api.Send_group_msg(group_id, help_info)
@@ -41,18 +36,8 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 	case "sp", "刷屏":
 		groupRefresh(group_id, user_id, message)
 
-	//case "jy", "禁言":
-	//	Group_jy(group_id, user_id, message)
-
-	//case "p", "图片":
-	//	api.Send_group_msg(group_id, "此功能正在开发（头发都要没了！）")
-	//url_img, name_img := services_api.Get_Random_Picture_URL()
-	//log.Info(url_img, name_img)
-	//api.Send_group_msg(group_id, "[CQ:image,file="+name_img+",subType=0,url="+url_img+"]\nBing每日壁纸")
-
 	case "test":
-		timeMessage := fmt.Sprintf("今天是: %d年%d月%d日 星期%s", time.Now().Year(), time.Now().Month(), time.Now().Day(), "ConversionWeek(time.Now().Weekday().String())")
-		api.Send_group_msg(group_id, timeMessage)
+		api.Send_group_msg(group_id, "[CQ:share,url=https://gitee.com/YGXB-net/QQBot_go/blob/develop/CHANGELOG.md#更新日志]")
 
 	default:
 		api.Send_group_msg(group_id, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
@@ -132,44 +117,3 @@ func Group_dk(group_id string, user_id string) {
 	db.WriteDBFile("group", user_id, dk_data)
 	api.Send_group_msg(group_id, message)
 }
-
-// func Group_jy(group_id string, user_id string, message string) {
-//
-//		defer func() {
-//			err := recover()
-//			if err != nil {
-//				log.Info("Group处理禁言时发生错误：")
-//				log.Info(err)
-//				api.Send_group_msg(group_id, "Group处理禁言时发生错误")
-//
-//				str := fmt.Sprintf("%v", err)
-//				api.Send_group_msg("115987946", str)
-//			}
-//		}()
-//
-//		var duration int
-//		if len(strings.Fields(message)) == 2 {
-//			duration = 10
-//		} else if len(strings.Fields(message)) == 3 {
-//			duration, _ = strconv.Atoi(strings.Fields(message)[2])
-//		} else {
-//			api.Send_group_msg(group_id,
-//				"缺少指令参数"+
-//					"\n\n/jy [@的人] [时间(秒)](可选,默认10秒)"+
-//					"\n\n例如："+
-//					"\n/jy @YGXB_net 60"+
-//					"\n/jy @YGXB_net")
-//			return
-//		}
-//
-//		reg := regexp.MustCompile("\\d+")
-//		silence_user_id := reg.FindAllString(strings.Fields(message)[1], -1)[0]
-//		result := api.Set_group_ban(group_id, silence_user_id, duration)
-//
-//		status := gjson.Parse(result).Get("status")
-//		if status.String() == "ok" {
-//			api.Send_group_msg(group_id, "执行成功")
-//		} else {
-//			api.Send_group_msg(group_id, "执行失败："+gjson.Parse(result).Get("wording").String())
-//		}
-//	}
