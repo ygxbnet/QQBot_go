@@ -20,27 +20,29 @@ var help_info = "----------帮助信息----------" +
 	"\n\n\"/\"为英文输入法的\"/\" 而非中文输入法的\"／\""
 
 func HandleOrder_Group(group_id string, user_id string, message string) {
-	switch strings.Fields(message)[0][1:] {
-	case "": //指令为空时
+	switch strings.Fields(message)[0][0:] {
+	case "/": //指令为空时
 		httpapi.Send_group_msg(group_id, "指令不能为空")
 
-	case "help":
+	case "/help":
 		httpapi.Send_group_msg(group_id, help_info)
 
-	case "info": //机器人信息
+	case "/info": //机器人信息
 		httpapi.Send_group_msg(group_id, info)
 
-	case "dk", "打卡":
+	case "/dk", "/打卡", "&#91;冒泡&#93;":
 		Group_dk(group_id, user_id)
 
-	case "sp", "刷屏":
+	case "/sp", "/刷屏":
 		groupRefresh(group_id, user_id, message)
 
-	case "test":
+	case "/test":
 		httpapi.Send_group_msg(group_id, "[CQ:share,url=https://gitee.com/YGXB-net/QQBot_go/blob/develop/CHANGELOG.md#更新日志]")
 
 	default:
-		httpapi.Send_group_msg(group_id, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
+		if message[0:1] == "/" {
+			httpapi.Send_group_msg(group_id, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
+		}
 	}
 }
 
