@@ -12,11 +12,9 @@ func init() {
 
 func Services() {
 	log.Info("功能模块将以插件模式运行")
+	Init()
 }
 
 func Group(group_id string, user_id string, message string) {
-	if message[0:1] == "/" {
-		handle_order.HandleOrder_Group(group_id, user_id, message)
-	} else {
-	}
+	handle_order.HandleOrder_Group(group_id, user_id, message)
 }
