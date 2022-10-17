@@ -2,7 +2,30 @@
 
 > 此文档为`QQBot_go`项目的更新日志
 
-## [0.7.1] - 2022
+## [0.7.2] - 2022-10-17
+
+### 新增
+
+- 增加打卡方式
+
+### 变更
+
+- 更改命令处理逻辑
+
+
+
+## [0.7.1] - 2022-10-14
+
+### 变更
+
+- 变更`/info`命令回复消息
+
+```go
+var info = "本机器人由YGXB_net开发" +
+	"\nQQ:3040809965" +
+	"\n\n当前版本: " + data.Version +
+	"\n更新日志: https://gitee.com/YGXB-net/QQBot_go/blob/master/CHANGELOG.md"
+```
 
 ### 优化
 
@@ -32,7 +55,7 @@
   var info = "本机器人由YGXB_net开发" +
   	"\nQQ:3040809965" +
   	"\n\n当前版本: " + data.Version +
-  	"\n更新日志: https://gitee.com/YGXB-net/QQBot_go/blob/master/CHANGELOG.md"
+  	"\n更新日志: https://gitee.com/YGXB-net/QQBot_go/blob/develop/CHANGELOG.md"
   ```
 
 ### 优化
