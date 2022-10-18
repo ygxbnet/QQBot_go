@@ -14,7 +14,8 @@ import (
 var help_info = "----------帮助信息----------" +
 	"\n\n/help 获取帮助" +
 	"\n/info 获取机器人信息" +
-	"\n\n/dk 进行打卡"
+	"\n\n/dk 进行打卡" +
+	"\n/sp 进行刷屏"
 
 func HandleOrder_Group(group_id string, user_id string, message string) {
 	switch strings.Fields(message)[0][0:] {
