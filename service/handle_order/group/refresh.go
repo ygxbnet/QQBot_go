@@ -6,11 +6,13 @@ import (
 	log "github.com/sirupsen/logrus"
 	"strconv"
 	"strings"
+	"time"
 )
 
-// 刷屏
-func groupRefresh(group_id string, user_id string, message string) {
+var refreshStructs = map[string]*refresh{}
 
+// 刷屏
+func GroupRefresh(group_id string, user_id string, message string) {
 	refreshNumber := 5
 
 	if len(strings.Fields(message)) == 1 {
@@ -29,7 +31,6 @@ func groupRefresh(group_id string, user_id string, message string) {
 			httpapi.Send_group_msg(group_id, fmt.Sprintf("[CQ:at,qq=%s]"+"\n❌指定刷屏次数错误", user_id))
 			return
 		}
-
 		if num <= 20 {
 			refreshNumber = num
 		} else {
@@ -46,5 +47,54 @@ func groupRefresh(group_id string, user_id string, message string) {
 		httpapi.Send_group_msg(group_id, "❌参数错误或多余")
 		return
 	}
+	doRefresh(group_id, user_id, refreshNumber)
+}
 
+func doRefresh(group_id string, user_id string, refreshNumber int) {
+	//刷屏实现
+	if _, ok := refreshStructs[user_id]; !ok {
+		r := &refresh{}
+		r.setUserId(user_id)
+		r.setNumber(refreshNumber)
+		r.do()
+
+		refreshStructs[user_id] = r
+	} else {
+		refreshStructs[user_id].do()
+	}
+}
+
+type refresh struct {
+	userID string
+	number int
+
+	times int
+	isdo  bool
+}
+
+func (receiver *refresh) setUserId(userID string) {
+	receiver.userID = userID
+}
+
+func (receiver *refresh) setNumber(number int) {
+	receiver.number = number
+}
+
+func (receiver *refresh) do() {
+	receiver.isdo = true
+	go func() {
+		for receiver.isdo {
+			time.Sleep(time.Second)
+			receiver.times += 1
+			if receiver.times >= 5 {
+				receiver.stop()
+			}
+
+		}
+	}()
+}
+
+func (receiver *refresh) stop() {
+	receiver.isdo = false
+	receiver.times = 0
 }

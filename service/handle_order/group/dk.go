@@ -10,6 +10,10 @@ import (
 	"time"
 )
 
+var message_dk = "[CQ:at,qq=%s]" +
+	"\n%s" +
+	"\n%s"
+
 // 打卡
 func Group_dk(group_id string, user_id string) {
 	UserData := db.ReadDBFile("group", user_id)

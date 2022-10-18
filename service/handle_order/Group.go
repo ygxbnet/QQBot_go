@@ -1,8 +1,9 @@
-package group
+package handle_order
 
 import (
 	"QQBot_go/internal/base"
 	"QQBot_go/internal/httpapi"
+	"QQBot_go/service/handle_order/group"
 	"strings"
 )
 
@@ -11,10 +12,6 @@ var help_info = "----------帮助信息----------" +
 	"\n/info 获取机器人信息" +
 	"\n\n/dk 进行打卡" +
 	"\n/sp 进行刷屏"
-
-var message_dk = "[CQ:at,qq=%s]" +
-	"\n%s" +
-	"\n%s"
 
 var info = "本机器人由YGXB_net开发" +
 	"\nQQ:3040809965" +
@@ -35,10 +32,10 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 		httpapi.Send_group_msg(group_id, info)
 
 	case "/dk", "／dk", "打卡", "&#91;冒泡&#93;":
-		Group_dk(group_id, user_id)
+		group.Group_dk(group_id, user_id)
 
 	case "/sp", "／sp", "刷屏":
-		groupRefresh(group_id, user_id, message)
+		group.GroupRefresh(group_id, user_id, message)
 
 	case "/test", "／test":
 		httpapi.Send_group_msg(group_id, "[CQ:share,url=https://gitee.com/YGXB-net/QQBot_go/blob/develop/CHANGELOG.md#更新日志]")
