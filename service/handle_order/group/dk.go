@@ -1,4 +1,4 @@
-package handle_order
+package group
 
 import (
 	"QQBot_go/db"
@@ -7,68 +7,8 @@ import (
 	"fmt"
 	"github.com/tidwall/gjson"
 	"strconv"
-	"strings"
 	"time"
 )
-
-var help_info = "----------帮助信息----------" +
-	"\n\n/help 获取帮助" +
-	"\n/info 获取机器人信息" +
-	"\n\n/dk 进行打卡" +
-	"\n/sp 进行刷屏"
-
-func HandleOrder_Group(group_id string, user_id string, message string) {
-	switch strings.Fields(message)[0][0:] {
-	case "/", "／": //指令为空时
-		httpapi.Send_group_msg(group_id, "指令不能为空")
-
-	case "/help", "／help":
-		httpapi.Send_group_msg(group_id, help_info)
-
-	case "/info", "／info": //机器人信息
-		httpapi.Send_group_msg(group_id, info)
-
-	case "/dk", "／dk", "打卡", "&#91;冒泡&#93;":
-		Group_dk(group_id, user_id)
-
-	case "/sp", "／sp", "刷屏":
-		groupRefresh(group_id, user_id, message)
-
-	case "/test", "／test":
-		httpapi.Send_group_msg(group_id, "[CQ:share,url=https://gitee.com/YGXB-net/QQBot_go/blob/develop/CHANGELOG.md#更新日志]")
-
-	default:
-		if message[0:1] == "/" || message[0:3] == "／" {
-			httpapi.Send_group_msg(group_id, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
-		}
-	}
-}
-
-// 刷屏
-func groupRefresh(group_id string, user_id string, message string) {
-
-	bannedNumber := 5
-	var msg1 = fmt.Sprintf(
-		"[CQ:at,qq=%s]"+
-			"\n将把您的下一条消息作为刷屏消息"+
-			"\n/sp [刷屏次数](默认5次)", user_id)
-	var msg2 = fmt.Sprintf(
-		"[CQ:at,qq=%s]"+
-			"\n将把您的下一条消息作为刷屏消息"+
-			"\n刷屏次数: %d", user_id, bannedNumber)
-	var msg_error = "参数错误或多余"
-
-	if len(strings.Fields(message)) == 1 {
-
-		httpapi.Send_group_msg(group_id, msg1)
-	} else if len(strings.Fields(message)) == 2 {
-
-		httpapi.Send_group_msg(group_id, msg2)
-	} else {
-		httpapi.Send_group_msg(group_id, msg_error)
-		return
-	}
-}
 
 // 打卡
 func Group_dk(group_id string, user_id string) {
