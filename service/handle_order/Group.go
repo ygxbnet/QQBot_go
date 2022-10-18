@@ -29,10 +29,10 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 	case "/info": //机器人信息
 		httpapi.Send_group_msg(group_id, info)
 
-	case "/dk", "/打卡", "&#91;冒泡&#93;":
+	case "/dk", "打卡", "&#91;冒泡&#93;":
 		Group_dk(group_id, user_id)
 
-	case "/sp", "/刷屏":
+	case "/sp", "刷屏":
 		groupRefresh(group_id, user_id, message)
 
 	case "/test":
