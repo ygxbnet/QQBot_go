@@ -2,6 +2,25 @@
 
 > 此文档为`QQBot_go`项目的更新日志
 
+## [0.7.3] - 2022-10-18
+
+### 变更
+
+- 更改 `/help` 命令回复消息
+
+```go
+var help_info = "----------帮助信息----------" +
+	"\n\n/help 获取帮助" +
+	"\n/info 获取机器人信息" +
+	"\n\n/dk 进行打卡"
+```
+
+### 移除
+
+- 移除了对命令触发的限制，可以使用 `／` 作为命令触发符号
+
+
+
 ## [0.7.2] - 2022-10-17
 
 ### 新增
@@ -23,7 +42,7 @@
 ```go
 var info = "本机器人由YGXB_net开发" +
 	"\nQQ:3040809965" +
-	"\n\n当前版本: " + data.Version +
+	"\n\n当前版本: " + base.Version +
 	"\n更新日志: https://gitee.com/YGXB-net/QQBot_go/blob/master/CHANGELOG.md"
 ```
 
