@@ -2,6 +2,23 @@
 
 > 此文档为`QQBot_go`项目的更新日志
 
+## [0.7.4] - 2022-10-19
+
+### 修复
+
+- 修复严重bug，处理命令时，对 `message` 切片会出现长度不足导致程序退出
+
+```go
+//文件: service/handle_order/Group.go:46
+default:
+		if message[0:1] == "/" || message[0:3] == "／" {
+			httpapi.Send_group_msg(group_id, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
+		}
+	}
+```
+
+
+
 ## [0.7.3] - 2022-10-18
 
 ### 变更

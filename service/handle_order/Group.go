@@ -4,6 +4,7 @@ import (
 	"QQBot_go/internal/base"
 	"QQBot_go/internal/httpapi"
 	"QQBot_go/service/handle_order/group"
+	log "github.com/sirupsen/logrus"
 	"strings"
 )
 
@@ -19,6 +20,12 @@ var info = "本机器人由YGXB_net开发" +
 	"\n更新日志: https://gitee.com/YGXB-net/QQBot_go/blob/master/CHANGELOG.md"
 
 func HandleOrder_Group(group_id string, user_id string, message string) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Error(err)
+		}
+	}()
+
 	switch strings.Fields(message)[0][0:] {
 	case "/", "／":
 		//指令为空时
