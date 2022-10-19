@@ -1,7 +1,7 @@
 package httpapi
 
 import (
-	"QQBot_go/config"
+	"QQBot_go/internal/config"
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"io"

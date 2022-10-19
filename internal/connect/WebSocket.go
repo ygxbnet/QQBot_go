@@ -1,8 +1,8 @@
 package connect
 
 import (
-	"QQBot_go/config"
-	"QQBot_go/handler"
+	"QQBot_go/internal/config"
+	"QQBot_go/internal/handler"
 	"time"
 
 	"github.com/gorilla/websocket"

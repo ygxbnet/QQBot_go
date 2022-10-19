@@ -1,7 +1,7 @@
 package service
 
 import (
-	"QQBot_go/handler"
+	"QQBot_go/internal/handler"
 	"QQBot_go/service/handle_order"
 	log "github.com/sirupsen/logrus"
 )

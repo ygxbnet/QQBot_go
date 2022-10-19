@@ -1,8 +1,8 @@
 package group
 
 import (
-	"QQBot_go/db"
-	"QQBot_go/db/model"
+	"QQBot_go/internal/db"
+	"QQBot_go/internal/db/model"
 	"QQBot_go/internal/httpapi"
 	"fmt"
 	"github.com/tidwall/gjson"
