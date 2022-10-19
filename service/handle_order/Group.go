@@ -4,6 +4,7 @@ import (
 	"QQBot_go/internal/base"
 	"QQBot_go/internal/httpapi"
 	"QQBot_go/service/handle_order/group"
+	"fmt"
 	log "github.com/sirupsen/logrus"
 	"strings"
 )
@@ -49,6 +50,8 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 	default:
 		if message[0:1] == "/" || message[0:3] == "／" {
 			httpapi.Send_group_msg(group_id, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
+		} else if message[0:21] == "[CQ:at,qq=2700154874]" {
+			httpapi.Send_group_msg(group_id, fmt.Sprintf("[CQ:at,qq=%s] 叫你爸爸干嘛？", user_id))
 		}
 	}
 }
