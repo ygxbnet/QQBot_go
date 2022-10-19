@@ -5,6 +5,7 @@ import (
 	"QQBot_go/db/model"
 	"QQBot_go/internal/httpapi"
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"github.com/tidwall/gjson"
 	"strconv"
 	"strings"
@@ -17,6 +18,12 @@ var help_info = "----------帮助信息----------" +
 	"\n\n/dk 进行打卡"
 
 func HandleOrder_Group(group_id string, user_id string, message string) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Error(err)
+		}
+	}()
+
 	switch strings.Fields(message)[0][0:] {
 	case "/", "／": //指令为空时
 		httpapi.Send_group_msg(group_id, "指令不能为空")
