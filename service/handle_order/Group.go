@@ -24,7 +24,6 @@ var info = "本机器人由YGXB_net开发" +
 	"\n更新日志: https://gitee.com/YGXB-net/QQBot_go/blob/master/CHANGELOG.md"
 
 func HandleOrder_Group(group_id string, user_id string, message string) {
-
 	switch strings.Fields(message)[0] {
 	case "/", "／":
 		//指令为空时
@@ -43,10 +42,8 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 		group.GroupRefresh(group_id, user_id, message)
 	case "/test", "／test":
 		httpapi.Send_group_msg(group_id, "This is test")
-
 	default:
 		handleEmojisOrder(group_id, user_id, message)
-
 		//因为切片会出现长度不足，所以会抛出异常
 		defer func() { recover() }()
 		if message[0:1] == "/" || message[0:3] == "／" {
