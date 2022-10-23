@@ -16,7 +16,8 @@ import (
 var help_info = "----------帮助信息----------" +
 	"\n\n/help 获取帮助" +
 	"\n/info 获取机器人信息" +
-	"\n\n/dk 进行打卡"
+	"\n\n/dk 进行打卡" +
+	"\n/sp 进行刷屏"
 
 var info = "本机器人由YGXB_net开发" +
 	"\nQQ:3040809965" +
