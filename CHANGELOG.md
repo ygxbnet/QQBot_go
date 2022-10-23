@@ -2,6 +2,32 @@
 
 > 此文档为`QQBot_go`项目的更新日志
 
+## [0.7.6] - 2022-10-23
+
+### 变更
+
+- 更改对于消息切片长度不足的处理
+
+```go
+//因为切片会出现长度不足，所以会抛出异常
+defer func() { recover() }()
+if message[0:1] == "/" || message[0:3] == "／" {
+    httpapi.Send_group_msg(group_id, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
+} else if strings.Index(message, "[CQ:at,qq=2700154874]") != -1 {
+    httpapi.Send_group_msg(group_id, fmt.Sprintf("[CQ:at,qq=%s] 叫你爸爸干嘛？", user_id))
+}
+```
+
+### 新增
+
+- 新增Group中对表情包命令的处理，通过计算文件的MD5值来判断
+
+### 优化
+
+- 优化 `service/handle_order/Group.go` 的代码，添加一堆注释
+
+
+
 ## [0.7.5] - 2022-10-19
 
 ### 新增
