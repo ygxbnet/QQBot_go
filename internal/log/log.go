@@ -33,9 +33,14 @@ func getTime() string {
 }
 
 func createDir(path string) {
-	err := os.Mkdir(path, 0755)
-	if err != nil {
-		log.Error(err)
+	_, err := os.Stat(path)
+	if err == nil {
+		return
+	} else {
+		err = os.Mkdir(path, 0755)
+		if err != nil {
+			log.Error(err)
+		}
 	}
 }
 
