@@ -25,6 +25,7 @@ func GroupRefresh(group_id string, user_id string, message string) {
 		var msg1 = fmt.Sprintf(
 			"[CQ:at,qq=%s]"+
 				"\n✅将把您的下一条消息作为刷屏消息"+
+				"\n刷屏次数: 2次"+
 				"\n/sp [刷屏次数](默认2次 最多为10次)", user_id)
 		httpapi.Send_group_msg(group_id, msg1)
 
@@ -44,9 +45,8 @@ func GroupRefresh(group_id string, user_id string, message string) {
 		var msg2 = fmt.Sprintf(
 			"[CQ:at,qq=%s]"+
 				"\n✅将把您的下一条消息作为刷屏消息"+
-				"\n刷屏次数: %d", user_id, refreshNumber)
+				"\n刷屏次数: %d次", user_id, refreshNumber)
 		httpapi.Send_group_msg(group_id, msg2)
-
 	} else {
 		//参数错误
 		httpapi.Send_group_msg(group_id, "❌参数错误或多余")
@@ -62,8 +62,6 @@ func doRefresh(group_id string, user_id string, refreshNumber int) {
 		r.setNumber(refreshNumber)
 
 		refreshStructs[user_id] = r
-	} else {
-		delete(refreshStructs, user_id)
 	}
 }
 

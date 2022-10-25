@@ -3,7 +3,6 @@ package service
 import (
 	"QQBot_go/internal/handler"
 	"QQBot_go/service/handle_order"
-	"QQBot_go/service/handle_order/group"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -17,6 +16,5 @@ func Services() {
 }
 
 func Group(group_id string, user_id string, message string) {
-	group.RefreshHandle(group_id, user_id, message)
 	handle_order.HandleOrder_Group(group_id, user_id, message)
 }

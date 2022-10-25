@@ -44,13 +44,20 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 		httpapi.Send_group_msg(group_id, "This is test")
 	default:
 		handleEmojisOrder(group_id, user_id, message)
-		//因为切片会出现长度不足，所以会抛出异常
-		defer func() { recover() }()
+
 		if message[0:1] == "/" || message[0:3] == "／" {
 			httpapi.Send_group_msg(group_id, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
-		} else if strings.Index(message, "[CQ:at,qq=2700154874]") != -1 && user_id != "3040809965" {
-			httpapi.Send_group_msg(group_id, "叫你爸爸干嘛？")
+			return
 		}
+
+		//因为切片会出现长度不足，所以会抛出异常
+		defer func() { recover() }()
+		if strings.Index(message, "[CQ:at,qq=2700154874]") != -1 && user_id != "3040809965" {
+			httpapi.Send_group_msg(group_id, "叫你爸爸干嘛？")
+			return
+		}
+		
+		group.RefreshHandle(group_id, user_id, message)
 	}
 }
 
