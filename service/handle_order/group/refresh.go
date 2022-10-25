@@ -6,13 +6,14 @@ import (
 	log "github.com/sirupsen/logrus"
 	"strconv"
 	"strings"
+	"time"
 )
 
 var refreshStructs = map[string]*refresh{}
 
 func RefreshHandle(group_id string, user_id string, message string) {
 	if refreshStructs[user_id] != nil {
-		refreshStructs[user_id].refresh(group_id, user_id, message)
+		refreshStructs[user_id].Refresh(group_id, user_id, message)
 	}
 }
 
@@ -57,23 +58,45 @@ func GroupRefresh(group_id string, user_id string, message string) {
 
 func doRefresh(group_id string, user_id string, refreshNumber int) {
 	//刷屏实现
-	if _, ok := refreshStructs[user_id]; !ok {
+	if refreshStructs[user_id] == nil {
 		r := &refresh{}
-		r.setNumber(refreshNumber)
+		r.SetNumber(refreshNumber)
+		r.SetUserID(user_id)
+		r.DelayDelete()
 
 		refreshStructs[user_id] = r
+	} else {
+		refreshStructs[user_id].ResetTime()
 	}
 }
 
 // 刷屏结构体
 type refresh struct {
+	userId string
 	number int
+	time   int
 }
 
-func (receiver *refresh) setNumber(number int) {
+func (receiver *refresh) SetNumber(number int) {
 	receiver.number = number
 }
-func (receiver *refresh) refresh(group_id string, user_id string, message string) {
+func (receiver *refresh) SetUserID(userId string) {
+	receiver.userId = userId
+}
+func (receiver *refresh) ResetTime() {
+	receiver.time = 20
+}
+func (receiver *refresh) DelayDelete() {
+	receiver.time = 20
+	go func() {
+		for receiver.time > 0 {
+			time.Sleep(time.Second)
+			receiver.time--
+		}
+		delete(refreshStructs, receiver.userId)
+	}()
+}
+func (receiver *refresh) Refresh(group_id string, user_id string, message string) {
 	for i := 1; i <= receiver.number; i++ {
 		httpapi.Send_group_msg(group_id, message)
 	}
