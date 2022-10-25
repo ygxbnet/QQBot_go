@@ -6,10 +6,15 @@ import (
 	log "github.com/sirupsen/logrus"
 	"strconv"
 	"strings"
-	"time"
 )
 
 var refreshStructs = map[string]*refresh{}
+
+func RefreshHandle(group_id string, user_id string, message string) {
+	if refreshStructs[user_id] != nil {
+		refreshStructs[user_id].refresh(group_id, user_id, message)
+	}
+}
 
 // 刷屏
 func GroupRefresh(group_id string, user_id string, message string) {
@@ -20,7 +25,7 @@ func GroupRefresh(group_id string, user_id string, message string) {
 		var msg1 = fmt.Sprintf(
 			"[CQ:at,qq=%s]"+
 				"\n✅将把您的下一条消息作为刷屏消息"+
-				"\n/sp [刷屏次数](默认5次)", user_id)
+				"\n/sp [刷屏次数](默认5次 最多为20次)", user_id)
 		httpapi.Send_group_msg(group_id, msg1)
 
 	} else if len(strings.Fields(message)) == 2 {
@@ -54,47 +59,25 @@ func doRefresh(group_id string, user_id string, refreshNumber int) {
 	//刷屏实现
 	if _, ok := refreshStructs[user_id]; !ok {
 		r := &refresh{}
-		r.setUserId(user_id)
 		r.setNumber(refreshNumber)
-		r.do()
 
 		refreshStructs[user_id] = r
 	} else {
-		refreshStructs[user_id].do()
+		delete(refreshStructs, user_id)
 	}
 }
 
+// 刷屏结构体
 type refresh struct {
-	userID string
 	number int
-
-	times int
-	isdo  bool
-}
-
-func (receiver *refresh) setUserId(userID string) {
-	receiver.userID = userID
 }
 
 func (receiver *refresh) setNumber(number int) {
 	receiver.number = number
 }
-
-func (receiver *refresh) do() {
-	receiver.isdo = true
-	go func() {
-		for receiver.isdo {
-			time.Sleep(time.Second)
-			receiver.times += 1
-			if receiver.times >= 5 {
-				receiver.stop()
-			}
-
-		}
-	}()
-}
-
-func (receiver *refresh) stop() {
-	receiver.isdo = false
-	receiver.times = 0
+func (receiver *refresh) refresh(group_id string, user_id string, message string) {
+	for i := 0; i <= receiver.number; i++ {
+		httpapi.Send_group_msg(group_id, message)
+	}
+	delete(refreshStructs, user_id)
 }
