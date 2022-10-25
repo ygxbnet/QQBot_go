@@ -6,7 +6,6 @@ import (
 	"QQBot_go/service/handle_order/group"
 	"crypto/md5"
 	"encoding/hex"
-	"fmt"
 	log "github.com/sirupsen/logrus"
 	"io"
 	"net/http"
@@ -50,7 +49,7 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 		if message[0:1] == "/" || message[0:3] == "／" {
 			httpapi.Send_group_msg(group_id, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
 		} else if strings.Index(message, "[CQ:at,qq=2700154874]") != -1 && user_id != "3040809965" {
-			httpapi.Send_group_msg(group_id, fmt.Sprintf("[CQ:at,qq=%s] 叫你爸爸干嘛？", user_id))
+			httpapi.Send_group_msg(group_id, "叫你爸爸干嘛？")
 		}
 	}
 }

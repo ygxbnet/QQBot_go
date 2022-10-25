@@ -18,14 +18,14 @@ func RefreshHandle(group_id string, user_id string, message string) {
 
 // 刷屏
 func GroupRefresh(group_id string, user_id string, message string) {
-	refreshNumber := 5
+	refreshNumber := 2
 
 	if len(strings.Fields(message)) == 1 {
 		//刷屏
 		var msg1 = fmt.Sprintf(
 			"[CQ:at,qq=%s]"+
 				"\n✅将把您的下一条消息作为刷屏消息"+
-				"\n/sp [刷屏次数](默认5次 最多为20次)", user_id)
+				"\n/sp [刷屏次数](默认2次 最多为10次)", user_id)
 		httpapi.Send_group_msg(group_id, msg1)
 
 	} else if len(strings.Fields(message)) == 2 {
@@ -36,10 +36,10 @@ func GroupRefresh(group_id string, user_id string, message string) {
 			httpapi.Send_group_msg(group_id, fmt.Sprintf("[CQ:at,qq=%s]"+"\n❌指定刷屏次数错误", user_id))
 			return
 		}
-		if num <= 20 {
+		if num <= 10 {
 			refreshNumber = num
 		} else {
-			refreshNumber = 20
+			refreshNumber = 10
 		}
 		var msg2 = fmt.Sprintf(
 			"[CQ:at,qq=%s]"+
