@@ -2,6 +2,7 @@ package httpapi
 
 import (
 	"QQBot_go/internal/config"
+	"encoding/json"
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"io"
@@ -9,33 +10,38 @@ import (
 	"strings"
 )
 
-func sendHTTP(Sndpoint string, body []string) []byte {
+func sendHTTP(path string, body map[string]string) []byte {
 
-	var PostBody string
-
-	for _, v := range body {
-		PostBody += v + "&"
-	}
-
-	resp, err := http.Post(config.Http_url+Sndpoint,
-		"application/x-www-form-urlencoded",
-		strings.NewReader(PostBody))
-
+	jsonData, err := json.Marshal(body)
 	if err != nil {
-		log.Error("请求[" + config.Http_url + Sndpoint + "]错误")
+		log.Error(err)
+		return nil
+	}
+	postBody := strings.NewReader(string(jsonData))
+
+	req, err := http.NewRequest("POST", config.Http_url+path, postBody)
+	if err != nil {
+		log.Error(err)
+		return nil
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		log.Error("请求[" + config.Http_url + path + "]错误")
 		log.Infof("body: %s\n", strings.Replace(fmt.Sprintf("%s", body), "\n", "\\n", -1))
 		log.Error(err)
 		return nil
 	}
+	defer res.Body.Close()
 
-	defer resp.Body.Close()
-	RespBody, err := io.ReadAll(resp.Body)
+	RespBody, err := io.ReadAll(res.Body)
 	if err != nil {
 		log.Error(err)
 		return nil
 	}
 
-	log.Info("请求[" + config.Http_url + Sndpoint + "]成功")
+	log.Info("请求[" + config.Http_url + path + "]成功")
 
 	log.Infof("body: %s\n", strings.Replace(fmt.Sprintf("%s", body), "\n", "\\n", -1))
 	return RespBody
