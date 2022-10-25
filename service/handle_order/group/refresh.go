@@ -76,7 +76,7 @@ func (receiver *refresh) setNumber(number int) {
 	receiver.number = number
 }
 func (receiver *refresh) refresh(group_id string, user_id string, message string) {
-	for i := 0; i <= receiver.number; i++ {
+	for i := 1; i <= receiver.number; i++ {
 		httpapi.Send_group_msg(group_id, message)
 	}
 	delete(refreshStructs, user_id)
