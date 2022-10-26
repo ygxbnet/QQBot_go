@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-var help_info = "----------帮助信息----------" +
+var helpInfo = "----------帮助信息----------" +
 	"\n\n/help 获取帮助" +
 	"\n/info 获取机器人信息" +
 	"\n\n/dk 进行打卡" +
@@ -23,43 +23,44 @@ var info = "本机器人由YGXB_net开发" +
 	"\n\n当前版本: " + base.Version +
 	"\n更新日志: https://gitee.com/YGXB-net/QQBot_go/blob/master/CHANGELOG.md"
 
-func HandleOrder_Group(group_id string, user_id string, message string) {
+// HandleGroupOrder 处理Group命令
+func HandleGroupOrder(groupID string, userID string, message string) {
 	switch strings.Fields(message)[0] {
 	case "/", "／":
 		//指令为空时
-		httpapi.Send_group_msg(group_id, "指令不能为空")
+		httpapi.SendGroupMsg(groupID, "指令不能为空")
 	case "/help", "／help":
 		//帮助指令
-		httpapi.Send_group_msg(group_id, help_info)
+		httpapi.SendGroupMsg(groupID, helpInfo)
 	case "/info", "／info":
 		//机器人信息
-		httpapi.Send_group_msg(group_id, info)
+		httpapi.SendGroupMsg(groupID, info)
 	case "/dk", "／dk", "打卡", "&#91;冒泡&#93;":
 		//打卡指令
-		group.Group_dk(group_id, user_id)
+		group.Dk(groupID, userID)
 	case "/sp", "／sp", "刷屏":
 		//刷屏指令
-		group.GroupRefresh(group_id, user_id, message)
+		group.Refresh(groupID, userID, message)
 	case "/test", "／test":
-		httpapi.Send_group_msg(group_id, "This is test")
+		httpapi.SendGroupMsg(groupID, "This is test")
 	default:
-		group.RefreshHandle(group_id, user_id, message)
-		handleEmojisOrder(group_id, user_id, message)
+		group.RefreshHandle(groupID, userID, message)
+		handleEmojisOrder(groupID, userID, message)
 
 		//因为切片会出现长度不足，所以会抛出异常
 		defer func() { recover() }()
 		if message[0:1] == "/" || message[0:3] == "／" {
-			httpapi.Send_group_msg(group_id, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
+			httpapi.SendGroupMsg(groupID, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
 			return
 		}
-		if strings.Index(message, "[CQ:at,qq=2700154874]") != -1 && user_id != "3040809965" {
-			httpapi.Send_group_msg(group_id, "叫你爸爸干嘛？")
+		if strings.Index(message, "[CQ:at,qq=2700154874]") != -1 && userID != "3040809965" {
+			httpapi.SendGroupMsg(groupID, "叫你爸爸干嘛？")
 			return
 		}
 	}
 }
 
-func handleEmojisOrder(group_id string, user_id string, message string) {
+func handleEmojisOrder(groupID string, userID string, message string) {
 	//判断是否为图片消息
 	if strings.Index(message, "CQ:image") == -1 {
 		return
@@ -76,14 +77,14 @@ func handleEmojisOrder(group_id string, user_id string, message string) {
 	}
 	data, _ := io.ReadAll(resp.Body)
 	//对请求到的数据求MD5
-	md5 := md5.New()
-	md5.Write(data)
-	MD5Str := hex.EncodeToString(md5.Sum(nil))
+	FileMd5 := md5.New()
+	FileMd5.Write(data)
+	MD5Str := hex.EncodeToString(FileMd5.Sum(nil))
 
 	switch MD5Str {
 	case "d3ab70d3f8b6b4eb2c7878d5177dc051":
 		//此MD5值对应的文件为:
 		//https://gchat.qpic.cn/gchatpic_new/3040809965/2058987946-2282106232-D3AB70D3F8B6B4EB2C7878D5177DC051/0?term=3
-		group.Group_dk(group_id, user_id)
+		group.Dk(groupID, userID)
 	}
 }

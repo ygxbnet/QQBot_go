@@ -1,6 +1,7 @@
 package model
 
-type User_Data struct {
-	DK_Last_Time string `json:"dk_last_time"`
-	DK_Times     int    `json:"dk_times"`
+// UserData 用户数据
+type UserData struct {
+	DkLastTime string `json:"dk_last_time"`
+	DkTimes    int    `json:"dk_times"`
 }

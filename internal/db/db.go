@@ -4,32 +4,36 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
-	"io/ioutil"
 	"os"
 )
 
-var DBFileName = "data.json"
+var dbFileName = "data.json"
 
+// CreateDBFile 创建DB文件
 func CreateDBFile() {
 	path, _ := os.Getwd()
-	_, err := os.Stat(path + "/" + DBFileName)
+	_, err := os.Stat(path + "/" + dbFileName)
 	if err != nil {
-		log.Info("未找到:", DBFileName)
-		file, _ := os.Create(DBFileName)
+		log.Info("未找到:", dbFileName)
+		file, _ := os.Create(dbFileName)
 		log.Info("已创建:", file.Name())
-		os.WriteFile(DBFileName, []byte("{\"guild\":{},\"group\":{}}"), 0644)
+		os.WriteFile(dbFileName, []byte("{\"guild\":{},\"group\":{}}"), 0644)
 	} else {
-		log.Info("文件:", DBFileName, "已存在")
+		log.Info("文件:", dbFileName, "已存在")
 	}
 }
-func ReadDBFile(option string, user_id string) string {
+
+// ReadDBFile 读取DB文件
+func ReadDBFile(option string, userID string) string {
 	path, _ := os.Getwd()
-	file, _ := ioutil.ReadFile(path + "/" + DBFileName)
-	return gjson.Parse(string(file)).Get(option).Get(user_id).String()
+	file, _ := os.ReadFile(path + "/" + dbFileName)
+	return gjson.Parse(string(file)).Get(option).Get(userID).String()
 }
-func WriteDBFile(option string, user_id string, data interface{}) {
+
+// WriteDBFile 写入DB文件
+func WriteDBFile(option string, userID string, data interface{}) {
 	path, _ := os.Getwd()
-	file, _ := ioutil.ReadFile(path + "/" + DBFileName)
-	json, _ := sjson.Set(string(file), option+"."+user_id, data)
-	_ = ioutil.WriteFile(path+"/"+DBFileName, []byte(json), 0644)
+	file, _ := os.ReadFile(path + "/" + dbFileName)
+	json, _ := sjson.Set(string(file), option+"."+userID, data)
+	_ = os.WriteFile(path+"/"+dbFileName, []byte(json), 0644)
 }

@@ -7,14 +7,15 @@ import (
 )
 
 func init() {
-	handler.AddHandlerGroupMessageFunc(Group)
+	handler.AddHandlerGroupMessageFunc(group)
 }
 
+// Services 信息打印
 func Services() {
 	log.Info("功能模块将以插件模式运行")
 	Init()
 }
 
-func Group(group_id string, user_id string, message string) {
-	handle_order.HandleOrder_Group(group_id, user_id, message)
+func group(groupID string, userID string, message string) {
+	handle_order.HandleGroupOrder(groupID, userID, message)
 }

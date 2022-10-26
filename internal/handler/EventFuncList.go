@@ -4,32 +4,42 @@ import (
 	"container/list"
 )
 
-var HandlerGuildMessageFuncs = list.New()
-var HandlerPrivateMessageFuncs = list.New()
-var HandlerGroupMessageFuncs = list.New()
+var handlerGuildMessageFuncs = list.New()
+var handlerPrivateMessageFuncs = list.New()
+var handlerGroupMessageFuncs = list.New()
 
-func AddHandlerGuildMessageFunc(HandlerFunc func(guild_id string, channel_id string, user_id string, message string)) {
-	HandlerGuildMessageFuncs.PushBack(HandlerFunc)
+// AddHandlerGuildMessageFunc 添加处理Guild消息方法
+func AddHandlerGuildMessageFunc(HandlerFunc func(guildID string, channelID string, userID string, message string)) {
+	handlerGuildMessageFuncs.PushBack(HandlerFunc)
 }
+
+// AddHandlerPrivateMessageFunc 添加处理Private消息方法
 func AddHandlerPrivateMessageFunc(HandlerFunc func(message string)) {
-	HandlerPrivateMessageFuncs.PushBack(HandlerFunc)
-}
-func AddHandlerGroupMessageFunc(HandlerFunc func(group_id string, user_id string, message string)) {
-	HandlerGroupMessageFuncs.PushBack(HandlerFunc)
+	handlerPrivateMessageFuncs.PushBack(HandlerFunc)
 }
 
-func GuildMessage(guild_id string, channel_id string, user_id string, message string) {
-	for e := HandlerGuildMessageFuncs.Front(); e != nil; e = e.Next() {
-		go e.Value.(func(guild_id string, channel_id string, user_id string, message string))(guild_id, channel_id, user_id, message)
+// AddHandlerGroupMessageFunc 添加处理Group消息方法
+func AddHandlerGroupMessageFunc(HandlerFunc func(groupID string, userID string, message string)) {
+	handlerGroupMessageFuncs.PushBack(HandlerFunc)
+}
+
+// GuildMessage Guild消息
+func GuildMessage(guildID string, channelID string, userID string, message string) {
+	for e := handlerGuildMessageFuncs.Front(); e != nil; e = e.Next() {
+		go e.Value.(func(guildID string, channelID string, userID string, message string))(guildID, channelID, userID, message)
 	}
 }
+
+// PrivateMessage Private消息
 func PrivateMessage(message string) {
-	for e := HandlerPrivateMessageFuncs.Front(); e != nil; e = e.Next() {
+	for e := handlerPrivateMessageFuncs.Front(); e != nil; e = e.Next() {
 		go e.Value.(func(message string))(message)
 	}
 }
-func GroupMessage(group_id string, user_id string, message string) {
-	for e := HandlerGroupMessageFuncs.Front(); e != nil; e = e.Next() {
-		go e.Value.(func(group_id string, user_id string, message string))(group_id, user_id, message)
+
+// GroupMessage Group消息
+func GroupMessage(groupID string, userID string, message string) {
+	for e := handlerGroupMessageFuncs.Front(); e != nil; e = e.Next() {
+		go e.Value.(func(groupID string, userID string, message string))(groupID, userID, message)
 	}
 }

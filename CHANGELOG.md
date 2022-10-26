@@ -50,9 +50,9 @@
 //因为切片会出现长度不足，所以会抛出异常
 defer func() { recover() }()
 if message[0:1] == "/" || message[0:3] == "／" {
-    httpapi.Send_group_msg(group_id, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
+    httpapi.Send_group_msg(groupID, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
 } else if strings.Index(message, "[CQ:at,qq=2700154874]") != -1 {
-    httpapi.Send_group_msg(group_id, fmt.Sprintf("[CQ:at,qq=%s] 叫你爸爸干嘛？", user_id))
+    httpapi.Send_group_msg(groupID, fmt.Sprintf("[CQ:at,qq=%s] 叫你爸爸干嘛？", userID))
 }
 ```
 
@@ -85,7 +85,7 @@ if message[0:1] == "/" || message[0:3] == "／" {
 //文件: service/handle_order/Group.go:46
 default:
 		if message[0:1] == "/" || message[0:3] == "／" {
-			httpapi.Send_group_msg(group_id, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
+			httpapi.Send_group_msg(groupID, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
 		}
 	}
 ```

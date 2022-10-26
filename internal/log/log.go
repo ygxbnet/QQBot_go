@@ -34,9 +34,7 @@ func getTime() string {
 
 func createDir(path string) {
 	_, err := os.Stat(path)
-	if err == nil {
-		return
-	} else {
+	if err != nil {
 		err = os.Mkdir(path, 0755)
 		if err != nil {
 			log.Error(err)
@@ -75,12 +73,12 @@ func timing(Hour int, Min int, Sec int) {
 	now := time.Now()
 	var next time.Time
 
-	set_time := time.Date(now.Year(), now.Month(), now.Day(), Hour, Min, Sec, 0, now.Location())
+	setTime := time.Date(now.Year(), now.Month(), now.Day(), Hour, Min, Sec, 0, now.Location())
 
-	if set_time.After(now) {
-		next = set_time
+	if setTime.After(now) {
+		next = setTime
 	} else {
-		next = set_time.Add(24 * time.Hour)
+		next = setTime.Add(24 * time.Hour)
 		next = time.Date(next.Year(), next.Month(), next.Day(), Hour, Min, Sec, 0, now.Location())
 	}
 

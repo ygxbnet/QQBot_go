@@ -9,10 +9,11 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Connect 连接WebSocket
 func Connect() {
-	log.Info("正在连接: ", config.WebSocket_url)
+	log.Info("正在连接: ", config.WebSocketURL)
 
-	c, _, err := websocket.DefaultDialer.Dial(config.WebSocket_url, nil)
+	c, _, err := websocket.DefaultDialer.Dial(config.WebSocketURL, nil)
 	if err != nil {
 		log.Error("连接错误: ", err)
 		time.Sleep(time.Second)

@@ -1,4 +1,7 @@
 package config
 
-var WebSocket_url = "ws://192.168.3.45:8080"
-var Http_url = "http://192.168.3.45:5700"
+// WebSocketURL WebSocket地址
+var WebSocketURL = "ws://192.168.3.45:8080"
+
+// HTTPURL Http地址
+var HTTPURL = "http://192.168.3.45:5700"

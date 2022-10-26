@@ -11,14 +11,15 @@ import (
 
 var refreshStructs = map[string]*refresh{}
 
-func RefreshHandle(group_id string, user_id string, message string) {
-	if refreshStructs[user_id] != nil {
-		refreshStructs[user_id].Refresh(group_id, user_id, message)
+// RefreshHandle 刷屏处理
+func RefreshHandle(groupID string, userID string, message string) {
+	if refreshStructs[userID] != nil {
+		refreshStructs[userID].Refresh(groupID, userID, message)
 	}
 }
 
-// 刷屏
-func GroupRefresh(group_id string, user_id string, message string) {
+// Refresh 刷屏
+func Refresh(groupID string, userID string, message string) {
 	refreshNumber := 2
 
 	if len(strings.Fields(message)) == 1 {
@@ -27,15 +28,15 @@ func GroupRefresh(group_id string, user_id string, message string) {
 			"[CQ:at,qq=%s]"+
 				"\n✅将把您的下一条消息作为刷屏消息"+
 				"\n刷屏次数: 2次"+
-				"\n/sp [刷屏次数](默认2次 最多为10次)", user_id)
-		httpapi.Send_group_msg(group_id, msg1)
+				"\n/sp [刷屏次数](默认2次 最多为10次)", userID)
+		httpapi.SendGroupMsg(groupID, msg1)
 
 	} else if len(strings.Fields(message)) == 2 {
 		//刷屏 指定刷屏次数
 		num, err := strconv.Atoi(strings.Fields(message)[1])
 		if err != nil {
 			log.Error(err)
-			httpapi.Send_group_msg(group_id, fmt.Sprintf("[CQ:at,qq=%s]"+"\n❌指定刷屏次数错误", user_id))
+			httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:at,qq=%s]"+"\n❌指定刷屏次数错误", userID))
 			return
 		}
 		if num <= 10 {
@@ -46,33 +47,33 @@ func GroupRefresh(group_id string, user_id string, message string) {
 		var msg2 = fmt.Sprintf(
 			"[CQ:at,qq=%s]"+
 				"\n✅将把您的下一条消息作为刷屏消息"+
-				"\n刷屏次数: %d次", user_id, refreshNumber)
-		httpapi.Send_group_msg(group_id, msg2)
+				"\n刷屏次数: %d次", userID, refreshNumber)
+		httpapi.SendGroupMsg(groupID, msg2)
 	} else {
 		//参数错误
-		httpapi.Send_group_msg(group_id, "❌参数错误或多余")
+		httpapi.SendGroupMsg(groupID, "❌参数错误或多余")
 		return
 	}
-	doRefresh(group_id, user_id, refreshNumber)
+	doRefresh(groupID, userID, refreshNumber)
 }
 
-func doRefresh(group_id string, user_id string, refreshNumber int) {
+func doRefresh(groupID string, userID string, refreshNumber int) {
 	//刷屏实现
-	if refreshStructs[user_id] == nil {
+	if refreshStructs[userID] == nil {
 		r := &refresh{}
 		r.SetNumber(refreshNumber)
-		r.SetUserID(user_id)
+		r.SetUserID(userID)
 		r.DelayDelete()
 
-		refreshStructs[user_id] = r
+		refreshStructs[userID] = r
 	} else {
-		refreshStructs[user_id].ResetTime()
+		refreshStructs[userID].ResetTime()
 	}
 }
 
 // 刷屏结构体
 type refresh struct {
-	userId string
+	userID string
 	number int
 	time   int
 }
@@ -80,8 +81,8 @@ type refresh struct {
 func (receiver *refresh) SetNumber(number int) {
 	receiver.number = number
 }
-func (receiver *refresh) SetUserID(userId string) {
-	receiver.userId = userId
+func (receiver *refresh) SetUserID(userID string) {
+	receiver.userID = userID
 }
 func (receiver *refresh) ResetTime() {
 	receiver.time = 20
@@ -93,12 +94,12 @@ func (receiver *refresh) DelayDelete() {
 			time.Sleep(time.Second)
 			receiver.time--
 		}
-		delete(refreshStructs, receiver.userId)
+		delete(refreshStructs, receiver.userID)
 	}()
 }
-func (receiver *refresh) Refresh(group_id string, user_id string, message string) {
+func (receiver *refresh) Refresh(groupID string, userID string, message string) {
 	for i := 1; i <= receiver.number; i++ {
-		httpapi.Send_group_msg(group_id, message)
+		httpapi.SendGroupMsg(groupID, message)
 	}
-	delete(refreshStructs, user_id)
+	delete(refreshStructs, userID)
 }
