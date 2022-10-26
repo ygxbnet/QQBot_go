@@ -43,6 +43,7 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 	case "/test", "／test":
 		httpapi.Send_group_msg(group_id, "This is test")
 	default:
+		group.RefreshHandle(group_id, user_id, message)
 		handleEmojisOrder(group_id, user_id, message)
 
 		//因为切片会出现长度不足，所以会抛出异常
@@ -55,8 +56,6 @@ func HandleOrder_Group(group_id string, user_id string, message string) {
 			httpapi.Send_group_msg(group_id, "叫你爸爸干嘛？")
 			return
 		}
-
-		group.RefreshHandle(group_id, user_id, message)
 	}
 }
 
