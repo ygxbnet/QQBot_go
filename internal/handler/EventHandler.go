@@ -13,20 +13,20 @@ func EventHandler(message string) {
 		switch gjson.Parse(message).Get("message_type").String() {
 		case "guild":
 
-			if gjson.Parse(message).Get("userID").String() != "144115218684493716" {
+			if gjson.Parse(message).Get("user_id").String() != "144115218684493716" {
 				messageType = "Guild"
 
-				var guildID = gjson.Parse(message).Get("guildID").String()
-				var channelID = gjson.Parse(message).Get("channelID").String()
-				var userID = gjson.Parse(message).Get("userID").String()
+				var guildID = gjson.Parse(message).Get("guild_id").String()
+				var channelID = gjson.Parse(message).Get("channel_id").String()
+				var userID = gjson.Parse(message).Get("user_id").String()
 				var msg = gjson.Parse(message).Get("message").String()
 				GuildMessage(guildID, channelID, userID, msg)
 			}
 		case "group":
 			messageType = "Group"
 
-			var groupID = gjson.Parse(message).Get("groupID").String()
-			var userID = gjson.Parse(message).Get("userID").String()
+			var groupID = gjson.Parse(message).Get("group_id").String()
+			var userID = gjson.Parse(message).Get("user_id").String()
 			var msg = gjson.Parse(message).Get("message").String()
 
 			GroupMessage(groupID, userID, msg)
