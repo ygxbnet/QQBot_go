@@ -2,6 +2,8 @@ package main
 
 import (
 	_ "QQBot_go/internal/log"
+	
+	_ "QQBot_go/internal/config"
 
 	"QQBot_go/internal/base"
 	"QQBot_go/internal/connect"

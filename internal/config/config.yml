@@ -1,5 +1,0 @@
-Server:
-  WebSocket:
-    url: "ws://192.168.3.45:6700"
-  HttpAPI:
-    url: "http://192.168.3.45:5700"
