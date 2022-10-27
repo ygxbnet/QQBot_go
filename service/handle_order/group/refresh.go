@@ -4,6 +4,7 @@ import (
 	"QQBot_go/internal/httpapi"
 	"fmt"
 	log "github.com/sirupsen/logrus"
+	"github.com/tidwall/gjson"
 	"strconv"
 	"strings"
 	"time"
@@ -21,6 +22,7 @@ func RefreshHandle(groupID string, userID string, message string) {
 // Refresh 刷屏
 func Refresh(groupID string, userID string, message string) {
 	refreshNumber := 2
+	var messageID string
 
 	if len(strings.Fields(message)) == 1 {
 		//刷屏
@@ -29,7 +31,7 @@ func Refresh(groupID string, userID string, message string) {
 				"\n✅将把您的下一条消息作为刷屏消息"+
 				"\n刷屏次数: 2次"+
 				"\n/sp [刷屏次数](默认2次 最多为10次)", userID)
-		httpapi.SendGroupMsg(groupID, msg1)
+		messageID = gjson.Parse(httpapi.SendGroupMsg(groupID, msg1)).Get("data").Get("message_id").String()
 
 	} else if len(strings.Fields(message)) == 2 {
 		//刷屏 指定刷屏次数
@@ -50,11 +52,18 @@ func Refresh(groupID string, userID string, message string) {
 			"[CQ:at,qq=%s]"+
 				"\n✅将把您的下一条消息作为刷屏消息"+
 				"\n刷屏次数: %d次", userID, refreshNumber)
-		httpapi.SendGroupMsg(groupID, msg2)
+		messageID = gjson.Parse(httpapi.SendGroupMsg(groupID, msg2)).Get("data").Get("message_id").String()
+
 	} else {
 		//参数错误
 		httpapi.SendGroupMsg(groupID, "❌参数错误或多余")
 		return
+	}
+
+	if messageID != "" {
+		time.AfterFunc(time.Minute, func() {
+			httpapi.DeleteMsg(messageID)
+		})
 	}
 	doRefresh(groupID, userID, refreshNumber)
 }
