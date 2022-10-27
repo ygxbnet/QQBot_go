@@ -1,11 +1,12 @@
 .idea
 .vscode
 
-# log
-logs
-
+# config
+config.yml
 # data
 data.json
+# log
+logs
 
 # build
 QQBot_go
