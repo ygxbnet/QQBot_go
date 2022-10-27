@@ -16,6 +16,16 @@ func SendGroupMsg(groupID string, message string) string {
 	return string(body)
 }
 
+// DeleteMsg 撤回Group消息
+func DeleteMsg(messageID string) string {
+	data := make(map[string]string)
+	data["message_id"] = messageID
+
+	body := sendHTTP("/delete_msg", data)
+	log.Infof("撤回Group消息结果: %s", string(body))
+	return string(body)
+}
+
 // SetGroupBan Group禁言
 func SetGroupBan(groupID string, userID string, duration int) string {
 	data := make(map[string]string)
