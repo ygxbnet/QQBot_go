@@ -84,10 +84,10 @@ func (receiver *refresh) SetUserID(userId string) {
 	receiver.userId = userId
 }
 func (receiver *refresh) ResetTime() {
-	receiver.time = 20
+	receiver.time = 300
 }
 func (receiver *refresh) DelayDelete() {
-	receiver.time = 20
+	receiver.time = 300
 	go func() {
 		for receiver.time > 0 {
 			time.Sleep(time.Second)
