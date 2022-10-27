@@ -66,6 +66,7 @@ func doRefresh(group_id string, user_id string, refreshNumber int) {
 
 		refreshStructs[user_id] = r
 	} else {
+		refreshStructs[user_id].SetNumber(refreshNumber)
 		refreshStructs[user_id].ResetTime()
 	}
 }
