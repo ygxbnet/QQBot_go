@@ -41,6 +41,8 @@ func Refresh(groupID string, userID string, message string) {
 		}
 		if num <= 10 {
 			refreshNumber = num
+		} else if num == 110 {
+			refreshNumber = 50
 		} else {
 			refreshNumber = 10
 		}
