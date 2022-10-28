@@ -4,6 +4,8 @@
 account:
   # Bot的QQ号
   bot-id: 2700154874
+  # 管理员QQ号
+  admin-id: 3040809965
 
 # 群组相关设置
 group:
