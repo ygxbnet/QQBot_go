@@ -10,8 +10,8 @@ import (
 //go:embed config-default.yml
 var defaultConfig string
 
-// Init 初始化config
-func Init() {
+// init 初始化config
+func init() {
 	_, err := os.Stat("config.yml")
 	if os.IsNotExist(err) {
 		file, err := os.Create("config.yml")

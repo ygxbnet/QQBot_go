@@ -18,12 +18,12 @@ group:
 
 # 服务器相关设置
 server:
-  # go-cqhttp 的 websocket 设置
-  websocket:
-    # websocket 连接地址
-    url: ws://127.0.0.1:6700
-
   # go-cqhttp 的 http 通信设置
   http-api:
     # http 的地址
     url: http://127.0.0.1:5700
+
+  # go-cqhttp 的 websocket 设置
+  websocket:
+    # websocket 连接地址
+    url: ws://127.0.0.1:8080
