@@ -6,12 +6,12 @@ type Config struct {
 	Server  Server  `yaml:"server"`
 }
 type Account struct {
-	BotID   int64 `yaml:"bot-id"`
-	AdminID int64 `yaml:"admin-id"`
+	BotID   string `yaml:"bot-id"`
+	AdminID string `yaml:"admin-id"`
 }
 type Group struct {
-	MainID int `yaml:"main-id"`
-	InfoID int `yaml:"info-id"`
+	MainID string `yaml:"main-id"`
+	InfoID string `yaml:"info-id"`
 }
 type Websocket struct {
 	URL string `yaml:"url"`
