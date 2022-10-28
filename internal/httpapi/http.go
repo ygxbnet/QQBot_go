@@ -11,6 +11,7 @@ import (
 )
 
 func sendHTTP(path string, body map[string]string) []byte {
+	httpURL := config.Parse().Server.HTTPAPI.URL
 
 	jsonData, err := json.Marshal(body)
 	if err != nil {
@@ -19,7 +20,7 @@ func sendHTTP(path string, body map[string]string) []byte {
 	}
 	postBody := strings.NewReader(string(jsonData))
 
-	req, err := http.NewRequest("POST", config.HTTPURL+path, postBody)
+	req, err := http.NewRequest("POST", httpURL, postBody)
 	if err != nil {
 		log.Error(err)
 		return nil
@@ -28,7 +29,7 @@ func sendHTTP(path string, body map[string]string) []byte {
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Error("请求[" + config.HTTPURL + path + "]错误")
+		log.Error("请求[" + httpURL + path + "]错误")
 		log.Infof("body: %s\n", strings.Replace(fmt.Sprintf("%s", body), "\n", "\\n", -1))
 		log.Error(err)
 		return nil
@@ -41,7 +42,7 @@ func sendHTTP(path string, body map[string]string) []byte {
 		return nil
 	}
 
-	log.Info("请求[" + config.HTTPURL + path + "]成功")
+	log.Info("请求[" + httpURL + path + "]成功")
 
 	log.Infof("body: %s\n", strings.Replace(fmt.Sprintf("%s", body), "\n", "\\n", -1))
 	return RespBody

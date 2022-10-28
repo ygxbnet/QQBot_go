@@ -11,9 +11,10 @@ import (
 
 // Connect 连接WebSocket
 func Connect() {
-	log.Info("正在连接: ", config.WebSocketURL)
+	webSocketURL := config.Parse().Server.Websocket.URL
 
-	c, _, err := websocket.DefaultDialer.Dial(config.WebSocketURL, nil)
+	log.Info("正在连接: ", webSocketURL)
+	c, _, err := websocket.DefaultDialer.Dial(webSocketURL, nil)
 	if err != nil {
 		log.Error("连接错误: ", err)
 		time.Sleep(time.Second)
