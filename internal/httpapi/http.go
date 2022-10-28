@@ -20,7 +20,7 @@ func sendHTTP(path string, body map[string]string) []byte {
 	}
 	postBody := strings.NewReader(string(jsonData))
 
-	req, err := http.NewRequest("POST", httpURL, postBody)
+	req, err := http.NewRequest("POST", httpURL+path, postBody)
 	if err != nil {
 		log.Error(err)
 		return nil
