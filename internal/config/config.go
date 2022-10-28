@@ -10,28 +10,6 @@ import (
 //go:embed config-default.yml
 var defaultConfig string
 
-type Config struct {
-	Account struct {
-		BotID   string `yaml:"bot-id"`
-		AdminID string `yaml:"admin-id"`
-	} `yaml:"account"`
-
-	Group struct {
-		MainID string `yaml:"main-id"`
-		InfoID string `yaml:"info-id"`
-	} `yaml:"group"`
-
-	Server struct {
-		Websocket struct {
-			URL string `yaml:"url"`
-		} `yaml:"websocket"`
-
-		HTTPAPI struct {
-			URL string `yaml:"url"`
-		} `yaml:"http-api"`
-	} `yaml:"server"`
-}
-
 func init() {
 	_, err := os.Stat("config.yml")
 	if os.IsNotExist(err) {
