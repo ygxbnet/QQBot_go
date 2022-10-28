@@ -11,7 +11,8 @@ import (
 
 var logFile *os.File
 
-func init() {
+// Init 初始化log
+func Init() {
 	//创建logs文件夹
 	createDir("logs")
 
