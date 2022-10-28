@@ -1,6 +1,7 @@
 package service
 
 import (
+	"QQBot_go/internal/config"
 	"QQBot_go/internal/httpapi"
 	"QQBot_go/service/services_api"
 	"fmt"
@@ -17,7 +18,7 @@ func Init() {
 	go func() {
 		for true {
 			count = count + 1
-			httpapi.SendGroupMsg("115987946", "每10min定时发送\n次数: "+strconv.Itoa(count))
+			httpapi.SendGroupMsg(config.Parse().Group.InfoID, "每10min定时发送\n次数: "+strconv.Itoa(count))
 			//time.Sleep(time.Second * 10)
 			time.Sleep(time.Minute * 10)
 		}
@@ -32,10 +33,10 @@ func Init() {
 			<-t.C
 
 			urlImg, nameImg := services_api.GetBingPictureURL()
-			httpapi.SendGroupMsg("1038122549", "[CQ:image,file="+nameImg+",subType=0,url="+urlImg+"]")
+			httpapi.SendGroupMsg(config.Parse().Group.MainID, "[CQ:image,file="+nameImg+",subType=0,url="+urlImg+"]")
 
 			timeMessage := fmt.Sprintf("今天是: %d年%d月%d日 星期%s", time.Now().Year(), time.Now().Month(), time.Now().Day(), conversionWeek(time.Now().Weekday().String()))
-			httpapi.SendGroupMsg("1038122549", timeMessage)
+			httpapi.SendGroupMsg(config.Parse().Group.MainID, timeMessage)
 		}
 	}()
 

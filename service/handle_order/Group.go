@@ -2,6 +2,7 @@ package handle_order
 
 import (
 	"QQBot_go/internal/base"
+	"QQBot_go/internal/config"
 	"QQBot_go/internal/httpapi"
 	"QQBot_go/service/handle_order/group"
 	"crypto/md5"
@@ -19,7 +20,7 @@ var helpInfo = "----------帮助信息----------" +
 	"\n/sp 进行刷屏"
 
 var info = "本机器人由YGXB_net开发" +
-	"\nQQ:3040809965" +
+	"\nQQ: " + config.Parse().Account.AdminID +
 	"\n\n当前版本: " + base.Version +
 	"\n更新日志: https://gitee.com/YGXB-net/QQBot_go/blob/master/CHANGELOG.md"
 
@@ -53,7 +54,7 @@ func HandleGroupOrder(groupID string, userID string, message string) {
 			httpapi.SendGroupMsg(groupID, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
 			return
 		}
-		if strings.Index(message, "[CQ:at,qq=2700154874]") != -1 && userID != "3040809965" {
+		if strings.Index(message, "[CQ:at,qq="+config.Parse().Account.BotID+"]") != -1 && userID != config.Parse().Account.AdminID {
 			httpapi.SendGroupMsg(groupID, "叫你爸爸干嘛？")
 			return
 		}
