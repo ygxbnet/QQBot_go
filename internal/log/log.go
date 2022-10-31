@@ -116,12 +116,11 @@ func (h *MyHook) Fire(entry *log.Entry) error {
 			return err
 		}
 
-		_, err = errorFile.Write([]byte(fmt.Sprintf("[%s] [%s] [%v:%v %v] %v\n",
+		_, err = errorFile.Write([]byte(fmt.Sprintf("[%s] [%s] [%v:%v] %v\n",
 			entry.Time.Format("2006-01-02 15-04-05"),
 			strings.ToUpper(entry.Level.String()),
 			entry.Caller.File,
 			entry.Caller.Line,
-			entry.Caller.Function,
 			strings.Replace(entry.Message, "\n", "\\n", -1))))
 		if err != nil {
 			return err
