@@ -10,12 +10,12 @@ import (
 	"time"
 )
 
-var refreshStructs = map[string]*refresh{}
+var refreshStructs = map[refreshKey]*refresh{}
 
 // RefreshHandle 刷屏处理
 func RefreshHandle(groupID string, userID string, message string) {
-	if refreshStructs[userID] != nil {
-		refreshStructs[userID].Refresh(groupID, userID, message)
+	if refreshStructs[refreshKey{userID, groupID}] != nil {
+		refreshStructs[refreshKey{userID, groupID}].Refresh(groupID, userID, message)
 	}
 }
 
@@ -70,24 +70,32 @@ func Refresh(groupID string, userID string, message string) {
 
 func doRefresh(groupID string, userID string, refreshNumber int) {
 	//刷屏实现
-	if refreshStructs[userID] == nil {
+	if refreshStructs[refreshKey{userID, groupID}] == nil {
 		r := &refresh{}
 		r.SetNumber(refreshNumber)
 		r.SetUserID(userID)
+		r.SetGroupID(groupID)
 		r.DelayDelete()
 
-		refreshStructs[userID] = r
+		refreshStructs[refreshKey{userID, groupID}] = r
 	} else {
-		refreshStructs[userID].SetNumber(refreshNumber)
-		refreshStructs[userID].ResetTime()
+		refreshStructs[refreshKey{userID, groupID}].SetNumber(refreshNumber)
+		refreshStructs[refreshKey{userID, groupID}].ResetTime()
 	}
+}
+
+// 索引架构体
+type refreshKey struct {
+	UserID  string
+	GroupID string
 }
 
 // 刷屏结构体
 type refresh struct {
-	userID string
-	number int
-	time   int
+	userID  string
+	groupID string
+	number  int
+	time    int
 }
 
 func (receiver *refresh) SetNumber(number int) {
@@ -96,6 +104,10 @@ func (receiver *refresh) SetNumber(number int) {
 func (receiver *refresh) SetUserID(userID string) {
 	receiver.userID = userID
 }
+func (receiver *refresh) SetGroupID(groupID string) {
+	receiver.groupID = groupID
+}
+
 func (receiver *refresh) ResetTime() {
 	receiver.time = 300
 }
@@ -106,12 +118,12 @@ func (receiver *refresh) DelayDelete() {
 			time.Sleep(time.Second)
 			receiver.time--
 		}
-		delete(refreshStructs, receiver.userID)
+		delete(refreshStructs, refreshKey{receiver.userID, receiver.groupID})
 	}()
 }
 func (receiver *refresh) Refresh(groupID string, userID string, message string) {
 	for i := 1; i <= receiver.number; i++ {
 		httpapi.SendGroupMsg(groupID, message)
 	}
-	delete(refreshStructs, userID)
+	delete(refreshStructs, refreshKey{userID, groupID})
 }
