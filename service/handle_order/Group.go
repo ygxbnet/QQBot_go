@@ -83,9 +83,11 @@ func handleEmojisOrder(groupID string, userID string, message string) {
 	MD5Str := hex.EncodeToString(FileMd5.Sum(nil))
 
 	switch MD5Str {
-	case "d3ab70d3f8b6b4eb2c7878d5177dc051":
-		//此MD5值对应的文件为:
-		//https://gchat.qpic.cn/gchatpic_new/3040809965/2058987946-2282106232-D3AB70D3F8B6B4EB2C7878D5177DC051/0?term=3
+	case "d3ab70d3f8b6b4eb2c7878d5177dc051", // https://gchat.qpic.cn/gchatpic_new/3040809965/2058987946-2282106232-D3AB70D3F8B6B4EB2C7878D5177DC051/0?term=3
+		"0833ab984df318f53c07466160859ca6", // https://gchat.qpic.cn/gchatpic_new/3040809965/818848626-2357317952-0833AB984DF318F53C07466160859CA6/0?term=3
+		"a3caf31ff742d543a0645ad6710e077c", // https://gchat.qpic.cn/gchatpic_new/3040809965/818848626-3205803506-A3CAF31FF742D543A0645AD6710E077C/0?term=3
+		"00fb5731dcaff37dd940ddaabcd20f10": // https://gchat.qpic.cn/gchatpic_new/3040809965/818848626-2682086032-00FB5731DCAFF37DD940DDAABCD20F10/0?term=3
+
 		group.Dk(groupID, userID)
 	}
 }
