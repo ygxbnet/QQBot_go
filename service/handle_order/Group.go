@@ -22,7 +22,7 @@ var helpInfo = "----------帮助信息----------" +
 var info = "本机器人由YGXB_net开发" +
 	"\nQQ: " + config.Parse().Account.AdminID +
 	"\n\n当前版本: " + base.Version +
-	"\n更新日志: https://gitee.com/YGXB-net/QQBot_go/blob/master/CHANGELOG.md"
+	"\n更新日志: https://gitee.com/YGXB-net/QQBot_go/blob/main/CHANGELOG.md"
 
 // HandleGroupOrder 处理Group命令
 func HandleGroupOrder(groupID string, userID string, message string) {
