@@ -100,7 +100,7 @@ func (h *MyHook) Levels() []log.Level {
 func (h *MyHook) Fire(entry *log.Entry) error {
 
 	_, err := logFile.Write([]byte(fmt.Sprintf("[%s] [%s] %v\n",
-		entry.Time.Format("2006-01-02 15-04-05"),
+		entry.Time.Format("2006-01-02 15:04:05"),
 		strings.ToUpper(entry.Level.String()),
 		strings.Replace(entry.Message, "\n", "\\n", -1))))
 	if err != nil {
