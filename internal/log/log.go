@@ -13,7 +13,7 @@ var logFile *os.File
 
 // init 初始化log
 func init() {
-	//创建logs文件夹
+	// 创建logs文件夹
 	createDir("logs")
 
 	log.AddHook(&MyHook{})
@@ -21,7 +21,7 @@ func init() {
 	log.SetFormatter(&log.TextFormatter{
 		ForceColors:      true,
 		FullTimestamp:    true,
-		TimestampFormat:  "2006-01-02 15.04.05",
+		TimestampFormat:  "2006-01-02 15:04:05",
 		CallerPrettyfier: func(*runtime.Frame) (function string, file string) { return "", "" },
 	})
 	log.SetLevel(log.InfoLevel)
@@ -117,7 +117,7 @@ func (h *MyHook) Fire(entry *log.Entry) error {
 		}
 
 		_, err = errorFile.Write([]byte(fmt.Sprintf("[%s] [%s] [%v:%v] %v\n",
-			entry.Time.Format("2006-01-02 15-04-05"),
+			entry.Time.Format("2006-01-02 15:04:05"),
 			strings.ToUpper(entry.Level.String()),
 			entry.Caller.File,
 			entry.Caller.Line,
