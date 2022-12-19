@@ -1,1 +1,1 @@
-docker buildx build -t registry.cn-hangzhou.aliyuncs.com/ygxb/qqbot-go --platform linux/arm/v7 .
+docker buildx build --platform linux/arm/v7,linux/arm64,linux/amd64 -t ygxb/qqbot-go:latest --push .
