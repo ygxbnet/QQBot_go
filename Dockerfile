@@ -14,11 +14,10 @@ RUN set -ex \
 
 FROM alpine:latest
 
-ENV TZ Asia/Shanghai
-
-RUN apk add tzdata && cp /usr/share/zoneinfo/${TZ} /etc/localtime \
-    && echo ${TZ} > /etc/timezone \
-    && apk del tzdata
+RUN apk update \
+    && apk add tzdata \
+    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone
 
 COPY --from=builder /build/QQBot_go /usr/bin/QQBot_go
 RUN chmod +x /usr/bin/QQBot_go
