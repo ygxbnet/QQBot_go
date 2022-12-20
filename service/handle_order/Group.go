@@ -11,6 +11,7 @@ import (
 	"io"
 	"net/http"
 	"strings"
+	"time"
 )
 
 var helpInfo = "----------帮助信息----------" +
@@ -28,27 +29,27 @@ var info = "本机器人由YGXB_net开发" +
 func HandleGroupOrder(groupID string, userID string, message string) {
 	switch strings.Fields(message)[0] {
 	case "/", "／":
-		//指令为空时
+		// 指令为空时
 		httpapi.SendGroupMsg(groupID, "指令不能为空")
 	case "/help", "／help":
-		//帮助指令
+		// 帮助指令
 		httpapi.SendGroupMsg(groupID, helpInfo)
 	case "/info", "／info":
-		//机器人信息
+		// 机器人信息
 		httpapi.SendGroupMsg(groupID, info)
 	case "/dk", "／dk", "打卡", "&#91;冒泡&#93;":
-		//打卡指令
+		// 打卡指令
 		group.Dk(groupID, userID)
 	case "/sp", "／sp", "刷屏":
-		//刷屏指令
+		// 刷屏指令
 		group.Refresh(groupID, userID, message)
 	case "/test", "／test":
-		httpapi.SendGroupMsg(groupID, "This is test")
+		httpapi.SendGroupMsg(groupID, time.Now().Format("2006-01-02 15:04:05"))
 	default:
 		group.RefreshHandle(groupID, userID, message)
 		handleEmojisOrder(groupID, userID, message)
 
-		//因为切片会出现长度不足，所以会抛出异常
+		// 因为切片会出现长度不足，所以会抛出异常
 		defer func() { recover() }()
 		if message[0:1] == "/" || message[0:3] == "／" {
 			httpapi.SendGroupMsg(groupID, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
@@ -62,22 +63,22 @@ func HandleGroupOrder(groupID string, userID string, message string) {
 }
 
 func handleEmojisOrder(groupID string, userID string, message string) {
-	//判断是否为图片消息
+	// 判断是否为图片消息
 	if strings.Index(message, "CQ:image") == -1 {
 		return
 	}
-	//提取图片消息的URL
-	//原始数据举例: [CQ:image,file=d3ab70d3f8b6b4eb2c7878d5177dc051.image,subType=1,url=https://gchat.qpic.cn/gchatpic_new/3040809965/2058987946-2446050292-D3AB70D3F8B6B4EB2C7878D5177DC051/0?term=3]
+	// 提取图片消息的URL
+	// 原始数据举例: [CQ:image,file=d3ab70d3f8b6b4eb2c7878d5177dc051.image,subType=1,url=https://gchat.qpic.cn/gchatpic_new/3040809965/2058987946-2446050292-D3AB70D3F8B6B4EB2C7878D5177DC051/0?term=3]
 	indexURL := strings.Index(message, "url")
 	URL := message[indexURL+4:][:len(message[indexURL+4:])-1]
-	//请求URL，获取数据
+	// 请求URL，获取数据
 	resp, err := http.Get(URL)
 	if err != nil {
 		log.Error("请求URL错误 ", err)
 		return
 	}
 	data, _ := io.ReadAll(resp.Body)
-	//对请求到的数据求MD5
+	// 对请求到的数据求MD5
 	FileMd5 := md5.New()
 	FileMd5.Write(data)
 	MD5Str := hex.EncodeToString(FileMd5.Sum(nil))
