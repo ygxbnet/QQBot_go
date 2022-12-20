@@ -43,11 +43,14 @@ func HandleGroupOrder(groupID string, userID string, message string) {
 	case "/sp", "／sp", "刷屏":
 		// 刷屏指令
 		group.Refresh(groupID, userID, message)
-	case "/test", "／test":
+	case "/date", "／data", "时间":
+		// 发送服务器当前时间
 		httpapi.SendGroupMsg(groupID, time.Now().Format("2006-01-02 15:04:05"))
+	case "/test", "／test":
+		httpapi.SendGroupMsg(groupID, "this is test")
 	default:
 		group.RefreshHandle(groupID, userID, message)
-		handleEmojisOrder(groupID, userID, message)
+		handleEmojiOrder(groupID, userID, message)
 
 		// 因为切片会出现长度不足，所以会抛出异常
 		defer func() { recover() }()
@@ -62,7 +65,7 @@ func HandleGroupOrder(groupID string, userID string, message string) {
 	}
 }
 
-func handleEmojisOrder(groupID string, userID string, message string) {
+func handleEmojiOrder(groupID string, userID string, message string) {
 	// 判断是否为图片消息
 	if strings.Index(message, "CQ:image") == -1 {
 		return
