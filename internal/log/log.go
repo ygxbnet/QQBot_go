@@ -62,7 +62,10 @@ func timeEvent() {
 
 		for true {
 			timing(0, 0, 0)
-			logFile.Close()
+			err := logFile.Close()
+			if err != nil {
+				log.Error(err)
+			}
 			logFile = setOutput()
 
 			log.Info("已切换日志文件为: ", time.Now().Format("2006-01-02"), ".log")

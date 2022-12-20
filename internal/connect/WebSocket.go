@@ -22,15 +22,18 @@ func Connect() {
 		time.Sleep(2 * time.Second)
 
 		if c != nil {
-			c.Close()
+			err := c.Close()
+			if err != nil {
+				log.Error(err)
+			}
 		}
 		Connect()
 	} else {
 		log.Info("连接成功")
 	}
 	defer c.Close()
-	//done := make(chan struct{})
-	//接受消息
+	// done := make(chan struct{})
+	// 接受消息
 	go func() {
 		for {
 			_, message, err := c.ReadMessage()
@@ -38,14 +41,17 @@ func Connect() {
 				log.Error("消息接受错误: ", err)
 
 				if c != nil {
-					c.Close()
+					err := c.Close()
+					if err != nil {
+						log.Error(err)
+					}
 				}
 				log.Info("正在重连")
 				Connect()
 
 				return
 			}
-			handler.EventHandler(string(message)) //处理消息
+			handler.EventHandler(string(message)) // 处理消息
 		}
 	}()
 

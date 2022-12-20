@@ -14,21 +14,21 @@ import (
 func Init() {
 	var count = 0
 
-	//每10min定时向Test群发送消息
+	// 每10min定时向Test群发送消息
 	go func() {
 		for true {
 			count = count + 1
 			httpapi.SendGroupMsg(config.Parse().Group.InfoID, "每10min定时发送\n次数: "+strconv.Itoa(count))
-			//time.Sleep(time.Second * 10)
+			// time.Sleep(time.Second * 10)
 			time.Sleep(time.Minute * 10)
 		}
 	}()
 
-	//每天8点定时发送Bing的每日壁纸
+	// 每天8点定时发送Bing的每日壁纸
 	go func() {
 		for {
 			log.Info("每日获取Bing壁纸开启")
-			//开启计时
+			// 开启计时
 			t := time.NewTimer(getTimeDifference(6, 0, 0))
 			<-t.C
 
@@ -40,8 +40,8 @@ func Init() {
 		}
 	}()
 
-	//每天晚上9点提醒未打卡的打卡
-	//go func() {
+	// 每天晚上9点提醒未打卡的打卡
+	// go func() {
 	//	for {
 	//		t := time.NewTimer(getTimeDifference(20, 0, 0))
 	//		<-t.C
@@ -55,7 +55,7 @@ func Init() {
 	//			httpapi.SendGroupMsg("1038122549", "快点来打卡吧！")
 	//		}
 	//	}
-	//}()
+	// }()
 }
 
 // 获取时间差

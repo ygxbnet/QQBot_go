@@ -25,7 +25,7 @@ func Refresh(groupID string, userID string, message string) {
 	var messageID string
 
 	if len(strings.Fields(message)) == 1 {
-		//刷屏
+		// 刷屏
 		var msg1 = fmt.Sprintf(
 			"[CQ:at,qq=%s]"+
 				"\n✅将把您的下一条消息作为刷屏消息"+
@@ -34,7 +34,7 @@ func Refresh(groupID string, userID string, message string) {
 		messageID = gjson.Parse(httpapi.SendGroupMsg(groupID, msg1)).Get("data").Get("message_id").String()
 
 	} else if len(strings.Fields(message)) == 2 {
-		//刷屏 指定刷屏次数
+		// 刷屏 指定刷屏次数
 		num, err := strconv.Atoi(strings.Fields(message)[1])
 		if err != nil {
 			log.Error(err)
@@ -55,7 +55,7 @@ func Refresh(groupID string, userID string, message string) {
 		messageID = gjson.Parse(httpapi.SendGroupMsg(groupID, msg2)).Get("data").Get("message_id").String()
 
 	} else {
-		//参数错误
+		// 参数错误
 		httpapi.SendGroupMsg(groupID, "❌参数错误或多余")
 		return
 	}
@@ -69,7 +69,7 @@ func Refresh(groupID string, userID string, message string) {
 }
 
 func doRefresh(groupID string, userID string, refreshNumber int) {
-	//刷屏实现
+	// 刷屏实现
 	if refreshStructs[refreshKey{userID, groupID}] == nil {
 		r := &refresh{}
 		r.SetNumber(refreshNumber)

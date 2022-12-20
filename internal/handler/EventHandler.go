@@ -35,7 +35,7 @@ func EventHandler(message string) {
 
 			PrivateMessage(message)
 		}
-		log.Info("接受到["+messageType+"]消息: ", string(message))
+		log.Info("接受到["+messageType+"]消息: ", message)
 	} else {
 		return
 	}
