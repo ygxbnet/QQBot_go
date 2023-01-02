@@ -19,7 +19,8 @@ var helpInfo = "=====> 帮助信息 <=====" +
 	"\n● /info 获取机器人信息" +
 	"\n" +
 	"\n● /dk 进行打卡" +
-	"\n● /sp 进行刷屏"
+	"\n● /sp 进行刷屏" +
+	"\n● /p  获取随机风景图"
 
 var info = "本机器人由YGXB_net开发" +
 	"\nQQ: " + config.Parse().Account.AdminID +
@@ -47,6 +48,8 @@ func HandleGroupOrder(groupID string, userID string, message string) {
 	case "/date", "／date", "时间":
 		// 发送服务器当前时间
 		httpapi.SendGroupMsg(groupID, time.Now().Format("2006-01-02 15:04:05"))
+	case "/p", "／p", "图片":
+		go group.GetRandomPicture(groupID, userID, message)
 	case "/test", "／test":
 		httpapi.SendGroupMsg(groupID, "this is test")
 	default:

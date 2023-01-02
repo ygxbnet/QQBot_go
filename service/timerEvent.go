@@ -58,7 +58,7 @@ func Init() {
 	// }()
 }
 
-// 获取时间差
+// getTimeDifference 获取时间差
 func getTimeDifference(Hour int, Min int, Sec int) time.Duration {
 	now := time.Now()
 	var next time.Time
