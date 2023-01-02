@@ -44,7 +44,7 @@ func HandleGroupOrder(groupID string, userID string, message string) {
 	case "/sp", "／sp", "刷屏":
 		// 刷屏指令
 		group.Refresh(groupID, userID, message)
-	case "/date", "／data", "时间":
+	case "/date", "／date", "时间":
 		// 发送服务器当前时间
 		httpapi.SendGroupMsg(groupID, time.Now().Format("2006-01-02 15:04:05"))
 	case "/test", "／test":
