@@ -54,36 +54,6 @@ func Refresh(groupID string, userID string, message string) {
 				"\n刷屏次数: %d次", userID, refreshNumber)
 		messageID = gjson.Parse(httpapi.SendGroupMsg(groupID, msg2)).Get("data").Get("message_id").String()
 
-	} else if len(strings.Fields(message)) == 3 {
-		// 刷屏 指定刷屏次数和刷屏内容
-		num, err := strconv.Atoi(strings.Fields(message)[1])
-		if err != nil {
-			log.Error(err)
-			httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:at,qq=%s]"+"\n❌指定刷屏次数错误", userID))
-			return
-		}
-		if num <= 10 {
-			refreshNumber = num
-		} else if num == 110 {
-			refreshNumber = 50
-		} else {
-			refreshNumber = 10
-		}
-		var msg2 = fmt.Sprintf(
-			"[CQ:at,qq=%s]"+
-				"\n✅将把您的下一条消息作为刷屏消息"+
-				"\n刷屏次数: %d次", userID, refreshNumber)
-		messageID = gjson.Parse(httpapi.SendGroupMsg(groupID, msg2)).Get("data").Get("message_id").String()
-
-		if messageID != "" {
-			time.AfterFunc(time.Minute, func() {
-				httpapi.DeleteMsg(messageID)
-			})
-		}
-
-		doRefreshWithMessage(groupID, userID, refreshNumber, strings.Fields(message)[2])
-		return
-
 	} else {
 		// 参数错误
 		httpapi.SendGroupMsg(groupID, "❌参数错误或多余")
@@ -112,23 +82,6 @@ func doRefresh(groupID string, userID string, refreshNumber int) {
 		refreshStructs[refreshKey{userID, groupID}].SetNumber(refreshNumber)
 		refreshStructs[refreshKey{userID, groupID}].ResetTime()
 	}
-}
-
-func doRefreshWithMessage(groupID string, userID string, refreshNumber int, message string) {
-	// 刷屏实现
-	if refreshStructs[refreshKey{userID, groupID}] == nil {
-		r := &refresh{}
-		r.SetNumber(refreshNumber)
-		r.SetUserID(userID)
-		r.SetGroupID(groupID)
-		r.DelayDelete()
-
-		refreshStructs[refreshKey{userID, groupID}] = r
-	} else {
-		refreshStructs[refreshKey{userID, groupID}].SetNumber(refreshNumber)
-		refreshStructs[refreshKey{userID, groupID}].ResetTime()
-	}
-	refreshStructs[refreshKey{userID, groupID}].Refresh(groupID, userID, message)
 }
 
 // 索引架构体
