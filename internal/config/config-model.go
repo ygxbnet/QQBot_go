@@ -1,9 +1,10 @@
 package config
 
 type Config struct {
-	Account Account `yaml:"account"`
-	Group   Group   `yaml:"group"`
-	Server  Server  `yaml:"server"`
+	PrependMessage string  `yaml:"prepend-message"`
+	Account        Account `yaml:"account"`
+	Group          Group   `yaml:"group"`
+	Server         Server  `yaml:"server"`
 }
 type Account struct {
 	BotID   string `yaml:"bot-id"`

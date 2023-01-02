@@ -1,6 +1,7 @@
 package httpapi
 
 import (
+	"QQBot_go/internal/config"
 	log "github.com/sirupsen/logrus"
 	"strconv"
 )
@@ -8,8 +9,13 @@ import (
 // SendGroupMsg 发送Group消息
 func SendGroupMsg(groupID string, message string) string {
 	data := make(map[string]string)
+
 	data["group_id"] = groupID
-	data["message"] = message
+	if config.Parse().PrependMessage == "" {
+		data["message"] = message
+	} else {
+		data["message"] = message + "\n\n" + config.Parse().PrependMessage
+	}
 
 	body := sendHTTP("/send_group_msg", data)
 	log.Infof("Group消息发送结果: %s", string(body))
