@@ -39,7 +39,7 @@ func HandleGroupOrder(groupID string, userID string, message string) {
 	case "/info", "／info":
 		// 机器人信息
 		httpapi.SendGroupMsg(groupID, info)
-	case "/dk", "／dk", "打卡", "&#91;冒泡&#93;":
+	case "/dk", "／dk", "打卡", "&#91;冒泡&#93;", "&#91;打卡&#93;":
 		// 打卡指令
 		group.Dk(groupID, userID)
 	case "/sp", "／sp", "刷屏":
