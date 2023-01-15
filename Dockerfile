@@ -4,12 +4,12 @@ RUN go env -w GO111MODULE=auto \
   && go env -w CGO_ENABLED=0 \
   && go env -w GOPROXY=https://goproxy.cn,direct
 
-WORKDIR /build
+WORKDIR /QQBot_go
 
 COPY ./ .
 
 RUN set -ex \
-    && cd /build \
+    && cd /QQBot_go \
     && go build -o QQBot_go
 
 FROM alpine:latest
