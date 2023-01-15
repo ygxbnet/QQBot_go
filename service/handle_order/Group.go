@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-var helpInfo = "=====> 帮助信息 <=====" +
+var HELP_MESSAGE = "=====> 帮助信息 <=====" +
 	"\n● /help 获取帮助" +
 	"\n● /info 获取机器人信息" +
 	"\n" +
@@ -22,7 +22,7 @@ var helpInfo = "=====> 帮助信息 <=====" +
 	"\n● /sp 进行刷屏" +
 	"\n● /p  获取随机风景图"
 
-var info = "本机器人由YGXB_net开发" +
+var INFO_MESSAGE = "本机器人由YGXB_net开发" +
 	"\nQQ: " + config.Parse().Account.AdminID +
 	"\n\n当前版本: " + base.Version +
 	"\n更新日志: https://gitee.com/YGXB-net/QQBot_go/blob/main/CHANGELOG.md"
@@ -35,10 +35,10 @@ func HandleGroupOrder(groupID string, userID string, message string) {
 		httpapi.SendGroupMsg(groupID, "指令不能为空")
 	case "/help", "／help":
 		// 帮助指令
-		httpapi.SendGroupMsg(groupID, helpInfo)
+		httpapi.SendGroupMsg(groupID, HELP_MESSAGE)
 	case "/info", "／info":
 		// 机器人信息
-		httpapi.SendGroupMsg(groupID, info)
+		httpapi.SendGroupMsg(groupID, INFO_MESSAGE)
 	case "/dk", "／dk", "打卡", "&#91;冒泡&#93;", "&#91;打卡&#93;":
 		// 打卡指令
 		group.Dk(groupID, userID)
@@ -59,11 +59,11 @@ func HandleGroupOrder(groupID string, userID string, message string) {
 		// 因为切片会出现长度不足，所以会抛出异常
 		defer func() { recover() }()
 		if message[0:1] == "/" || message[0:3] == "／" {
-			httpapi.SendGroupMsg(groupID, "命令输入错误或没有此命令\n请输入 /help 查看帮助")
+			httpapi.SendGroupMsg(groupID, "❌命令输入错误或没有此命令\n请输入 /help 查看帮助")
 			return
 		}
 		if strings.Index(message, "[CQ:at,qq="+config.Parse().Account.BotID+"]") != -1 && userID != config.Parse().Account.AdminID {
-			httpapi.SendGroupMsg(groupID, "叫你爸爸干嘛？")
+			httpapi.SendGroupMsg(groupID, "怎么了？有什么事情吗？")
 			return
 		}
 	}
