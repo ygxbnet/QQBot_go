@@ -43,7 +43,8 @@ func sendHTTP(path string, body map[string]string) []byte {
 	}
 
 	log.Info("请求[" + httpURL + path + "]成功")
-
 	log.Infof("body: %s\n", strings.Replace(fmt.Sprintf("%s", body), "\n", "\\n", -1))
+	http.DefaultClient.CloseIdleConnections() // 关闭空闲连接，防止内存泄漏
+
 	return RespBody
 }

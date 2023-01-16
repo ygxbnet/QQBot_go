@@ -45,6 +45,7 @@ func Init() {
 			t := time.NewTimer(getTimeDifference(6, 0, 0))
 			<-t.C
 
+			// 时间段模糊一言
 			response, _ := http.Get("https://v.api.aa1.cn/api/time-tx/index.php")
 			if response.StatusCode == 200 {
 				bytes, _ := io.ReadAll(response.Body)
@@ -54,6 +55,14 @@ func Init() {
 				httpapi.SendGroupMsg(config.Parse().Group.MainID, message)
 			} else {
 				httpapi.SendGroupMsg(config.Parse().Group.MainID, "早上好！！！")
+			}
+
+			// 每日笑话
+			response, _ = http.Get("https://v.api.aa1.cn/api/api-wenan-gaoxiao/index.php?aa1=text")
+			if response.StatusCode == 200 {
+				bytes, _ := io.ReadAll(response.Body)
+
+				httpapi.SendGroupMsg(config.Parse().Group.MainID, "每日笑话：\n"+string(bytes))
 			}
 		}
 	}()
