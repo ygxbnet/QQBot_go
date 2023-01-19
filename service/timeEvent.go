@@ -42,32 +42,32 @@ func Init() {
 	// 6点定时发送问好
 	go func() {
 		for {
-			t := time.NewTimer(getTimeDifference(6, 0, 0))
+			t := time.NewTimer(getTimeDifference(11, 24, 0))
 			<-t.C
 
-			// 早上好
-			response, _ := http.Get("https://v.api.aa1.cn/api/zaoanyulu/index.php")
-			if response.StatusCode == 200 {
+			{ // 早上好
+				response, _ := http.Get("https://v.api.aa1.cn/api/zaoanyulu/index.php")
 				bytes, _ := io.ReadAll(response.Body)
 				msg := gjson.Parse(string(bytes))
-
-				message := fmt.Sprintf("%s", msg.Get("text").String())
-				httpapi.SendGroupMsg(config.Parse().Group.MainID, message)
-			} else {
-				httpapi.SendGroupMsg(config.Parse().Group.MainID, "早上好！！！")
-			}
-
-			// 每日笑话
-			var msg []string
-
-			for i := 0; i < 2; i++ {
-				response, _ = http.Get("https://v.api.aa1.cn/api/api-wenan-gaoxiao/index.php?aa1=json")
-				if response.StatusCode == 200 {
-					bytes, _ := io.ReadAll(response.Body)
-					msg = append(msg, gjson.Parse(string(bytes)).Get("0.gaoxiao").String())
+				if response.StatusCode == 200 && msg.Get("code").Int() == 1 {
+					message := fmt.Sprintf("%s", msg.Get("text").String())
+					httpapi.SendGroupMsg(config.Parse().Group.MainID, message)
+				} else {
+					httpapi.SendGroupMsg(config.Parse().Group.MainID, "早上好！！！")
 				}
 			}
-			httpapi.SendGroupMsg(config.Parse().Group.MainID, fmt.Sprintf("每日笑话二则：\n1. %s\n2. %s", msg[0], msg[1]))
+			{ // 每日笑话
+				var msg []string
+
+				for i := 0; i < 3; i++ {
+					response, _ := http.Get("https://v.api.aa1.cn/api/api-wenan-gaoxiao/index.php?aa1=json")
+					if response.StatusCode == 200 {
+						bytes, _ := io.ReadAll(response.Body)
+						msg = append(msg, gjson.Parse(string(bytes)).Get("0.gaoxiao").String())
+					}
+				}
+				httpapi.SendGroupMsg(config.Parse().Group.MainID, fmt.Sprintf("每日笑话三则：\n1. %s\n2. %s\n3. %s", msg[0], msg[1], msg[2]))
+			}
 		}
 	}()
 }
