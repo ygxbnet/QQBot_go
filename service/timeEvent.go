@@ -15,6 +15,7 @@ import (
 
 // Init 初始化
 func Init() {
+	// 发送基本信息
 	httpapi.SendGroupMsg(config.Parse().Group.InfoID, fmt.Sprintf("Bot已启动\n当前版本: %s\n构建时间: %s", base.VERSION, base.BUILD_TIME))
 
 	// 每10min定时向 Test 群发送消息
@@ -49,16 +50,27 @@ func Init() {
 			<-t.C
 
 			{ // 早上好
-				response, _ := http.Get("https://v.api.aa1.cn/api/zaoanyulu/index.php")
+				response, _ := http.Get("https://v.api.aa1.cn/api/yiyan/index.php?type=json")
 				bytes, _ := io.ReadAll(response.Body)
 				msg := gjson.Parse(string(bytes))
-				if response.StatusCode == 200 && msg.Get("code").Int() == 1 {
-					message := fmt.Sprintf("%s", msg.Get("text").String())
+				if response.StatusCode == 200 {
+					message := fmt.Sprintf("%s", msg.Get("yiyan").String())
 					httpapi.SendGroupMsg(config.Parse().Group.MainID, message)
 				} else {
 					httpapi.SendGroupMsg(config.Parse().Group.MainID, "早上好！！！")
 				}
 			}
+			// { // 早上好
+			// 	response, _ := http.Get("https://v.api.aa1.cn/api/zaoanyulu/index.php")
+			// 	bytes, _ := io.ReadAll(response.Body)
+			// 	msg := gjson.Parse(string(bytes))
+			// 	if response.StatusCode == 200 && msg.Get("code").Int() == 1 {
+			// 		message := fmt.Sprintf("%s", msg.Get("text").String())
+			// 		httpapi.SendGroupMsg(config.Parse().Group.MainID, message)
+			// 	} else {
+			// 		httpapi.SendGroupMsg(config.Parse().Group.MainID, "早上好！！！")
+			// 	}
+			// }
 			{ // 每日笑话
 				var msg []string
 
