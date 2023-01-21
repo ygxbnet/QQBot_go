@@ -42,7 +42,7 @@ func Init() {
 	// 6点定时发送问好
 	go func() {
 		for {
-			t := time.NewTimer(getTimeDifference(11, 24, 0))
+			t := time.NewTimer(getTimeDifference(6, 0, 0))
 			<-t.C
 
 			{ // 早上好
