@@ -2,7 +2,7 @@ name: Build And Push Docker Image
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: ["dev"]
 
 jobs:
   build-docker:
@@ -31,6 +31,10 @@ jobs:
       - name: Setup Buildx
         uses: docker/setup-buildx-action@v2
 
+      - name: Get date
+        id: date
+        run: echo ::set-output name=now::$(TZ=Asia/Shanghai date +"%Y-%m-%d %H:%M:%S")
+
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
@@ -38,4 +42,5 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: now=${{ steps.date.outputs.now }}
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6,linux/386,linux/s390x

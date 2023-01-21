@@ -1,6 +1,7 @@
 package service
 
 import (
+	"QQBot_go/internal/base"
 	"QQBot_go/internal/config"
 	"QQBot_go/internal/httpapi"
 	"QQBot_go/service/services_api"
@@ -14,6 +15,8 @@ import (
 
 // Init 初始化
 func Init() {
+	httpapi.SendGroupMsg(config.Parse().Group.InfoID, fmt.Sprintf("Bot已启动\n当前版本: %s\n构建时间: %s", base.VERSION, base.BUILD_TIME))
+
 	// 每10min定时向 Test 群发送消息
 	go func() {
 		var count = 0

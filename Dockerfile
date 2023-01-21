@@ -1,7 +1,9 @@
 FROM golang:1.19-alpine AS builder
 
+ARG now
+
 RUN go env -w GO111MODULE=auto \
-  && go env -w CGO_ENABLED=0 \
+  && go env -w CGO_ENABLED=1 \
   && go env -w GOPROXY=https://goproxy.cn,direct
 
 WORKDIR /QQBot_go
@@ -10,7 +12,7 @@ COPY ./ .
 
 RUN set -ex \
     && cd /QQBot_go \
-    && go build -o QQBot_go
+    && go build -ldflags "-X QQBot_go/internal/base.BUILD_TIME=${now}" -o QQBot_go
 
 FROM alpine:latest
 

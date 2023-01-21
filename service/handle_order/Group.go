@@ -24,7 +24,8 @@ var HELP_MESSAGE = "=====> 帮助信息 <=====" +
 
 var INFO_MESSAGE = "本机器人由YGXB_net开发" +
 	"\nQQ: " + config.Parse().Account.AdminID +
-	"\n\n当前版本: " + base.Version +
+	"\n\n当前版本: " + base.VERSION +
+	"\n构建时间: " + base.BUILD_TIME +
 	"\n更新日志: https://gitee.com/YGXB-net/QQBot_go/blob/main/CHANGELOG.md"
 
 // HandleGroupOrder 处理Group命令
