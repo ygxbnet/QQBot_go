@@ -2,7 +2,7 @@
 
 > 正如简介所说，这是一个好玩的QQ机器人
 
-[![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/YGXB-net/QQBot_go)](./go.mod) [![GitHub](https://img.shields.io/github/license/YGXB-net/QQBot_go)](./LICENSE)
+[![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/YGXB-net/QQBot_go)](./go.mod) [![GitHub](https://img.shields.io/github/license/YGXB-net/QQBot_go)](./LICENSE) [![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/YGXB-net/QQBot_go/build_docker_image.yml?branch=dev)](https://github.com/YGXB-net/QQBot_go/actions)
 
 ## 介绍
 

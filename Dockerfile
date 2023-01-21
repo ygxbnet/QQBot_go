@@ -3,7 +3,7 @@ FROM golang:1.19 AS builder
 ARG now
 
 RUN go env -w GO111MODULE=auto \
-  && go env -w CGO_ENABLED=0 \
+  && go env -w CGO_ENABLED=1 \
   && go env -w GOPROXY=https://goproxy.cn,direct
 
 WORKDIR /QQBot_go
