@@ -33,7 +33,7 @@ jobs:
 
       - name: Get date
         id: date
-        run: echo ::set-output name=now::$(TZ=Asia/Shanghai date +"%Y-%m-%d %H:%M:%S")
+        run: echo now=$(TZ=Asia/Shanghai date +"%Y-%m-%d %H:%M:%S") >> $GITHUB_OUTPUT
 
       - name: Build and push
         uses: docker/build-push-action@v3
