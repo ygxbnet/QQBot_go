@@ -31,11 +31,10 @@ func Init() {
 	// 0点定时发送相关消息
 	go func() {
 		for {
-			t := time.NewTimer(getTimeDifference(0, 0, 0))
-			<-t.C
+			<-time.NewTimer(getTimeDifference(0, 0, 0)).C
 
 			// 发送消息
-			timeMessage := fmt.Sprintf("今天是: %d年%d月%d日 星期%s", time.Now().Year(), time.Now().Month(), time.Now().Day(), conversionWeek(time.Now().Weekday().String()))
+			timeMessage := fmt.Sprintf("现在是: %d年%d月%d日 星期%s", time.Now().Year(), time.Now().Month(), time.Now().Day(), conversionWeek(time.Now().Weekday().String()))
 			httpapi.SendGroupMsg(config.Parse().Group.MainID, timeMessage)
 
 			urlImg, nameImg := services_api.GetBingPictureURL()
@@ -46,8 +45,7 @@ func Init() {
 	// 6点定时发送问好
 	go func() {
 		for {
-			t := time.NewTimer(getTimeDifference(6, 0, 0))
-			<-t.C
+			<-time.NewTimer(getTimeDifference(6, 0, 0)).C
 
 			{ // 早上好
 				response, _ := http.Get("https://v.api.aa1.cn/api/yiyan/index.php?type=json")
@@ -71,18 +69,18 @@ func Init() {
 			// 		httpapi.SendGroupMsg(config.Parse().Group.MainID, "早上好！！！")
 			// 	}
 			// }
-			{ // 每日笑话
-				var msg []string
-
-				for i := 0; i < 3; i++ {
-					response, _ := http.Get("https://v.api.aa1.cn/api/api-wenan-gaoxiao/index.php?aa1=json")
-					if response.StatusCode == 200 {
-						bytes, _ := io.ReadAll(response.Body)
-						msg = append(msg, gjson.Parse(string(bytes)).Get("0.gaoxiao").String())
-					}
-				}
-				httpapi.SendGroupMsg(config.Parse().Group.MainID, fmt.Sprintf("每日笑话三则：\n1. %s\n2. %s\n3. %s", msg[0], msg[1], msg[2]))
-			}
+			// { // 每日笑话
+			// 	var msg []string
+			//
+			// 	for i := 0; i < 3; i++ {
+			// 		response, _ := http.Get("https://v.api.aa1.cn/api/api-wenan-gaoxiao/index.php?aa1=json")
+			// 		if response.StatusCode == 200 {
+			// 			bytes, _ := io.ReadAll(response.Body)
+			// 			msg = append(msg, gjson.Parse(string(bytes)).Get("0.gaoxiao").String())
+			// 		}
+			// 	}
+			// 	httpapi.SendGroupMsg(config.Parse().Group.MainID, fmt.Sprintf("每日笑话三则：\n1. %s\n2. %s\n3. %s", msg[0], msg[1], msg[2]))
+			// }
 		}
 	}()
 }
