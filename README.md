@@ -10,4 +10,20 @@
 
 如果你对项目感兴趣或者想交流讨论，也非常欢迎
 
+E-mail: [me@ygxb.net](mailto:me@ygxb.net)
+
 QQ: 3040809965
+
+## 使用方法
+
+1. 将代码克隆到本地
+
+2. 运行:（请先启动 [go-cqhttp](https://github.com/Mrs4s/go-cqhttp) 然后再运行此程序）
+
+   ```shell
+   go mod download
+   go run
+   ```
+
+3. 根据提示修改 `config.yml` 文件
+4. 再次运行，畅(tiao)玩(xi)机器人吧

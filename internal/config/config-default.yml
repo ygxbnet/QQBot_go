@@ -3,27 +3,27 @@
 # 账号相关设置
 account:
   # Bot的QQ号
-  bot-id: 2700154874
+  bot-id:
   # 管理员QQ号
-  admin-id: 3040809965
+  admin-id:
 
 # 群组相关设置
 group:
   # 注意，main-id info-id 不建议设置成相同的
-
+  #
   # 主群的群号，用于发送每日图片及日期消息
-  main-id: 1038122549
+  main-id:
   # 信息群的群号，用于发送后台信息
-  info-id: 115987946
+  info-id:
 
 # 服务器相关设置
 server:
   # go-cqhttp 的 http 通信设置
   http-api:
     # http 的地址
-    url: http://127.0.0.1:5700
+    url: http://0.0.0.0:5700
 
   # go-cqhttp 的 websocket 设置
   websocket:
     # websocket 连接地址
-    url: ws://127.0.0.1:8080
+    url: ws://0.0.0.0:8080
