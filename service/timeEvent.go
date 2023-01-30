@@ -47,12 +47,12 @@ func Init() {
 		for {
 			<-time.NewTimer(getTimeDifference(6, 0, 0)).C
 
-			{ // 早上好
-				response, _ := http.Get("https://v.api.aa1.cn/api/yiyan/index.php?type=json")
+			{ // 每日一句
+				response, _ := http.Get("https://v.api.aa1.cn/api/pyq/index.php?aa1=json")
 				bytes, _ := io.ReadAll(response.Body)
 				msg := gjson.Parse(string(bytes))
 				if response.StatusCode == 200 {
-					message := fmt.Sprintf("%s", msg.Get("yiyan").String())
+					message := fmt.Sprintf("%s", msg.Get("pyq").String())
 					httpapi.SendGroupMsg(config.Parse().Group.MainID, message)
 				} else {
 					httpapi.SendGroupMsg(config.Parse().Group.MainID, "早上好！！！")
