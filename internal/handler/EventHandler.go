@@ -28,8 +28,9 @@ func EventHandler(message string) {
 			var groupID = gjson.Parse(message).Get("group_id").String()
 			var userID = gjson.Parse(message).Get("user_id").String()
 			var msg = gjson.Parse(message).Get("message").String()
+			var msgID = gjson.Parse(message).Get("message_id").String()
 
-			GroupMessage(groupID, userID, msg)
+			GroupMessage(groupID, userID, msg, msgID)
 		case "private":
 			messageType = "Private"
 

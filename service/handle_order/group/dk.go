@@ -10,12 +10,12 @@ import (
 	"time"
 )
 
-var messageDk = "[CQ:at,qq=%s]" +
-	"\n%s" +
+var messageDk = "[CQ:reply,id=%s]" +
+	"%s" +
 	"\n%s"
 
 // Dk 打卡
-func Dk(groupID string, userID string) {
+func Dk(groupID string, userID string, messageID string) {
 	UserData := db.ReadDBFile("group", userID)
 	message := ""
 	var dkData model.UserData
@@ -26,18 +26,18 @@ func Dk(groupID string, userID string) {
 	if UserData == "" { // 没有打卡记录
 		dkData.DkLastTime = timeNow.Format("2006-01-02")
 		dkData.DkTimes = 1
-		message = fmt.Sprintf(messageDk, userID, "✅打卡成功", "这是你第一次打卡！[CQ:face,id=144]")
+		message = fmt.Sprintf(messageDk, messageID, "✅打卡成功", "这是你第一次打卡！[CQ:face,id=144]")
 
 	} else { // 有打卡记录
 		if timeDifference == 0 { // 当天打卡（打卡失败）
 			dkData.DkLastTime = timeNow.Format("2006-01-02")
 			dkData.DkTimes = int(gjson.Parse(UserData).Get("dk_times").Int())
-			message = fmt.Sprintf(messageDk, userID, "❌打卡失败", "今天你已经打卡了！\n明天再来吧 ^_^")
+			message = fmt.Sprintf(messageDk, messageID, "❌打卡失败", "今天你已经打卡了！\n明天再来吧 ^_^")
 
 		} else if timeDifference == 1 { // 昨天打卡
 			dkData.DkLastTime = timeNow.Format("2006-01-02")
 			dkData.DkTimes = int(gjson.Parse(UserData).Get("dk_times").Int()) + 1
-			message = fmt.Sprintf(messageDk, userID, "✅打卡成功",
+			message = fmt.Sprintf(messageDk, messageID, "✅打卡成功",
 				"你已经打卡了"+strconv.Itoa(dkData.DkTimes)+"次了！[CQ:face,id=144]")
 
 		} else if timeDifference > 1 { // 间隔两天以上打卡
@@ -47,10 +47,10 @@ func Dk(groupID string, userID string) {
 
 			dkData.DkTimes = int(gjson.Parse(UserData).Get("dk_times").Int()) + 1 // int(gjson.Parse(UserData).Get("dk_times").Int())
 
-			message = fmt.Sprintf(messageDk, userID, "✅打卡成功",
-				"Hi,好久不见呀 ^_^"+
-					"\n你已经打卡了"+strconv.Itoa(dkData.DkTimes)+"次") +
-				"\n距离上次打卡已经过去了" + strconv.FormatInt((nowUnix-timeData.Unix())/(60*60*24), 10) + "天"
+			message = fmt.Sprintf(messageDk, messageID, "✅打卡成功",
+				"Hi,好久不见呀 (^_^)"+
+					"\n距离上次打卡已经过去了"+strconv.FormatInt((nowUnix-timeData.Unix())/(60*60*24), 10)+"天"+
+					"\n你已经打卡了"+strconv.Itoa(dkData.DkTimes)+"次")
 			// timeData.Format("2006-01-02")
 		}
 	}

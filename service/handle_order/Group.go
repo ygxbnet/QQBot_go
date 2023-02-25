@@ -29,7 +29,7 @@ var INFO_MESSAGE = "本机器人由YGXB_net开发" +
 	"\n更新日志: https://gitee.com/YGXB-net/QQBot_go/blob/main/CHANGELOG.md"
 
 // HandleGroupOrder 处理Group命令
-func HandleGroupOrder(groupID string, userID string, message string) {
+func HandleGroupOrder(groupID string, userID string, message string, messageID string) {
 	switch strings.Fields(message)[0] {
 	case "/", "／":
 		// 指令为空时
@@ -42,7 +42,7 @@ func HandleGroupOrder(groupID string, userID string, message string) {
 		httpapi.SendGroupMsg(groupID, INFO_MESSAGE)
 	case "/dk", "／dk", "打卡", "&#91;冒泡&#93;", "&#91;打卡&#93;":
 		// 打卡指令
-		group.Dk(groupID, userID)
+		group.Dk(groupID, userID, messageID)
 	case "/sp", "／sp", "刷屏":
 		// 刷屏指令
 		group.Refresh(groupID, userID, message)
@@ -51,11 +51,11 @@ func HandleGroupOrder(groupID string, userID string, message string) {
 		httpapi.SendGroupMsg(groupID, time.Now().Format("2006-01-02 15:04:05"))
 	case "/p", "／p", "图片":
 		go group.GetRandomPicture(groupID, userID, message)
-	case "/test", "／test":
+	case "/test", "／test": // 测试指令
 		httpapi.SendGroupMsg(groupID, "this is test")
 	default:
 		group.RefreshHandle(groupID, userID, message)
-		handleEmojiOrder(groupID, userID, message)
+		handleEmojiOrder(groupID, userID, message, messageID)
 
 		// 因为切片会出现长度不足，所以会抛出异常
 		defer func() { recover() }()
@@ -70,7 +70,7 @@ func HandleGroupOrder(groupID string, userID string, message string) {
 	}
 }
 
-func handleEmojiOrder(groupID string, userID string, message string) {
+func handleEmojiOrder(groupID string, userID string, message string, messageID string) {
 	// 判断是否为图片消息
 	if strings.Index(message, "CQ:image") == -1 {
 		return
@@ -97,6 +97,6 @@ func handleEmojiOrder(groupID string, userID string, message string) {
 		"a3caf31ff742d543a0645ad6710e077c", // https://gchat.qpic.cn/gchatpic_new/3040809965/818848626-3205803506-A3CAF31FF742D543A0645AD6710E077C/0?term=3
 		"00fb5731dcaff37dd940ddaabcd20f10": // https://gchat.qpic.cn/gchatpic_new/3040809965/818848626-2682086032-00FB5731DCAFF37DD940DDAABCD20F10/0?term=3
 
-		group.Dk(groupID, userID)
+		group.Dk(groupID, userID, messageID)
 	}
 }

@@ -4,4 +4,4 @@ package base
 var VERSION = "0.8.5"
 
 // BUILD_TIME 构建时间
-var BUILD_TIME = ""
+var BUILD_TIME = "unknown"

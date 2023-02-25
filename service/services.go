@@ -14,6 +14,6 @@ func Services() {
 	Init()
 }
 
-func group(groupID string, userID string, message string) {
-	handle_order.HandleGroupOrder(groupID, userID, message)
+func group(groupID string, userID string, message string, messageID string) {
+	handle_order.HandleGroupOrder(groupID, userID, message, messageID)
 }
