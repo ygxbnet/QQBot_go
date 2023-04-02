@@ -26,4 +26,10 @@ QQ: 3040809965
    ```
 
 3. 根据提示修改 `config.yml` 文件
+
 4. 再次运行，畅(tiao)玩(xi)机器人吧
+
+## 相关接口
+
+- [https://api.aa1.cn/doc/chatgpts.html（ChatGPT免费API）](https://api.aa1.cn/doc/chatgpts.html)
+- [https://api.aa1.cn/doc/pyq.html（朋友圈一言免费API）](https://api.aa1.cn/doc/pyq.html)

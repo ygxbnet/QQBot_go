@@ -51,6 +51,8 @@ func HandleGroupOrder(groupID string, userID string, message string, messageID s
 		httpapi.SendGroupMsg(groupID, time.Now().Format("2006-01-02 15:04:05"))
 	case "/p", "／p", "图片":
 		go group.GetRandomPicture(groupID, userID, message)
+	case "/q", "/question", "问个问题", "问一个问题":
+		go group.AskQuestion(groupID, userID, message, messageID)
 	case "/test", "／test": // 测试指令
 		httpapi.SendGroupMsg(groupID, "this is test")
 	default:
@@ -64,7 +66,7 @@ func HandleGroupOrder(groupID string, userID string, message string, messageID s
 			return
 		}
 		if strings.Index(message, "[CQ:at,qq="+config.Parse().Account.BotID+"]") != -1 && userID != config.Parse().Account.AdminID {
-			httpapi.SendGroupMsg(groupID, "怎么了？有什么事情吗？")
+			httpapi.SendGroupMsg(groupID, "你好，如果你想问我问题请输入 /q 提问")
 			return
 		}
 	}
