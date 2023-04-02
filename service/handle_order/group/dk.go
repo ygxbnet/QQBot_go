@@ -23,7 +23,6 @@ func Dk(groupID string, userID string, messageID string) {
 		dkData.DkLastTime = timeNow.Format("2006-01-02")
 		dkData.DkTimes = 1
 		message = generateReplyMessage(messageID, userID, "✅打卡成功", "这是你第一次打卡！[CQ:face,id=144]")
-
 	} else { // 有打卡记录
 		if timeDifference == 0 { // 当天打卡（打卡失败）
 			dkData.DkLastTime = timeNow.Format("2006-01-02")
@@ -45,10 +44,9 @@ func Dk(groupID string, userID string, messageID string) {
 			dkData.DkTimes = int(gjson.Parse(UserData).Get("dk_times").Int()) + 1 // int(gjson.Parse(UserData).Get("dk_times").Int())
 
 			message = generateReplyMessage(messageID, userID, "✅打卡成功",
-				"Hi,好久不见呀！ (^_^)"+
-					"\n距离你上次打卡已经过去 "+strconv.FormatInt((nowUnix-timeData.Unix())/(60*60*24), 10)+" 天了"+
+				"(^_^) 好久不见呀！"+
+					"\n距离你上次打卡已经过去了 "+strconv.FormatInt((nowUnix-timeData.Unix())/(60*60*24), 10)+" 天"+
 					"\n你总共打卡了"+strconv.Itoa(dkData.DkTimes)+"次")
-			// timeData.Format("2006-01-02")
 		}
 	}
 	db.WriteDBFile("group", userID, dkData)
