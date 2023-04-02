@@ -21,14 +21,19 @@ func AskQuestion(groupID string, userID string, message string, messageID string
 				"\n\n使用方法：/q [问题内容]"+
 				"\n例如：/q 你是谁")
 	} else {
-		httpapi.SendGroupMsg(groupID, "AI正在努力生成中，请稍后......")
+		httpapi.SendGroupMsg(groupID, "AI正在努力思考中，请稍后......")
 
 		response, err := http.Get(fmt.Sprintf(apiurl, strings.Fields(message)[1]))
 		if err != nil {
 			httpapi.SendGroupMsg(groupID, "请求发生错误：\n"+err.Error())
 			return
 		}
+
 		returnMessage, _ := io.ReadAll(response.Body)
-		httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]%s", messageID, gjson.Parse(string(returnMessage)).Get("ChatGPT_Answer").String()))
+		if gjson.Parse(string(returnMessage)).Get("ChatGPT_Answer").String() == "" {
+			httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]获取失败，请重试或换一个问题", messageID))
+		} else {
+			httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]%s", messageID, gjson.Parse(string(returnMessage)).Get("ChatGPT_Answer").String()))
+		}
 	}
 }

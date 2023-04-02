@@ -65,8 +65,8 @@ func HandleGroupOrder(groupID string, userID string, message string, messageID s
 			httpapi.SendGroupMsg(groupID, "❌命令输入错误或没有此命令\n请输入 /help 查看帮助")
 			return
 		}
-		if strings.Index(message, "[CQ:at,qq="+config.Parse().Account.BotID+"]") != -1 && userID != config.Parse().Account.AdminID {
-			httpapi.SendGroupMsg(groupID, "你好，如果你想问我问题请输入 /q 提问")
+		if strings.Index(message, "[CQ:at,qq="+config.Parse().Account.BotID+"]") != -1 {
+			group.AskQuestion(groupID, userID, message, messageID)
 			return
 		}
 	}
