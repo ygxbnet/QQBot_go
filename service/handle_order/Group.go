@@ -50,7 +50,7 @@ func HandleGroupOrder(groupID string, userID string, message string, messageID s
 		// 发送服务器当前时间
 		httpapi.SendGroupMsg(groupID, time.Now().Format("2006-01-02 15:04:05"))
 	case "/p", "／p", "图片":
-		go group.GetRandomPicture(groupID, userID, message)
+		group.GetRandomPicture(groupID, userID, message)
 	case "/q", "/question", "问个问题", "问一个问题":
 		go group.AskQuestion(groupID, userID, message, messageID)
 	case "/test", "／test": // 测试指令

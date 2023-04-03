@@ -5,12 +5,9 @@ import (
 	"QQBot_go/service/handle_order"
 )
 
-func init() {
-	handler.AddHandlerGroupMessageFunc(group)
-}
-
 // Services 信息打印
 func Services() {
+	handler.AddHandlerGroupMessageFunc(group)
 	Init()
 }
 

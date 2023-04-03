@@ -14,15 +14,15 @@ func CreateDBFile() {
 	path, _ := os.Getwd()
 	_, err := os.Stat(path + "/" + dbFileName)
 	if err != nil {
-		log.Info("未找到:", dbFileName)
+		log.Info("未找到: ", dbFileName)
 		file, _ := os.Create(dbFileName)
-		log.Info("已创建:", file.Name())
-		err := os.WriteFile(dbFileName, []byte("{\"guild\":{},\"group\":{}}"), 0644)
+		log.Info("已创建: ", file.Name())
+		err := os.WriteFile(dbFileName, []byte(`{"guild":{},"group":{}}`), 0644)
 		if err != nil {
 			log.Error(err)
 		}
 	} else {
-		log.Info("文件:", dbFileName, "已存在")
+		log.Info("数据库文件 ", dbFileName, " 已存在")
 	}
 }
 

@@ -16,22 +16,23 @@ import (
 // Init 初始化
 func Init() {
 	// 发送基本信息
-	httpapi.SendGroupMsg(config.Parse().Group.InfoID, fmt.Sprintf("Bot已启动\n当前版本: %s\n构建时间: %s", base.VERSION, base.BUILD_TIME))
+	msg := fmt.Sprintf("[CQ:at,qq=%s]\nBot已启动\n当前版本: %s\n构建时间: %s", config.Parse().Account.AdminID, base.VERSION, base.BUILD_TIME)
+	httpapi.SendGroupMsg(config.Parse().Group.InfoID, msg)
 
 	// 每10min定时向 Test 群发送消息
 	go func() {
-		var count = 0
+		count := 0
 		for true {
+			time.Sleep(time.Minute * 10)
 			count = count + 1
 			httpapi.SendGroupMsg(config.Parse().Group.InfoID, "每10min定时发送\n次数: "+strconv.Itoa(count))
-			time.Sleep(time.Minute * 10)
 		}
 	}()
 
 	// 0点定时发送相关消息
 	go func() {
 		for {
-			<-time.NewTimer(getTimeDifference(0, 0, 0)).C
+			<-time.NewTimer(getTimeDifference(0, 0, 0)).C // 定时器
 
 			// 发送消息
 			timeMessage := fmt.Sprintf("现在是: %d年%d月%d日 星期%s", time.Now().Year(), time.Now().Month(), time.Now().Day(), conversionWeek(time.Now().Weekday().String()))
@@ -42,7 +43,7 @@ func Init() {
 		}
 	}()
 
-	// 6点定时发送问好
+	// 6点定时发送相关消息
 	go func() {
 		for {
 			<-time.NewTimer(getTimeDifference(6, 0, 0)).C
