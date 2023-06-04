@@ -22,6 +22,7 @@ func main() {
 	Path, _ := os.Getwd()
 	log.Info("运行位置: ", Path)
 
+	// 初始化
 	db.CreateDBFile()
 	connect.Connect()
 	go service.Services()
