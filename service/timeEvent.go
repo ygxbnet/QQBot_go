@@ -15,6 +15,10 @@ import (
 
 // Init 初始化
 func Init() {
+
+}
+
+func Init_Backup() {
 	// 发送基本信息
 	msg := fmt.Sprintf("[CQ:at,qq=%s]\nBot已启动\n当前版本: %s\n构建时间: %s", config.Parse().Account.AdminID, base.VERSION, base.BUILD_TIME)
 	httpapi.SendGroupMsg(config.Parse().Group.InfoID, msg)
