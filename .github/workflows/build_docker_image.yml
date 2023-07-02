@@ -3,11 +3,11 @@ name: Build And Push Docker Image
 on:
   push:
     branches:
-      - "dev"
+      - dev
 
   pull_request:
     branches:
-      - "dev"
+      - dev
 
 jobs:
   build-docker:
@@ -27,7 +27,7 @@ jobs:
         uses: docker/metadata-action@v4
         id: meta
         with:
-          tags: latest
+          tags: latest,dev
           images: ${{ secrets.DOCKERHUB_REPOSITORY }}
 
       - name: Setup QEMU
