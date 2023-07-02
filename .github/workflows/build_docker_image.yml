@@ -24,11 +24,13 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Extract metadata for Docker
-        uses: docker/metadata-action@v4
         id: meta
+        uses: docker/metadata-action@v4
         with:
-          tags: latest,dev
           images: ${{ secrets.DOCKERHUB_REPOSITORY }}
+          tags: |
+            latest
+            dev
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v2
