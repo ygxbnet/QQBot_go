@@ -55,7 +55,7 @@ func HandleGroupOrder(groupID string, userID string, message string, messageID s
 	case "/q", "/question", "问个问题", "问一个问题":
 		go group.AskQuestion(groupID, userID, message, messageID)
 	case "/test", "／test": // 测试指令
-		httpapi.SendGroupMsg(groupID, "this is test")
+		httpapi.SendGroupMsg(groupID, "This is test")
 	default:
 		group.RefreshHandle(groupID, userID, message)
 		handleEmojiOrder(groupID, userID, message, messageID)
