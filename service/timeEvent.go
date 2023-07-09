@@ -15,10 +15,6 @@ import (
 
 // Init 初始化
 func Init() {
-
-}
-
-func Init_Backup() {
 	// 发送基本信息
 	msg := fmt.Sprintf("[CQ:at,qq=%s]\nBot已启动\n当前版本: %s\n构建时间: %s", config.Parse().Account.AdminID, base.VERSION, base.BUILD_TIME)
 	httpapi.SendGroupMsg(config.Parse().Group.InfoID, msg)
@@ -29,9 +25,12 @@ func Init_Backup() {
 		for true {
 			time.Sleep(time.Minute * 10)
 			count = count + 1
-			httpapi.SendGroupMsg(config.Parse().Group.InfoID, "每10min定时发送\n次数: "+strconv.Itoa(count))
+			httpapi.SendGroupMsg(config.Parse().Group.InfoID, "每 10min 定时发送消息\n程序运行时长："+strconv.Itoa(count)+"min")
 		}
 	}()
+}
+
+func Init_Backup() {
 
 	// 0点定时发送相关消息
 	go func() {
