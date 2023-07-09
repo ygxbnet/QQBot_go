@@ -16,7 +16,7 @@ import (
 // Init 初始化
 func Init() {
 	// 发送基本信息
-	msg := fmt.Sprintf("[CQ:at,qq=%s]\nBot已启动\n当前版本: %s\n构建时间: %s", config.Parse().Account.AdminID, base.VERSION, base.BUILD_TIME)
+	msg := fmt.Sprintf("[CQ:at,qq=%s]\nBot已启动\n当前程序版本: %s\n构建时间: %s", config.Parse().Account.AdminID, base.VERSION, base.BUILD_TIME)
 	httpapi.SendGroupMsg(config.Parse().Group.InfoID, msg)
 
 	// 每10min定时向 Test 群发送消息
