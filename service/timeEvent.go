@@ -4,7 +4,6 @@ import (
 	"QQBot_go/internal/base"
 	"QQBot_go/internal/config"
 	"QQBot_go/internal/httpapi"
-	"QQBot_go/service/services_api"
 	"fmt"
 	"github.com/tidwall/gjson"
 	"io"
@@ -16,7 +15,7 @@ import (
 // Init 初始化
 func Init() {
 	// 发送基本信息
-	msg := fmt.Sprintf("[CQ:at,qq=%s]\nBot 已启动\n当前程序版本: %s\n构建时间: %s", config.Parse().Account.AdminID, base.VERSION, base.BUILD_TIME)
+	msg := fmt.Sprintf("[CQ:at,qq=%s]\nBot 已启动\n当前程序版本：%s\n构建时间：%s", config.Parse().Account.AdminID, base.VERSION, base.BUILD_TIME)
 	httpapi.SendGroupMsg(config.Parse().Group.InfoID, msg)
 
 	// 每10min定时向 Test 群发送消息
@@ -28,9 +27,6 @@ func Init() {
 			httpapi.SendGroupMsg(config.Parse().Group.InfoID, "每 10min 定时发送消息\n程序运行时长："+strconv.Itoa(count)+"min")
 		}
 	}()
-}
-
-func Init_Backup() {
 
 	// 0点定时发送相关消息
 	go func() {
@@ -38,13 +34,16 @@ func Init_Backup() {
 			<-time.NewTimer(getTimeDifference(0, 0, 0)).C // 定时器
 
 			// 发送消息
-			timeMessage := fmt.Sprintf("现在是: %d年%d月%d日 星期%s", time.Now().Year(), time.Now().Month(), time.Now().Day(), conversionWeek(time.Now().Weekday().String()))
+			timeMessage := fmt.Sprintf("现在是：%d年%d月%d日 星期%s\n又是新的一天，希望大家过得开心", time.Now().Year(), time.Now().Month(), time.Now().Day(), conversionWeek(time.Now().Weekday().String()))
 			httpapi.SendGroupMsg(config.Parse().Group.MainID, timeMessage)
 
-			urlImg, nameImg := services_api.GetBingPictureURL()
-			httpapi.SendGroupMsg(config.Parse().Group.MainID, "[CQ:image,file="+nameImg+",subType=0,url="+urlImg+"]")
+			// urlImg, nameImg := services_api.GetBingPictureURL()
+			// httpapi.SendGroupMsg(config.Parse().Group.MainID, "[CQ:image,file="+nameImg+",subType=0,url="+urlImg+"]")
 		}
 	}()
+}
+
+func Init_Backup() {
 
 	// 6点定时发送相关消息
 	go func() {
