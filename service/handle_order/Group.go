@@ -35,27 +35,36 @@ func HandleGroupOrder(groupID string, userID string, message string, messageID s
 	case "/", "／":
 		// 指令为空时
 		httpapi.SendGroupMsg(groupID, "指令不能为空")
+
 	case "/help", "／help":
 		// 帮助指令
 		httpapi.SendGroupMsg(groupID, HELP_MESSAGE)
+
 	case "/info", "／info":
 		// 机器人信息
 		httpapi.SendGroupMsg(groupID, INFO_MESSAGE)
+
 	case "/dk", "／dk", "打卡", "&#91;冒泡&#93;", "&#91;打卡&#93;":
 		// 打卡指令
 		group.Dk(groupID, userID, messageID)
+
 	case "/sp", "／sp", "刷屏":
 		// 刷屏指令
 		group.Refresh(groupID, userID, message)
+
 	case "/date", "／date", "时间":
 		// 发送服务器当前时间
 		httpapi.SendGroupMsg(groupID, time.Now().Format("2006-01-02 15:04:05"))
+
 	case "/p", "／p", "图片":
 		group.GetRandomPicture(groupID, userID, message)
+
 	case "/q", "/question", "问个问题", "问一个问题":
 		go group.AskQuestion(groupID, userID, message, messageID)
+
 	case "/test", "／test": // 测试指令
 		httpapi.SendGroupMsg(groupID, "This is test")
+
 	default:
 		group.RefreshHandle(groupID, userID, message)
 		handleEmojiOrder(groupID, userID, message, messageID)
