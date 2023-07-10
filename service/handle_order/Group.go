@@ -27,8 +27,6 @@ var INFO_MESSAGE = "本机器人由 YGXB_net 开发" +
 	"\n\n当前版本：" + base.VERSION +
 	"\n构建时间：" + base.BUILD_TIME
 
-// "\n更新日志: https://gitee.com/YGXB-net/QQBot_go/blob/main/CHANGELOG.md"
-
 // HandleGroupOrder 处理Group命令
 func HandleGroupOrder(groupID string, userID string, message string, messageID string) {
 	switch strings.Fields(message)[0] {
