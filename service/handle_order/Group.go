@@ -14,9 +14,12 @@ import (
 	"time"
 )
 
-var HELP_MESSAGE = "=====> 帮助信息 <=====" +
+var HELP_MESSAGE = " ====>  帮助信息  <==== " +
+	"\n" +
 	"\n● /help 获取帮助" +
 	"\n● /info 获取机器人信息" +
+	"\n" +
+	"\n ====>  功能指令  <==== " +
 	"\n" +
 	"\n● /dk 进行打卡" +
 	"\n● /sp 进行刷屏" +
@@ -60,7 +63,8 @@ func HandleGroupOrder(groupID string, userID string, message string, messageID s
 	case "/q", "/question", "问个问题", "问一个问题":
 		go group.AskQuestion(groupID, userID, message, messageID)
 
-	case "/test", "／test": // 测试指令
+	case "/test", "／test":
+		// 测试指令
 		httpapi.SendGroupMsg(groupID, "This is test")
 
 	default:
