@@ -19,24 +19,30 @@ func Dk(groupID string, userID string, messageID string) {
 	timeData, _ := time.Parse("2006-01-02", gjson.Parse(UserData).Get("dk_last_time").String())
 	timeDifference := (timeNow.Unix() - timeData.Unix()) / 86400
 
-	if UserData == "" { // 没有打卡记录
+	if UserData == "" {
+		// 没有打卡记录
 		dkData.DkLastTime = timeNow.Format("2006-01-02")
 		dkData.DkTimes = 1
 		message = generateReplyMessage(messageID, userID, "✅打卡成功", "这是你第一次打卡！[CQ:face,id=144]")
-	} else { // 有打卡记录
-		if timeDifference == 0 { // 当天打卡（打卡失败）
+
+	} else {
+		// 有打卡记录
+		if timeDifference == 0 {
+			// 当天打卡（打卡失败）
 			dkData.DkLastTime = timeNow.Format("2006-01-02")
 			dkData.DkTimes = int(gjson.Parse(UserData).Get("dk_times").Int())
 			message = generateReplyMessage(messageID, userID, "❌打卡失败", "今天你已经打卡了！\n明天再来吧 ^_^")
 
-		} else if timeDifference == 1 { // 昨天打卡
+		} else if timeDifference == 1 {
+			// 昨天打卡
 			dkData.DkLastTime = timeNow.Format("2006-01-02")
 			dkData.DkTimes = int(gjson.Parse(UserData).Get("dk_times").Int()) + 1
 			message = generateReplyMessage(messageID, userID, "✅打卡成功",
-				"你已经打卡"+strconv.Itoa(dkData.DkTimes)+"次了！"+
+				"你已经打卡 "+strconv.Itoa(dkData.DkTimes)+" 次了！"+
 					"\n[CQ:face,id=144][CQ:face,id=144][CQ:face,id=144][CQ:face,id=144][CQ:face,id=144][CQ:face,id=144]")
 
-		} else if timeDifference > 1 { // 间隔两天以上打卡
+		} else if timeDifference > 1 {
+			// 间隔两天以上打卡
 			dkData.DkLastTime = timeNow.Format("2006-01-02")
 			now := time.Now()
 			nowUnix := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location()).Unix()
@@ -46,18 +52,18 @@ func Dk(groupID string, userID string, messageID string) {
 			message = generateReplyMessage(messageID, userID, "✅打卡成功",
 				"(^_^) 好久不见呀！"+
 					"\n距离你上次打卡已经过去了 "+strconv.FormatInt((nowUnix-timeData.Unix())/(60*60*24), 10)+" 天"+
-					"\n你总共打卡了"+strconv.Itoa(dkData.DkTimes)+"次")
+					"\n你总共打卡了 "+strconv.Itoa(dkData.DkTimes)+" 次")
 		}
 	}
 	db.WriteDBFile("group", userID, dkData)
 	httpapi.SendGroupMsg(groupID, message)
 }
 
-func generateReplyMessage(userID string, messageID string, state string, other string) string {
+func generateReplyMessage(messageID string, userID string, state string, other string) string {
 
-	var messageDk = "[CQ:reply,id=%s][CQ:at,qq=%s][CQ:at,qq=%s]" +
-		"\n%s" + // 打卡状态
+	var messageDk = "[CQ:reply,id=%s]" +
+		"%s" + // 打卡状态
 		"\n%s" // 回复消息
 
-	return fmt.Sprintf(messageDk, userID, messageID, messageID, state, other)
+	return fmt.Sprintf(messageDk, messageID, state, other)
 }
