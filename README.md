@@ -16,6 +16,31 @@ QQ: 3040809965
 
 ## 使用方法
 
+### 使用 Docker（推荐）
+
+1. 安装 Docker
+
+2. 编写 `docker-compose.yml`
+
+   ```yaml
+   services:
+     qqbot-go:
+       image: ygxb/qqbot-go
+       restart: always
+       volumes:
+         - ./qqbot-go_data:/data
+   ```
+
+3. 启动 [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
+
+4. 运行 `docker compose up` 启动本程序
+
+5. 根据提示修改 `config.yml` 文件
+
+6. 再次运行，畅(tiao)玩(xi)机器人吧
+
+### 本地启动
+
 1. 将代码克隆到本地
 
 2. 运行:（请先启动 [go-cqhttp](https://github.com/Mrs4s/go-cqhttp) 然后再运行此程序）
@@ -28,6 +53,12 @@ QQ: 3040809965
 3. 根据提示修改 `config.yml` 文件
 
 4. 再次运行，畅(tiao)玩(xi)机器人吧
+
+## 特别说明
+
+**本项目还处于开发阶段，仅个人自用，代码简陋及相关教程不完善还请见谅**
+
+如果发现项目有问题，欢迎提交 [Issues](https://github.com/ygxbnet/QQBot_go/issues)，我会尽量解决
 
 ## 相关接口
 
