@@ -27,3 +27,9 @@ server:
   websocket:
     # websocket 连接地址
     url: ws://0.0.0.0:8080
+
+openai:
+  # OpenAI 接口代理 URL
+  base-url:
+  # OpanAI API 密钥
+  api-key:
