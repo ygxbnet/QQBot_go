@@ -27,7 +27,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ secrets.DOCKERHUB_REPOSITORY }}
+          images: ygxb/qqbot-go
           tags: |
             latest
             dev
