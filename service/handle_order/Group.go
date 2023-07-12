@@ -26,7 +26,7 @@ var HELP_MESSAGE = " ====>  帮助信息  <==== " +
 	"\n● /p  获取随机风景图"
 
 var INFO_MESSAGE = "本机器人由 YGXB_net 开发" +
-	"\nQQ: " + config.Parse().Account.AdminID +
+	"\nQQ: " + config.Get().Account.AdminID +
 	"\n\n当前版本：" + base.VERSION +
 	"\n构建时间：" + base.BUILD_TIME
 
@@ -61,6 +61,7 @@ func HandleGroupOrder(groupID string, userID string, message string, messageID s
 		group.GetRandomPicture(groupID, userID, message)
 
 	case "/q", "/question", "问个问题", "问一个问题":
+		// 问问题
 		go group.AskQuestion(groupID, userID, message, messageID)
 
 	case "/test", "／test":
@@ -77,7 +78,8 @@ func HandleGroupOrder(groupID string, userID string, message string, messageID s
 			httpapi.SendGroupMsg(groupID, "❌命令输入错误或没有此命令\n请输入 /help 查看帮助")
 			return
 		}
-		if strings.Index(message, "[CQ:at,qq="+config.Parse().Account.BotID+"]") != -1 {
+		if strings.Index(message, "[CQ:at,qq="+config.Get().Account.BotID+"]") != -1 {
+			// @机器人 交给问问题处理方法处理
 			group.AskQuestion(groupID, userID, message, messageID)
 			return
 		}

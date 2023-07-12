@@ -11,7 +11,7 @@ import (
 
 // Connect 连接WebSocket
 func Connect() {
-	webSocketURL := config.Parse().Server.Websocket.URL
+	webSocketURL := config.Get().Server.Websocket.URL
 
 	log.Info("正在连接: ", webSocketURL)
 	// 连接WebSocket

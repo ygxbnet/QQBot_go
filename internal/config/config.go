@@ -32,8 +32,8 @@ func init() {
 	}
 }
 
-// Parse 从默认配置文件路径中获取
-func Parse() Config {
+// Get 从默认配置文件路径中获取
+func Get() Config {
 	file, err := os.ReadFile("config.yml")
 	if err != nil {
 		log.Error("读取配置文件错误", err)

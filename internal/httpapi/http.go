@@ -11,7 +11,7 @@ import (
 )
 
 func sendHTTP(path string, body map[string]string) []byte {
-	httpURL := config.Parse().Server.HTTPAPI.URL
+	httpURL := config.Get().Server.HTTPAPI.URL
 
 	jsonData, err := json.Marshal(body)
 	if err != nil {

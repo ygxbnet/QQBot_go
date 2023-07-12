@@ -11,10 +11,10 @@ func SendGroupMsg(groupID string, message string) string {
 	data := make(map[string]string)
 
 	data["group_id"] = groupID
-	if config.Parse().PrependMessage == "" {
+	if config.Get().PrependMessage == "" {
 		data["message"] = message
 	} else {
-		data["message"] = message + "\n\n" + config.Parse().PrependMessage
+		data["message"] = message + "\n\n" + config.Get().PrependMessage
 	}
 
 	body := sendHTTP("/send_group_msg", data)

@@ -20,5 +20,5 @@ func TestDailyJoke(t *testing.T) {
 			msg = append(msg, gjson.Parse(string(bytes)).Get("0.gaoxiao").String())
 		}
 	}
-	httpapi.SendGroupMsg(config.Parse().Group.MainID, fmt.Sprintf("每日笑话二则：\n1. %s\n2. %s", msg[0], msg[1]))
+	httpapi.SendGroupMsg(config.Get().Group.MainID, fmt.Sprintf("每日笑话二则：\n1. %s\n2. %s", msg[0], msg[1]))
 }

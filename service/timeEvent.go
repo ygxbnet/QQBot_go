@@ -15,8 +15,8 @@ import (
 // Init 初始化
 func Init() {
 	// 发送基本信息
-	msg := fmt.Sprintf("[CQ:at,qq=%s]\nBot 已启动\n当前程序版本：%s\n构建时间：%s", config.Parse().Account.AdminID, base.VERSION, base.BUILD_TIME)
-	httpapi.SendGroupMsg(config.Parse().Group.InfoID, msg)
+	msg := fmt.Sprintf("[CQ:at,qq=%s]\nBot 已启动\n当前程序版本：%s\n构建时间：%s", config.Get().Account.AdminID, base.VERSION, base.BUILD_TIME)
+	httpapi.SendGroupMsg(config.Get().Group.InfoID, msg)
 
 	// 每10min定时向 Test 群发送消息
 	go func() {
@@ -24,7 +24,7 @@ func Init() {
 		for true {
 			time.Sleep(time.Minute * 10)
 			count = count + 1
-			httpapi.SendGroupMsg(config.Parse().Group.InfoID, "每 10min 定时发送消息\n程序运行时长："+strconv.Itoa(count*10)+"min")
+			httpapi.SendGroupMsg(config.Get().Group.InfoID, "每 10min 定时发送消息\n程序运行时长："+strconv.Itoa(count*10)+"min")
 		}
 	}()
 
@@ -35,10 +35,10 @@ func Init() {
 
 			// 发送消息
 			timeMessage := fmt.Sprintf("现在是：%d年%d月%d日 星期%s\n又是新的一天，希望大家过得开心", time.Now().Year(), time.Now().Month(), time.Now().Day(), conversionWeek(time.Now().Weekday().String()))
-			httpapi.SendGroupMsg(config.Parse().Group.MainID, timeMessage)
+			httpapi.SendGroupMsg(config.Get().Group.MainID, timeMessage)
 
 			// urlImg, nameImg := services_api.GetBingPictureURL()
-			// httpapi.SendGroupMsg(config.Parse().Group.MainID, "[CQ:image,file="+nameImg+",subType=0,url="+urlImg+"]")
+			// httpapi.SendGroupMsg(config.Get().Group.MainID, "[CQ:image,file="+nameImg+",subType=0,url="+urlImg+"]")
 		}
 	}()
 }
@@ -56,20 +56,20 @@ func Init_Backup() {
 				msg := gjson.Parse(string(bytes))
 				if response.StatusCode == 200 {
 					message := fmt.Sprintf("%s", msg.Get("pyq").String())
-					httpapi.SendGroupMsg(config.Parse().Group.MainID, message)
+					httpapi.SendGroupMsg(config.Get().Group.MainID, message)
 				} else {
-					httpapi.SendGroupMsg(config.Parse().Group.MainID, "早上好！！！")
+					httpapi.SendGroupMsg(config.Get().Group.MainID, "早上好！！！")
 				}
 			}
 			// { // 早上好
 			// 	response, _ := http.Get("https://v.api.aa1.cn/api/zaoanyulu/index.php")
 			// 	bytes, _ := io.ReadAll(response.Body)
-			// 	msg := gjson.Parse(string(bytes))
+			// 	msg := gjson.Get(string(bytes))
 			// 	if response.StatusCode == 200 && msg.Get("code").Int() == 1 {
 			// 		message := fmt.Sprintf("%s", msg.Get("text").String())
-			// 		httpapi.SendGroupMsg(config.Parse().Group.MainID, message)
+			// 		httpapi.SendGroupMsg(config.Get().Group.MainID, message)
 			// 	} else {
-			// 		httpapi.SendGroupMsg(config.Parse().Group.MainID, "早上好！！！")
+			// 		httpapi.SendGroupMsg(config.Get().Group.MainID, "早上好！！！")
 			// 	}
 			// }
 			// { // 每日笑话
@@ -79,10 +79,10 @@ func Init_Backup() {
 			// 		response, _ := http.Get("https://v.api.aa1.cn/api/api-wenan-gaoxiao/index.php?aa1=json")
 			// 		if response.StatusCode == 200 {
 			// 			bytes, _ := io.ReadAll(response.Body)
-			// 			msg = append(msg, gjson.Parse(string(bytes)).Get("0.gaoxiao").String())
+			// 			msg = append(msg, gjson.Get(string(bytes)).Get("0.gaoxiao").String())
 			// 		}
 			// 	}
-			// 	httpapi.SendGroupMsg(config.Parse().Group.MainID, fmt.Sprintf("每日笑话三则：\n1. %s\n2. %s\n3. %s", msg[0], msg[1], msg[2]))
+			// 	httpapi.SendGroupMsg(config.Get().Group.MainID, fmt.Sprintf("每日笑话三则：\n1. %s\n2. %s\n3. %s", msg[0], msg[1], msg[2]))
 			// }
 		}
 	}()
