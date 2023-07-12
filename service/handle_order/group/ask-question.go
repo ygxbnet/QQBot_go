@@ -47,7 +47,7 @@ func AskQuestion(groupID string, userID string, message string, messageID string
 		httpapi.SendGroupMsg(groupID, "已经重新开启一个新的对话")
 
 	} else {
-		// 拼接请求，使用 gpt-3.5-turbo 模型
+		// 拼接请求，用于支持连续对话，使用 gpt-3.5-turbo 模型
 		historyMessage[groupID] = append(historyMessage[groupID], Message{
 			Role:    "user",
 			Content: strings.Fields(message)[1],
