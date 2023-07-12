@@ -13,16 +13,18 @@ import (
 	"strings"
 )
 
+var historyMessage = make(map[string][]Message)
+
 func AskQuestion(groupID string, userID string, message string, messageID string) {
 
 	helpMessage := "你好，我是 ChatGPT 的替身。" +
-		"\n你可以问我各种问题，我都可以帮你回答（但不一定正确 (←_←)）" +
+		"\n你可以与我对话，可以和我聊天，可以问我问题，我都会一直陪着你 ٩( 'ω' )و " +
 		"\n" +
-		"\n使用方法：/q [提问内容]" +
-		"\n或者直接 @我 [提问内容]" +
-		"\n" +
+		"\n使用方法：/q [对话内容]" +
+		"\n或者直接 @我 [对话内容]" +
 		"\n例如：/q 请介绍一下你自己" +
-		"\n注：该功能还没有接入连续上下文对话"
+		"\n" +
+		"\n命令：/q restart 重新开启一个对话"
 
 	// 拼接请求 URL
 	var apiURL string
@@ -36,21 +38,32 @@ func AskQuestion(groupID string, userID string, message string, messageID string
 		// 获取插件帮助
 		httpapi.SendGroupMsg(groupID, helpMessage)
 
+	} else if strings.Fields(message)[1] == "restart" {
+		// 重新开启一个新的对话
+		_, status := historyMessage[groupID]
+		if status {
+			delete(historyMessage, groupID)
+		}
+		httpapi.SendGroupMsg(groupID, "已经重新开启一个新的对话")
+
 	} else {
 		// 拼接请求，使用 gpt-3.5-turbo 模型
-		jsonByte, _ := json.Marshal(
-			Body{
-				Model: "gpt-3.5-turbo",
-				Messages: []Message{
-					{Role: "user", Content: strings.Fields(message)[1]},
-				},
-			})
+		historyMessage[groupID] = append(historyMessage[groupID], Message{
+			Role:    "user",
+			Content: strings.Fields(message)[1],
+		})
+		jsonByte, _ := json.Marshal(Body{
+			Model:    "gpt-3.5-turbo",
+			Messages: historyMessage[groupID],
+		})
+
 		client := &http.Client{}
 		req, _ := http.NewRequest("POST", apiURL, bytes.NewReader(jsonByte))
 		req.Header.Add("Content-Type", "application/json")
-		req.Header.Add("Authorization", "Bearer "+config.Get().OpenAI.APIKey)
+		req.Header.Add("Authorization", "Bearer "+config.Get().OpenAI.APIKey[0])
 
 		// 发送请求
+		log.Info("正在发送请求：", apiURL, string(jsonByte))
 		res, err := client.Do(req)
 		if err != nil {
 			log.Error(err)
@@ -62,7 +75,7 @@ func AskQuestion(groupID string, userID string, message string, messageID string
 		// 处理请求并给用户回应
 		returnMessage, _ := io.ReadAll(res.Body)
 		if gjson.Parse(string(returnMessage)).Get("choices.0.message.content").String() == "" {
-			httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]获取失败，请重试或换一个问题", messageID))
+			httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]获取失败，请重试或换一个问题\n%s", messageID, returnMessage))
 		} else {
 			httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]ChatGPT：%s", messageID, gjson.Parse(string(returnMessage)).Get("choices.0.message.content").String()))
 		}

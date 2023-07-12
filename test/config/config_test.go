@@ -13,7 +13,7 @@ func TestParse(t *testing.T) {
 	t.Log("Group.InfoID", config.Get().Group.InfoID)
 
 	t.Log("Server.Websocket.URL", config.Get().Server.Websocket.URL)
-	t.Log("Server.HTTPAPI.URL", config.Get().Server.HTTPAPI.URL)
+	t.Log("Server.HttpAPI.URL", config.Get().Server.HttpAPI.URL)
 
 	for i := 0; i <= 10000; i++ {
 		config.Get()
