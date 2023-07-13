@@ -38,7 +38,9 @@ func AskQuestion(groupID string, userID string, message string, messageID string
 		"\n或者直接 @我 [对话内容]" +
 		"\n例如：/q 请介绍一下你自己" +
 		"\n" +
-		"\n命令：/q restart 重新开启一个对话"
+		"\n命令：" +
+		"\n/q restart 重新开启一个对话" +
+		"\n/q check 检查 OpenAI Key"
 
 	if len(strings.Fields(message)) == 1 {
 		// 获取插件帮助
@@ -51,6 +53,31 @@ func AskQuestion(groupID string, userID string, message string, messageID string
 			delete(historyMessage, groupID)
 		}
 		httpapi.SendGroupMsg(groupID, "已经重新开启一个新的对话")
+
+	} else if strings.Fields(message)[1] == "check" {
+		// 检查 OpenAI Key是否可用
+		var key []string
+		var rMessage string
+
+		for _, value := range config.Get().OpenAI.APIKey {
+			client := &http.Client{}
+			req, _ := http.NewRequest("GET", "https://api.jiqili.com/v1/models", nil)
+			req.Header.Add("Authorization", "Bearer "+value)
+			res, err := client.Do(req)
+			if err != nil {
+				log.Error(err)
+				return
+			}
+
+			if res.StatusCode == 200 {
+				rMessage += fmt.Sprintf("✅ 有效 %s......\n", value[:15])
+				key = append(key, value)
+			} else {
+				rMessage += fmt.Sprintf("❌ 无效 %s......\n", value[:15])
+			}
+		}
+		apiKey = key
+		httpapi.SendGroupMsg(groupID, rMessage[:len(rMessage)-2])
 
 	} else {
 		// 拼接请求，用于支持连续对话，使用 gpt-3.5-turbo 模型
@@ -122,6 +149,7 @@ func getResponseMessage(groupID string, messageID string, jsonByte []byte) {
 
 // verifyOpenAIKey 验证配置文件中的 OpenAI Key
 func verifyOpenAIKey() {
+	var key []string
 	for index, value := range config.Get().OpenAI.APIKey {
 		client := &http.Client{}
 		req, _ := http.NewRequest("GET", "https://api.jiqili.com/v1/models", nil)
@@ -133,12 +161,13 @@ func verifyOpenAIKey() {
 		}
 
 		if res.StatusCode == 200 {
-			log.Infof("✅ 第%dKey %s 有效", index, value)
-			apiKey = append(apiKey, value)
+			log.Infof("✅ %d Key %s 有效", index, value)
+			key = append(key, value)
 		} else {
-			log.Infof("❌ 第%dKey %s 无效", index, value)
+			log.Infof("❌ %d Key %s 无效", index, value)
 		}
 	}
+	apiKey = key
 }
 
 // Body 数据结构
