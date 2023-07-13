@@ -77,7 +77,11 @@ func AskQuestion(groupID string, userID string, message string, messageID string
 		if gjson.Parse(string(returnMessage)).Get("choices.0.message.content").String() == "" {
 			httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]获取失败，请重试或换一个问题\n%s", messageID, returnMessage))
 		} else {
-			httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]ChatGPT：%s", messageID, gjson.Parse(string(returnMessage)).Get("choices.0.message.content").String()))
+			httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]ChatGPT：\n%s\n\n本次回答消耗 %s Token",
+				messageID,
+				gjson.Parse(string(returnMessage)).Get("choices.0.message.content").String(),
+				gjson.Parse(string(returnMessage)).Get("usage.total_tokens").String(),
+			))
 		}
 	}
 }

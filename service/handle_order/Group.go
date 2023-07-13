@@ -21,9 +21,10 @@ var HELP_MESSAGE = " ====>  帮助信息  <==== " +
 	"\n" +
 	"\n ====>  功能指令  <==== " +
 	"\n" +
-	"\n● /dk 进行打卡" +
-	"\n● /sp 进行刷屏" +
-	"\n● /p  获取随机风景图"
+	"\n● /dk  进行打卡" +
+	"\n● /q   开始一个新的对话" +
+	"\n● /p   获取随机风景图" +
+	"\n● /sp  进行刷屏"
 
 var INFO_MESSAGE = "本机器人由 YGXB_net 开发" +
 	"\nQQ: " + config.Get().Account.AdminID +
