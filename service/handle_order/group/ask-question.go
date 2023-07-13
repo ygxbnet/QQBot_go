@@ -61,7 +61,7 @@ func AskQuestion(groupID string, userID string, message string, messageID string
 
 		for _, value := range config.Get().OpenAI.APIKey {
 			client := &http.Client{}
-			req, _ := http.NewRequest("GET", "https://api.jiqili.com/v1/models", nil)
+			req, _ := http.NewRequest("GET", config.Get().OpenAI.BaseURL+"/v1/models", nil)
 			req.Header.Add("Authorization", "Bearer "+value)
 			res, err := client.Do(req)
 			if err != nil {
