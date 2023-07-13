@@ -152,7 +152,7 @@ func verifyOpenAIKey() {
 	var key []string
 	for index, value := range config.Get().OpenAI.APIKey {
 		client := &http.Client{}
-		req, _ := http.NewRequest("GET", apiURL+"/v1/models", nil)
+		req, _ := http.NewRequest("GET", config.Get().OpenAI.BaseURL+"/v1/models", nil)
 		req.Header.Add("Authorization", "Bearer "+value)
 		res, err := client.Do(req)
 		if err != nil {
