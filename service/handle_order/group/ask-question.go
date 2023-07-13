@@ -14,6 +14,20 @@ import (
 )
 
 var historyMessage = make(map[string][]Message)
+var apiKey []string
+var apiURL string
+
+func init() {
+	// 拼接请求 URL
+	if config.Get().OpenAI.BaseURL == "" {
+		apiURL = "https://api.openai.com" + "/v1/chat/completions"
+	} else {
+		apiURL = config.Get().OpenAI.BaseURL + "/v1/chat/completions"
+	}
+	// 验证配置文件中所有的 OpenAI Key
+	log.Info("正在验证所有 OpenAI Key")
+	verifyOpenAIKey()
+}
 
 func AskQuestion(groupID string, userID string, message string, messageID string) {
 
@@ -25,14 +39,6 @@ func AskQuestion(groupID string, userID string, message string, messageID string
 		"\n例如：/q 请介绍一下你自己" +
 		"\n" +
 		"\n命令：/q restart 重新开启一个对话"
-
-	// 拼接请求 URL
-	var apiURL string
-	if config.Get().OpenAI.BaseURL == "" {
-		apiURL = "https://api.openai.com" + "/v1/chat/completions"
-	} else {
-		apiURL = config.Get().OpenAI.BaseURL + "/v1/chat/completions"
-	}
 
 	if len(strings.Fields(message)) == 1 {
 		// 获取插件帮助
@@ -56,36 +62,86 @@ func AskQuestion(groupID string, userID string, message string, messageID string
 			Model:    "gpt-3.5-turbo",
 			Messages: historyMessage[groupID],
 		})
+		getResponseMessage(groupID, messageID, jsonByte)
+	}
+}
 
+// getResponseMessage 发送请求，获取 OpenAI 回复
+func getResponseMessage(groupID string, messageID string, jsonByte []byte) {
+	if len(apiKey) == 0 {
+		verifyOpenAIKey()
+		if len(apiKey) == 0 {
+			httpapi.SendGroupMsg(groupID, "当前配置文件中已没有可用 OpenAI Key，请重新添加")
+			return
+		}
+	}
+
+	client := &http.Client{}
+	req, _ := http.NewRequest("POST", apiURL, bytes.NewReader(jsonByte))
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+apiKey[0])
+
+	// 发送请求
+	log.Info("正在发送请求：", apiURL, string(jsonByte))
+	res, err := client.Do(req)
+	if err != nil {
+		log.Error(err)
+		httpapi.SendGroupMsg(groupID, "请求发生错误：\n"+err.Error())
+		return
+	}
+	defer res.Body.Close()
+
+	// 处理请求并给用户回应
+	returnMessage, _ := io.ReadAll(res.Body)
+	if gjson.Parse(string(returnMessage)).Get("choices.0.message.content").String() != "" {
+		// 成功获取到回答
+		httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]ChatGPT：\n%s\n\n本次回答消耗 %s Token",
+			messageID,
+			gjson.Parse(string(returnMessage)).Get("choices.0.message.content").String(),
+			gjson.Parse(string(returnMessage)).Get("usage.total_tokens").String(),
+		))
+
+	} else if res.StatusCode == 401 {
+		// OpenAI Key 无效
+		if len(apiKey) <= 1 {
+			httpapi.SendGroupMsg(groupID, "当前已没有可用 OpenAI Key。正在从配置文件中重新检索")
+			verifyOpenAIKey()
+			getResponseMessage(groupID, messageID, jsonByte)
+		} else {
+			httpapi.SendGroupMsg(groupID, "当前 OpenAI Key 不可用，正在切换 Key，并重新获取回复")
+			apiKey = apiKey[1:]
+			getResponseMessage(groupID, messageID, jsonByte)
+		}
+	} else {
+		httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]获取失败，请重试或换一个问题\n%s",
+			messageID,
+			returnMessage,
+		))
+	}
+}
+
+// verifyOpenAIKey 验证配置文件中的 OpenAI Key
+func verifyOpenAIKey() {
+	for index, value := range config.Get().OpenAI.APIKey {
 		client := &http.Client{}
-		req, _ := http.NewRequest("POST", apiURL, bytes.NewReader(jsonByte))
-		req.Header.Add("Content-Type", "application/json")
-		req.Header.Add("Authorization", "Bearer "+config.Get().OpenAI.APIKey[0])
-
-		// 发送请求
-		log.Info("正在发送请求：", apiURL, string(jsonByte))
+		req, _ := http.NewRequest("GET", "https://api.jiqili.com/v1/models", nil)
+		req.Header.Add("Authorization", "Bearer "+value)
 		res, err := client.Do(req)
 		if err != nil {
 			log.Error(err)
-			httpapi.SendGroupMsg(groupID, "请求发生错误：\n"+err.Error())
 			return
 		}
-		defer res.Body.Close()
 
-		// 处理请求并给用户回应
-		returnMessage, _ := io.ReadAll(res.Body)
-		if gjson.Parse(string(returnMessage)).Get("choices.0.message.content").String() == "" {
-			httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]获取失败，请重试或换一个问题\n%s", messageID, returnMessage))
+		if res.StatusCode == 200 {
+			log.Infof("✅ 第%dKey %s 有效", index, value)
+			apiKey = append(apiKey, value)
 		} else {
-			httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]ChatGPT：\n%s\n\n本次回答消耗 %s Token",
-				messageID,
-				gjson.Parse(string(returnMessage)).Get("choices.0.message.content").String(),
-				gjson.Parse(string(returnMessage)).Get("usage.total_tokens").String(),
-			))
+			log.Infof("❌ 第%dKey %s 无效", index, value)
 		}
 	}
 }
 
+// Body 数据结构
 type Body struct {
 	Model    string    `json:"model"`
 	Messages []Message `json:"messages"`
