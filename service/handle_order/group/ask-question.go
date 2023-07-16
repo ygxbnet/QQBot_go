@@ -83,12 +83,13 @@ func AskQuestion(groupID string, userID string, message string, messageID string
 		// 拼接请求，用于支持连续对话，使用 gpt-3.5-turbo 模型
 		historyMessage[groupID] = append(historyMessage[groupID], Message{
 			Role:    "user",
-			Content: strings.Fields(message)[1],
+			Content: fmt.Sprintf("%s", strings.Fields(message)[1:]),
 		})
 		jsonByte, _ := json.Marshal(Body{
 			Model:    "gpt-3.5-turbo",
 			Messages: historyMessage[groupID],
 		})
+		log.Info(string(jsonByte))
 		getResponseMessage(groupID, messageID, jsonByte)
 	}
 }
@@ -135,7 +136,7 @@ func getResponseMessage(groupID string, messageID string, jsonByte []byte) {
 			verifyOpenAIKey()
 			getResponseMessage(groupID, messageID, jsonByte)
 		} else {
-			httpapi.SendGroupMsg(groupID, "当前 OpenAI Key 不可用，正在切换 Key，并重新获取回复")
+			httpapi.SendGroupMsg(groupID, "当前 OpenAI Key 不可用，正在切换 Key 并重新获取回复，请稍后...")
 			apiKey = apiKey[1:]
 			getResponseMessage(groupID, messageID, jsonByte)
 		}
