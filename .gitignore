@@ -1,13 +1,13 @@
-.idea
-.vscode
+/.idea/
+/.vscode/
 
 # config
-config.yml
+/config.yml
 # data
-data.json
+/data.json
 # log
-logs
+/logs/
 
 # Build Output
-QQBot_go
-QQBot_go.exe
+/QQBot_go
+/QQBot_go.exe
