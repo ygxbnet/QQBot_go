@@ -18,11 +18,11 @@ func Init() {
 	msg := fmt.Sprintf("[CQ:at,qq=%s]\nBot 已启动\n当前程序版本：%s\n构建时间：%s", config.Get().Account.AdminID, base.VERSION, base.BUILD_TIME)
 	httpapi.SendGroupMsg(config.Get().Group.InfoID, msg)
 
-	// 每10min定时向 Test 群发送消息
+	// 每 20min 定时向 Test 群发送消息
 	go func() {
 		count := 0
 		for true {
-			time.Sleep(time.Minute * 10)
+			time.Sleep(time.Minute * 20)
 			count = count + 1
 			httpapi.SendGroupMsg(config.Get().Group.InfoID, "每 10min 定时发送消息\n程序运行时长："+strconv.Itoa(count*10)+"min")
 		}
