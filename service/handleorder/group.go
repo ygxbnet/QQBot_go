@@ -1,10 +1,10 @@
-package handle_order
+package handleorder
 
 import (
 	"QQBot_go/internal/base"
 	"QQBot_go/internal/config"
 	"QQBot_go/internal/httpapi"
-	"QQBot_go/service/handle_order/group"
+	"QQBot_go/service/handleorder/group"
 	"crypto/md5"
 	"encoding/hex"
 	log "github.com/sirupsen/logrus"

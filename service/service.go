@@ -2,7 +2,7 @@ package service
 
 import (
 	"QQBot_go/internal/handler"
-	"QQBot_go/service/handle_order"
+	"QQBot_go/service/handleorder"
 )
 
 // Services 信息打印
@@ -12,5 +12,5 @@ func Services() {
 }
 
 func group(groupID string, userID string, message string, messageID string) {
-	handle_order.HandleGroupOrder(groupID, userID, message, messageID)
+	handleorder.HandleGroupOrder(groupID, userID, message, messageID)
 }
