@@ -123,10 +123,9 @@ func getResponseMessage(groupID string, messageID string, jsonByte []byte) {
 	returnMessage, _ := io.ReadAll(res.Body)
 	if gjson.Parse(string(returnMessage)).Get("choices.0.message.content").String() != "" {
 		// 成功获取到回答
-		httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]ChatGPT：\n%s\n\n本次回答消耗 %s Token",
+		httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]ChatGPT：\n%s",
 			messageID,
 			gjson.Parse(string(returnMessage)).Get("choices.0.message.content").String(),
-			gjson.Parse(string(returnMessage)).Get("usage.total_tokens").String(),
 		))
 
 	} else if res.StatusCode == 401 {
