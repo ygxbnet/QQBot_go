@@ -2,7 +2,6 @@ package group
 
 import (
 	"QQBot_go/internal/db"
-	"QQBot_go/internal/db/model"
 	"QQBot_go/internal/httpapi"
 	"fmt"
 	"github.com/tidwall/gjson"
@@ -14,7 +13,7 @@ import (
 func Dk(groupID string, userID string, messageID string) {
 	UserData := db.ReadDBFile("group", userID)
 	message := ""
-	var dkData model.UserData
+	var dkData db.UserData
 	timeNow, _ := time.Parse("2006-01-02", time.Now().Format("2006-01-02"))
 	timeData, _ := time.Parse("2006-01-02", gjson.Parse(UserData).Get("dk_last_time").String())
 	timeDifference := (timeNow.Unix() - timeData.Unix()) / 86400

@@ -1,4 +1,4 @@
-package config
+package test
 
 import (
 	"QQBot_go/internal/config"

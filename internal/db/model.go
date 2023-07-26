@@ -1,4 +1,4 @@
-package model
+package db
 
 // UserData 用户数据
 type UserData struct {

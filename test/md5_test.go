@@ -1,4 +1,4 @@
-package MD5
+package test
 
 import (
 	"crypto/md5"

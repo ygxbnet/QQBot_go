@@ -1,4 +1,4 @@
-package services_api
+package serviceapi
 
 import (
 	log "github.com/sirupsen/logrus"

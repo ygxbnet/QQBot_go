@@ -28,8 +28,8 @@ var HELP_MESSAGE = " ====>  帮助信息  <==== " +
 
 var INFO_MESSAGE = "本机器人由 YGXB_net 开发" +
 	"\nQQ: " + config.Get().Account.AdminID +
-	"\n\n当前版本：" + base.VERSION +
-	"\n构建时间：" + base.BUILD_TIME
+	"\n\n当前版本：" + base.Version +
+	"\n构建时间：" + base.BuildTime
 
 // HandleGroupOrder 处理Group命令
 func HandleGroupOrder(groupID string, userID string, message string, messageID string) {

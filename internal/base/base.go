@@ -1,7 +1,7 @@
 package base
 
-// VERSION 程序的版本
-var VERSION = "0.9.1"
+// Version 程序的版本
+var Version = "0.9.2"
 
-// BUILD_TIME 构建时间
-var BUILD_TIME = "unknown"
+// BuildTime 构建时间
+var BuildTime = "unknown"
