@@ -24,7 +24,7 @@ func Init() {
 		for true {
 			time.Sleep(time.Minute * 20)
 			count = count + 1
-			httpapi.SendGroupMsg(config.Get().Group.InfoID, "每 10min 定时发送消息\n程序运行时长："+strconv.Itoa(count*10)+"min")
+			httpapi.SendGroupMsg(config.Get().Group.InfoID, "每 20min 定时发送消息\n程序运行时长："+strconv.Itoa(count*20)+"min")
 		}
 	}()
 
