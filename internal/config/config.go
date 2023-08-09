@@ -2,13 +2,17 @@ package config
 
 import (
 	_ "embed"
+	"fmt"
 	log "github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	"gopkg.in/yaml.v3"
 	"os"
 )
 
 //go:embed config-default.yml
 var defaultConfig string
+
+var config Config
 
 // init 初始化config
 func init() {
@@ -30,6 +34,14 @@ func init() {
 		log.Warn("请修改配置文件后再重新启动")
 		os.Exit(0)
 	}
+
+	viper.SetConfigName("config")
+	viper.AddConfigPath(".")
+	viper.ReadInConfig()
+
+	fmt.Println(viper.Get("server"))
+	viper.Unmarshal(&config)
+	fmt.Println(config)
 }
 
 // Get 从默认配置文件路径中获取
