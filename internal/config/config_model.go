@@ -1,35 +1,35 @@
 package config
 
 type Config struct {
-	PrependMessage string  `yaml:"prepend-message"`
-	Account        Account `yaml:"account"`
-	Group          Group   `yaml:"group"`
-	Server         Server  `yaml:"server"`
-	OpenAI         OpenAI  `yaml:"openai"`
+	PrependMessage string
+	Account        Account
+	Group          Group
+	Server         Server
+	OpenAI         OpenAI
 }
 
 type Account struct {
-	BotID   string `yaml:"bot-id"`
-	AdminID string `yaml:"admin-id"`
+	BotID   string
+	AdminID string
 }
 
 type Group struct {
-	MainID string `yaml:"main-id"`
-	InfoID string `yaml:"info-id"`
+	MainID string
+	InfoID string
 }
 
 type Server struct {
-	HttpAPI   HttpAPI   `yaml:"http-api"`
-	Websocket Websocket `yaml:"websocket"`
+	HttpAPI   HttpAPI
+	Websocket Websocket
 }
 type Websocket struct {
-	URL string `yaml:"url"`
+	URL string
 }
 type HttpAPI struct {
-	URL string `yaml:"url"`
+	URL string
 }
 
 type OpenAI struct {
-	BaseURL string   `yaml:"base-url"`
-	APIKey  []string `yaml:"api-key"`
+	BaseURL string
+	APIKey  []string
 }
