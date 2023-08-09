@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/gorilla/websocket v1.5.0
 	github.com/sirupsen/logrus v1.9.3
+	github.com/spf13/viper v1.16.0
 	github.com/tidwall/gjson v1.15.0
 	github.com/tidwall/sjson v1.2.5
 	gopkg.in/yaml.v3 v3.0.1
@@ -20,8 +21,6 @@ require (
 	github.com/spf13/cast v1.5.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/spf13/viper v1.16.0 // indirect
-	github.com/stretchr/testify v1.8.3 // indirect
 	github.com/subosito/gotenv v1.4.2 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
