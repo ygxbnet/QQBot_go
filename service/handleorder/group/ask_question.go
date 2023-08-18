@@ -130,7 +130,7 @@ func getResponseMessage(groupID string, messageID string, jsonByte []byte) {
 
 	} else if res.StatusCode == 401 {
 		// OpenAI Key 无效
-		if len(apiKey) <= 1 {
+		if len(apiKey) <= 0 {
 			httpapi.SendGroupMsg(groupID, "当前已没有可用 OpenAI Key。正在从配置文件中重新检索")
 			verifyOpenAIKey()
 			getResponseMessage(groupID, messageID, jsonByte)
