@@ -17,7 +17,7 @@ var historyMessage = make(map[string][]Message)
 var apiKey []string
 var apiURL string
 
-func init() {
+func initD() {
 	// 拼接请求 URL
 	if config.Get().OpenAI.BaseURL == "" {
 		apiURL = "https://api.openai.com" + "/v1/chat/completions"
@@ -30,6 +30,10 @@ func init() {
 }
 
 func AskQuestion(groupID string, userID string, message string, messageID string) {
+	httpapi.SendGroupMsg(groupID, "当前此功能存在严重bug，待修复后会重新开放")
+}
+
+func AskQuestionD(groupID string, userID string, message string, messageID string) {
 
 	helpMessage := "你好，我是 ChatGPT 的替身。" +
 		"\n你可以与我对话，可以和我聊天，可以问我问题，我都会一直陪着你 ٩( 'ω' )و " +
