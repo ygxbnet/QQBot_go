@@ -36,7 +36,7 @@ func AskQuestion(groupID string, userID string, message string, messageID string
 func AskQuestionD(groupID string, userID string, message string, messageID string) {
 
 	helpMessage := "你好，我是 ChatGPT 的替身。" +
-		"\n你可以与我对话，可以和我聊天，可以问我问题，我都会一直陪着你 ٩( 'ω' )و " +
+		"\n你可以与我对话，可以和我聊天，可以问我问题" +
 		"\n" +
 		"\n使用方法：/q [对话内容]" +
 		"\n或者直接 @我 [对话内容]" +
