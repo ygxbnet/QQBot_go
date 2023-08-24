@@ -2,15 +2,15 @@ package service
 
 import (
 	"QQBot_go/internal/handler"
-	"QQBot_go/service/handleorder"
+	group2 "QQBot_go/service/group"
 )
 
 // Services 信息打印
 func Services() {
 	handler.AddHandlerGroupMessageFunc(group)
-	Init()
+	group2.Init()
 }
 
 func group(groupID string, userID string, message string, messageID string) {
-	handleorder.HandleGroupOrder(groupID, userID, message, messageID)
+	group2.HandleGroupOrder(groupID, userID, message, messageID)
 }

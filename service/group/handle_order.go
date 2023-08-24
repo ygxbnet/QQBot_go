@@ -1,10 +1,13 @@
-package handleorder
+package group
 
 import (
 	"QQBot_go/internal/base"
 	"QQBot_go/internal/config"
-	"QQBot_go/internal/httpapi"
-	"QQBot_go/service/handleorder/group"
+	"QQBot_go/internal/cqapi"
+	"QQBot_go/service/group/chatgpt"
+	"QQBot_go/service/group/dk"
+	"QQBot_go/service/group/get_random_picture"
+	"QQBot_go/service/group/refresh"
 	"crypto/md5"
 	"encoding/hex"
 	log "github.com/sirupsen/logrus"
@@ -36,52 +39,52 @@ func HandleGroupOrder(groupID string, userID string, message string, messageID s
 	switch strings.Fields(message)[0] {
 	case "/", "／":
 		// 指令为空时
-		httpapi.SendGroupMsg(groupID, "指令不能为空")
+		cqapi.SendGroupMsg(groupID, "指令不能为空")
 
 	case "/help", "／help":
 		// 帮助指令
-		httpapi.SendGroupMsg(groupID, HELP_MESSAGE)
+		cqapi.SendGroupMsg(groupID, HELP_MESSAGE)
 
 	case "/info", "／info":
 		// 机器人信息
-		httpapi.SendGroupMsg(groupID, INFO_MESSAGE)
+		cqapi.SendGroupMsg(groupID, INFO_MESSAGE)
 
 	case "/dk", "／dk", "打卡", "&#91;冒泡&#93;", "&#91;打卡&#93;":
 		// 打卡指令
-		group.Dk(groupID, userID, messageID)
+		dk.Dk(groupID, userID, messageID)
 
 	case "/sp", "／sp", "刷屏":
 		// 刷屏指令
-		group.Refresh(groupID, userID, message)
+		refresh.Refresh(groupID, userID, message)
 
 	case "/date", "／date", "时间":
 		// 发送服务器当前时间
-		httpapi.SendGroupMsg(groupID, time.Now().Format("2006-01-02 15:04:05"))
+		cqapi.SendGroupMsg(groupID, time.Now().Format("2006-01-02 15:04:05"))
 
 	case "/p", "／p", "图片":
-		group.GetRandomPicture(groupID, userID, message)
+		get_random_picture.GetRandomPicture(groupID, userID, message)
 
 	case "/q", "/question", "问个问题", "问一个问题":
 		// 问问题
-		go group.AskQuestion(groupID, userID, message, messageID)
+		go chatgpt.AskQuestion(groupID, userID, message, messageID)
 
 	case "/test", "／test":
 		// 测试指令
-		httpapi.SendGroupMsg(groupID, "This is test")
+		cqapi.SendGroupMsg(groupID, "This is test")
 
 	default:
-		group.RefreshHandle(groupID, userID, message)
+		refresh.RefreshHandle(groupID, userID, message)
 		handleEmojiOrder(groupID, userID, message, messageID)
 
 		// 因为切片会出现长度不足，所以会抛出异常
 		defer func() { recover() }()
 		if message[0:1] == "/" || message[0:3] == "／" {
-			httpapi.SendGroupMsg(groupID, "❌命令输入错误或没有此命令\n请输入 /help 查看帮助")
+			cqapi.SendGroupMsg(groupID, "❌命令输入错误或没有此命令\n请输入 /help 查看帮助")
 			return
 		}
 		if strings.Index(message, "[CQ:at,qq="+config.Get().Account.BotID+"]") != -1 {
 			// @机器人 交给问问题处理方法处理
-			group.AskQuestion(groupID, userID, message, messageID)
+			chatgpt.AskQuestion(groupID, userID, message, messageID)
 			return
 		}
 	}
@@ -114,6 +117,6 @@ func handleEmojiOrder(groupID string, userID string, message string, messageID s
 		"a3caf31ff742d543a0645ad6710e077c", // https://gchat.qpic.cn/gchatpic_new/3040809965/818848626-3205803506-A3CAF31FF742D543A0645AD6710E077C/0?term=3
 		"00fb5731dcaff37dd940ddaabcd20f10": // https://gchat.qpic.cn/gchatpic_new/3040809965/818848626-2682086032-00FB5731DCAFF37DD940DDAABCD20F10/0?term=3
 
-		group.Dk(groupID, userID, messageID)
+		dk.Dk(groupID, userID, messageID)
 	}
 }

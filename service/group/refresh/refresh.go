@@ -1,7 +1,7 @@
-package group
+package refresh
 
 import (
-	"QQBot_go/internal/httpapi"
+	"QQBot_go/internal/cqapi"
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"github.com/tidwall/gjson"
@@ -31,14 +31,14 @@ func Refresh(groupID string, userID string, message string) {
 				"\n✅将把您的下一条消息作为刷屏消息"+
 				"\n刷屏次数: 2次"+
 				"\n/sp [刷屏次数](默认2次 最多为10次)", userID)
-		messageID = gjson.Parse(httpapi.SendGroupMsg(groupID, msg1)).Get("data").Get("message_id").String()
+		messageID = gjson.Parse(cqapi.SendGroupMsg(groupID, msg1)).Get("data").Get("message_id").String()
 
 	} else if len(strings.Fields(message)) == 2 {
 		// 刷屏 指定刷屏次数
 		num, err := strconv.Atoi(strings.Fields(message)[1])
 		if err != nil {
 			log.Error(err)
-			httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:at,qq=%s]"+"\n❌指定刷屏次数错误", userID))
+			cqapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:at,qq=%s]"+"\n❌指定刷屏次数错误", userID))
 			return
 		}
 		if num <= 10 {
@@ -52,14 +52,14 @@ func Refresh(groupID string, userID string, message string) {
 			"[CQ:at,qq=%s]"+
 				"\n✅将把您的下一条消息作为刷屏消息"+
 				"\n刷屏次数: %d次", userID, refreshNumber)
-		messageID = gjson.Parse(httpapi.SendGroupMsg(groupID, msg2)).Get("data").Get("message_id").String()
+		messageID = gjson.Parse(cqapi.SendGroupMsg(groupID, msg2)).Get("data").Get("message_id").String()
 
 	} else if len(strings.Fields(message)) == 3 {
 		// 刷屏 指定刷屏次数和刷屏内容
 		num, err := strconv.Atoi(strings.Fields(message)[1])
 		if err != nil {
 			log.Error(err)
-			httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:at,qq=%s]"+"\n❌指定刷屏次数错误", userID))
+			cqapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:at,qq=%s]"+"\n❌指定刷屏次数错误", userID))
 			return
 		}
 		if num <= 10 {
@@ -73,11 +73,11 @@ func Refresh(groupID string, userID string, message string) {
 			"[CQ:at,qq=%s]"+
 				"\n✅将把您的下一条消息作为刷屏消息"+
 				"\n刷屏次数: %d次", userID, refreshNumber)
-		messageID = gjson.Parse(httpapi.SendGroupMsg(groupID, msg2)).Get("data").Get("message_id").String()
+		messageID = gjson.Parse(cqapi.SendGroupMsg(groupID, msg2)).Get("data").Get("message_id").String()
 
 		if messageID != "" {
 			time.AfterFunc(time.Minute, func() {
-				httpapi.DeleteMsg(messageID)
+				cqapi.DeleteMsg(messageID)
 			})
 		}
 
@@ -86,13 +86,13 @@ func Refresh(groupID string, userID string, message string) {
 
 	} else {
 		// 参数错误
-		httpapi.SendGroupMsg(groupID, "❌参数错误或多余")
+		cqapi.SendGroupMsg(groupID, "❌参数错误或多余")
 		return
 	}
 
 	if messageID != "" {
 		time.AfterFunc(time.Minute, func() {
-			httpapi.DeleteMsg(messageID)
+			cqapi.DeleteMsg(messageID)
 		})
 	}
 	doRefresh(groupID, userID, refreshNumber)
@@ -170,7 +170,7 @@ func (receiver *refresh) DelayDelete() {
 }
 func (receiver *refresh) Refresh(groupID string, userID string, message string) {
 	for i := 1; i <= receiver.number; i++ {
-		httpapi.SendGroupMsg(groupID, message)
+		cqapi.SendGroupMsg(groupID, message)
 	}
 	delete(refreshStructs, refreshKey{userID, groupID})
 }

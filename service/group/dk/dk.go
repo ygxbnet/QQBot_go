@@ -1,8 +1,8 @@
-package group
+package dk
 
 import (
+	"QQBot_go/internal/cqapi"
 	"QQBot_go/internal/db"
-	"QQBot_go/internal/httpapi"
 	"fmt"
 	"github.com/tidwall/gjson"
 	"strconv"
@@ -55,7 +55,7 @@ func Dk(groupID string, userID string, messageID string) {
 		}
 	}
 	db.WriteDBFile("group", userID, dkData)
-	httpapi.SendGroupMsg(groupID, message)
+	cqapi.SendGroupMsg(groupID, message)
 }
 
 func generateReplyMessage(messageID string, userID string, state string, other string) string {

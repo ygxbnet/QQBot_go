@@ -1,9 +1,9 @@
-package service
+package group
 
 import (
 	"QQBot_go/internal/base"
 	"QQBot_go/internal/config"
-	"QQBot_go/internal/httpapi"
+	"QQBot_go/internal/cqapi"
 	"fmt"
 	"github.com/tidwall/gjson"
 	"io"
@@ -16,7 +16,7 @@ import (
 func Init() {
 	// 发送基本信息
 	msg := fmt.Sprintf("[CQ:at,qq=%s]\nBot 已启动\n当前程序版本：%s\n构建时间：%s", config.Get().Account.AdminID, base.Version, base.BuildTime)
-	httpapi.SendGroupMsg(config.Get().Group.InfoID, msg)
+	cqapi.SendGroupMsg(config.Get().Group.InfoID, msg)
 
 	// 每 30min 定时向 Test 群发送消息
 	go func() {
@@ -24,7 +24,7 @@ func Init() {
 		for true {
 			time.Sleep(time.Minute * 30)
 			count = count + 1
-			httpapi.SendGroupMsg(config.Get().Group.InfoID, "每 30min 定时发送消息\n程序发送次数："+strconv.Itoa(count))
+			cqapi.SendGroupMsg(config.Get().Group.InfoID, "每 30min 定时发送消息\n程序发送次数："+strconv.Itoa(count))
 		}
 	}()
 
@@ -35,7 +35,7 @@ func Init() {
 
 			// 发送消息
 			timeMessage := fmt.Sprintf("现在是：%d年%d月%d日 星期%s\n又是新的一天，希望大家过得开心", time.Now().Year(), time.Now().Month(), time.Now().Day(), conversionWeek(time.Now().Weekday().String()))
-			httpapi.SendGroupMsg(config.Get().Group.MainID, timeMessage)
+			cqapi.SendGroupMsg(config.Get().Group.MainID, timeMessage)
 
 			// urlImg, nameImg := services_api.GetBingPictureURL()
 			// httpapi.SendGroupMsg(config.Get().Group.MainID, "[CQ:image,file="+nameImg+",subType=0,url="+urlImg+"]")
@@ -56,9 +56,9 @@ func Init_Backup() {
 				msg := gjson.Parse(string(bytes))
 				if response.StatusCode == 200 {
 					message := fmt.Sprintf("%s", msg.Get("pyq").String())
-					httpapi.SendGroupMsg(config.Get().Group.MainID, message)
+					cqapi.SendGroupMsg(config.Get().Group.MainID, message)
 				} else {
-					httpapi.SendGroupMsg(config.Get().Group.MainID, "早上好！！！")
+					cqapi.SendGroupMsg(config.Get().Group.MainID, "早上好！！！")
 				}
 			}
 			// { // 早上好

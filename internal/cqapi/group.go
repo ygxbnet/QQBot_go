@@ -1,4 +1,4 @@
-package httpapi
+package cqapi
 
 import (
 	"QQBot_go/internal/config"

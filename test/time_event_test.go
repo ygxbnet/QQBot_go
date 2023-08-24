@@ -2,7 +2,7 @@ package test
 
 import (
 	"QQBot_go/internal/config"
-	"QQBot_go/internal/httpapi"
+	"QQBot_go/internal/cqapi"
 	"fmt"
 	"github.com/tidwall/gjson"
 	"io"
@@ -20,5 +20,5 @@ func TestDailyJoke(t *testing.T) {
 			msg = append(msg, gjson.Parse(string(bytes)).Get("0.gaoxiao").String())
 		}
 	}
-	httpapi.SendGroupMsg(config.Get().Group.MainID, fmt.Sprintf("每日笑话二则：\n1. %s\n2. %s", msg[0], msg[1]))
+	cqapi.SendGroupMsg(config.Get().Group.MainID, fmt.Sprintf("每日笑话二则：\n1. %s\n2. %s", msg[0], msg[1]))
 }

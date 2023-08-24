@@ -1,8 +1,8 @@
-package group
+package chatgpt
 
 import (
 	"QQBot_go/internal/config"
-	"QQBot_go/internal/httpapi"
+	"QQBot_go/internal/cqapi"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -47,7 +47,7 @@ func AskQuestion(groupID string, userID string, message string, messageID string
 
 	if len(strings.Fields(message)) == 1 {
 		// 获取插件帮助
-		httpapi.SendGroupMsg(groupID, helpMessage)
+		cqapi.SendGroupMsg(groupID, helpMessage)
 
 	} else if strings.Fields(message)[1] == "restart" {
 		// 重新开启一个新的对话
@@ -55,7 +55,7 @@ func AskQuestion(groupID string, userID string, message string, messageID string
 		if status {
 			delete(historyMessage, groupID)
 		}
-		httpapi.SendGroupMsg(groupID, "已经重新开启一个新的对话")
+		cqapi.SendGroupMsg(groupID, "已经重新开启一个新的对话")
 
 	} else if strings.Fields(message)[1] == "check" {
 		// 检查 OpenAI Key是否可用
@@ -80,7 +80,7 @@ func AskQuestion(groupID string, userID string, message string, messageID string
 			}
 		}
 		apiKey = key
-		httpapi.SendGroupMsg(groupID, rMessage[:len(rMessage)-2])
+		cqapi.SendGroupMsg(groupID, rMessage[:len(rMessage)-2])
 
 	} else {
 		// 拼接请求，用于支持连续对话，使用 gpt-3.5-turbo 模型
@@ -102,7 +102,7 @@ func getResponseMessage(groupID string, messageID string, jsonByte []byte) {
 	if len(apiKey) == 0 {
 		verifyOpenAIKey()
 		if len(apiKey) == 0 {
-			httpapi.SendGroupMsg(groupID, "当前配置文件中已没有可用 OpenAI Key，请重新添加")
+			cqapi.SendGroupMsg(groupID, "当前配置文件中已没有可用 OpenAI Key，请重新添加")
 			return
 		}
 	}
@@ -117,7 +117,7 @@ func getResponseMessage(groupID string, messageID string, jsonByte []byte) {
 	res, err := client.Do(req)
 	if err != nil {
 		log.Error(err)
-		httpapi.SendGroupMsg(groupID, "请求发生错误：\n"+err.Error())
+		cqapi.SendGroupMsg(groupID, "请求发生错误：\n"+err.Error())
 		return
 	}
 	defer res.Body.Close()
@@ -126,7 +126,7 @@ func getResponseMessage(groupID string, messageID string, jsonByte []byte) {
 	returnMessage, _ := io.ReadAll(res.Body)
 	if gjson.Parse(string(returnMessage)).Get("choices.0.message.content").String() != "" {
 		// 成功获取到回答
-		httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]ChatGPT：\n%s",
+		cqapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]ChatGPT：\n%s",
 			messageID,
 			gjson.Parse(string(returnMessage)).Get("choices.0.message.content").String(),
 		))
@@ -135,16 +135,16 @@ func getResponseMessage(groupID string, messageID string, jsonByte []byte) {
 		// OpenAI Key 无效
 		log.Info("请求失败：", string(returnMessage))
 		if len(apiKey) <= 0 {
-			httpapi.SendGroupMsg(groupID, "当前已没有可用 OpenAI Key。正在从配置文件中重新检索")
+			cqapi.SendGroupMsg(groupID, "当前已没有可用 OpenAI Key。正在从配置文件中重新检索")
 			verifyOpenAIKey()
 			getResponseMessage(groupID, messageID, jsonByte)
 		} else {
-			httpapi.SendGroupMsg(groupID, "当前 OpenAI Key 不可用，正在切换 Key 并重新获取回复，请稍后...")
+			cqapi.SendGroupMsg(groupID, "当前 OpenAI Key 不可用，正在切换 Key 并重新获取回复，请稍后...")
 			apiKey = apiKey[1:]
 			getResponseMessage(groupID, messageID, jsonByte)
 		}
 	} else {
-		httpapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]获取失败，请重试或换一个问题\n%s",
+		cqapi.SendGroupMsg(groupID, fmt.Sprintf("[CQ:reply,id=%s]获取失败，请重试或换一个问题\n%s",
 			messageID,
 			returnMessage,
 		))

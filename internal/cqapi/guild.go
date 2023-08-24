@@ -1,4 +1,4 @@
-package httpapi
+package cqapi
 
 import (
 	log "github.com/sirupsen/logrus"
