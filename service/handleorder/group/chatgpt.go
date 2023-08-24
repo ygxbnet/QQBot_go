@@ -24,9 +24,12 @@ func init() {
 	} else {
 		apiURL = config.Get().OpenAI.BaseURL + "/v1/chat/completions"
 	}
+
 	// 验证配置文件中所有的 OpenAI Key
-	log.Info("正在验证所有 OpenAI Key")
-	verifyOpenAIKey()
+	go func() {
+		log.Info("正在验证所有 OpenAI Key")
+		verifyOpenAIKey()
+	}()
 }
 
 func AskQuestion(groupID string, userID string, message string, messageID string) {
