@@ -18,13 +18,13 @@ func Init() {
 	msg := fmt.Sprintf("[CQ:at,qq=%s]\nBot 已启动\n当前程序版本：%s\n构建时间：%s", config.Get().Account.AdminID, base.Version, base.BuildTime)
 	cqapi.SendGroupMsg(config.Get().Group.InfoID, msg)
 
-	// 每 30min 定时向 Test 群发送消息
+	// 每 12h 定时向 Test 群发送消息
 	go func() {
 		count := 0
 		for true {
-			time.Sleep(time.Minute * 30)
+			time.Sleep(time.Hour * 12)
 			count = count + 1
-			cqapi.SendGroupMsg(config.Get().Group.InfoID, "每 30min 定时发送消息\n程序发送次数："+strconv.Itoa(count))
+			cqapi.SendGroupMsg(config.Get().Group.InfoID, "每 12h 定时发送消息\n程序发送次数："+strconv.Itoa(count))
 		}
 	}()
 
