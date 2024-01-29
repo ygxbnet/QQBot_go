@@ -21,7 +21,7 @@ func Init() {
 	// 每 12h 定时向 Test 群发送消息
 	go func() {
 		count := 0
-		for true {
+		for {
 			time.Sleep(time.Hour * 12)
 			count = count + 1
 			cqapi.SendGroupMsg(config.Get().Group.InfoID, "每 12h 定时发送消息\n程序发送次数："+strconv.Itoa(count))

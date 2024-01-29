@@ -60,7 +60,7 @@ func timeEvent() {
 			log.Error(err)
 		}
 
-		for true {
+		for {
 			timing(0, 0, 0)
 			err := logFile.Close()
 			if err != nil {
